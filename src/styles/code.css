@@ -1,0 +1,213 @@
+/* Code Block and Syntax Highlighting Styles */
+
+/* Inline Code */
+code {
+	background: var(--color-bg-secondary);
+	color: var(--color-text-primary);
+	padding: 0.2rem 0.4rem;
+	border-radius: var(--radius-sm);
+	font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+	font-size: 0.9em;
+	border: 1px solid var(--color-border-primary);
+}
+
+/* Code Blocks */
+pre {
+	background: var(--color-bg-secondary);
+	color: var(--color-text-primary);
+	padding: var(--space-4);
+	border-radius: var(--radius-lg);
+	overflow-x: auto;
+	margin: var(--space-4) 0;
+	border: 1px solid var(--color-border-primary);
+	position: relative;
+	font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+	line-height: 1.5;
+}
+
+pre code {
+	background: transparent;
+	color: inherit;
+	padding: 0;
+	border-radius: 0;
+	border: none;
+	font-size: 0.875rem;
+}
+
+/* Dark mode specific code styling */
+[data-theme="dark"] pre {
+	background: #1a1a1a;
+	border-color: var(--color-border-primary);
+}
+
+[data-theme="dark"] code {
+	background: #2a2a2a;
+	border-color: var(--color-border-primary);
+}
+
+/* Syntax highlighting for common tokens */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #6a737d;
+}
+
+.token.punctuation {
+	color: var(--color-text-secondary);
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #d73a49;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #28a745;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+	color: #e36209;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+	color: #0366d6;
+}
+
+.token.function,
+.token.class-name {
+	color: #6f42c1;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+	color: #e36209;
+}
+
+/* Dark mode syntax highlighting */
+[data-theme="dark"] .token.comment,
+[data-theme="dark"] .token.prolog,
+[data-theme="dark"] .token.doctype,
+[data-theme="dark"] .token.cdata {
+	color: #8b949e;
+}
+
+[data-theme="dark"] .token.property,
+[data-theme="dark"] .token.tag,
+[data-theme="dark"] .token.boolean,
+[data-theme="dark"] .token.number,
+[data-theme="dark"] .token.constant,
+[data-theme="dark"] .token.symbol,
+[data-theme="dark"] .token.deleted {
+	color: #ff7b72;
+}
+
+[data-theme="dark"] .token.selector,
+[data-theme="dark"] .token.attr-name,
+[data-theme="dark"] .token.string,
+[data-theme="dark"] .token.char,
+[data-theme="dark"] .token.builtin,
+[data-theme="dark"] .token.inserted {
+	color: #7ee787;
+}
+
+[data-theme="dark"] .token.operator,
+[data-theme="dark"] .token.entity,
+[data-theme="dark"] .token.url,
+[data-theme="dark"] .language-css .token.string,
+[data-theme="dark"] .style .token.string {
+	color: #ffa657;
+}
+
+[data-theme="dark"] .token.atrule,
+[data-theme="dark"] .token.attr-value,
+[data-theme="dark"] .token.keyword {
+	color: #79c0ff;
+}
+
+[data-theme="dark"] .token.function,
+[data-theme="dark"] .token.class-name {
+	color: #d2a8ff;
+}
+
+[data-theme="dark"] .token.regex,
+[data-theme="dark"] .token.important,
+[data-theme="dark"] .token.variable {
+	color: #ffa657;
+}
+
+/* Code block with language label */
+pre[data-language]:before {
+	content: attr(data-language);
+	position: absolute;
+	top: var(--space-2);
+	right: var(--space-3);
+	font-size: var(--font-size-xs);
+	color: var(--color-text-tertiary);
+	text-transform: uppercase;
+	font-weight: var(--font-weight-medium);
+	letter-spacing: 0.5px;
+}
+
+/* Copy button for code blocks */
+.code-block-wrapper {
+	position: relative;
+}
+
+.copy-button {
+	position: absolute;
+	top: var(--space-2);
+	right: var(--space-2);
+	background: var(--color-bg-tertiary);
+	border: 1px solid var(--color-border-primary);
+	color: var(--color-text-secondary);
+	padding: var(--space-1) var(--space-2);
+	border-radius: var(--radius-sm);
+	font-size: var(--font-size-xs);
+	cursor: pointer;
+	transition: all var(--transition-fast);
+	opacity: 0;
+}
+
+.code-block-wrapper:hover .copy-button {
+	opacity: 1;
+}
+
+.copy-button:hover {
+	background: var(--color-bg-primary);
+	color: var(--color-text-primary);
+}
+
+/* Terminal/shell styling */
+pre.language-bash,
+pre.language-shell,
+pre.language-terminal {
+	background: #1a1a1a;
+	color: #50fa7b;
+	border-left: 4px solid #50fa7b;
+}
+
+[data-theme="dark"] pre.language-bash,
+[data-theme="dark"] pre.language-shell,
+[data-theme="dark"] pre.language-terminal {
+	background: #0d1117;
+	border-left-color: #7ee787;
+	color: #7ee787;
+}
