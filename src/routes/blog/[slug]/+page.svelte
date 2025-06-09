@@ -1,6 +1,5 @@
-<script lang="ts">
-	import type { PageData } from './$types';
-	import { formatDate } from '$lib/utils/blog.js';
+<script lang="ts">	import type { PageData } from './$types';
+	import { formatDate } from '$lib/utils/date.js';
 
 	let { data }: { data: PageData } = $props();
 </script>

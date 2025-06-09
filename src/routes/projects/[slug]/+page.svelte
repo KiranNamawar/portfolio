@@ -1,6 +1,5 @@
-<script lang="ts">
-	import type { PageData } from './$types';
-	import { formatDate } from '$lib/utils/project.js';
+<script lang="ts">	import type { PageData } from './$types';
+	import { formatDate } from '$lib/utils/date.js';
 	import { ExternalLink, Github, ArrowLeft } from '@lucide/svelte';
 
 	let { data }: { data: PageData } = $props();

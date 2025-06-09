@@ -6,5 +6,8 @@ export interface BlogPost {
 	author?: string;
 	tags?: string[];
 	published: boolean;
+	featured?: boolean;
+	readingTime?: number;
+	image?: string;
 	content?: string;
 }

@@ -1,16 +1,18 @@
 import type { Project } from '$lib/types/project.js';
+import { extractReadingTime } from './string.js';
 
 export async function getProjects(): Promise<Project[]> {
 	const modules = import.meta.glob('../../content/projects/*.md', { eager: true });
 	const projects: Project[] = [];
 
 	for (const path in modules) {
-		const mod = modules[path] as { metadata?: Project; default?: unknown };
+		const mod = modules[path] as { metadata?: Project; default?: unknown; __content?: string };
 		if (mod?.metadata) {
 			const slug = path.split('/').pop()?.replace('.md', '') || '';
 			projects.push({
 				...mod.metadata,
-				slug
+				slug,
+				readingTime: mod.__content ? extractReadingTime(mod.__content) : undefined
 			});
 		}
 	}
@@ -38,12 +40,4 @@ export async function getProject(slug: string) {
 export async function getFeaturedProjects(): Promise<Project[]> {
 	const projects = await getProjects();
 	return projects.filter((project) => project.featured);
-}
-
-export function formatDate(date: string): string {
-	return new Date(date).toLocaleDateString('en-US', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric'
-	});
 }

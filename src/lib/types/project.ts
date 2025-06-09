@@ -9,5 +9,6 @@ export interface Project {
 	demo?: string;
 	featured?: boolean;
 	published: boolean;
+	readingTime?: number;
 	content?: string;
 }

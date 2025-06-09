@@ -1,21 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { personalInfo, heroTypingPhrases } from '../../data/personal.js';
 
 	let typingText = '';
 	let currentIndex = 0;
 	let isDeleting = false;
 	let typeSpeed = 100;
-
-	const phrases = [
-		'Full Stack Developer',
-		'Creative Problem Solver',
-		'Technology Enthusiast',
-		'Digital Innovator'
-	];
-
 	onMount(() => {
 		function typeWriter() {
-			const currentPhrase = phrases[currentIndex];
+			const currentPhrase = heroTypingPhrases[currentIndex];
 			
 			if (isDeleting) {
 				typingText = currentPhrase.substring(0, typingText.length - 1);
@@ -27,10 +20,9 @@
 
 			if (!isDeleting && typingText === currentPhrase) {
 				typeSpeed = 2000;
-				isDeleting = true;
-			} else if (isDeleting && typingText === '') {
+				isDeleting = true;			} else if (isDeleting && typingText === '') {
 				isDeleting = false;
-				currentIndex = (currentIndex + 1) % phrases.length;
+				currentIndex = (currentIndex + 1) % heroTypingPhrases.length;
 				typeSpeed = 500;
 			}
 
@@ -41,40 +33,37 @@
 	});
 </script>
 
-<section class="hero-section">
+<section class="hero-section" id="hero">
 	<div class="hero-background">
 		<div class="particles" aria-hidden="true"></div>
 		<div class="gradient-overlay"></div>
 	</div>
 	
-	<div class="hero-content">
-		<div class="hero-text">
+	<div class="hero-content">		<div class="hero-text">
 			<h1 class="hero-title">
 				<span class="greeting">Hello, I'm</span>
-				<span class="name">Kiran</span>
+				<span class="name">{personalInfo.name}</span>
 			</h1>
 			
 			<div class="hero-subtitle">
 				<span class="typing-container">
 					<span class="typing-text">{typingText}</span>
 					<span class="cursor" aria-hidden="true">|</span>
-				</span>
-			</div>
+				</span>			</div>
 			
 			<p class="hero-description">
-				Passionate about creating beautiful, functional web experiences 
-				that solve real-world problems and delight users.
+				{personalInfo.bio}
 			</p>
 			
 			<div class="hero-actions">
-				<a href="/portfolio" class="btn btn-primary glass-button">
+				<a href="/projets" class="btn btn-primary glass-button">
 					<span>View My Work</span>
 					<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
 						<path d="m9 18 6-6-6-6"/>
 					</svg>
 				</a>
 				
-				<a href="/contact" class="btn btn-secondary glass-button">
+				<a href="#contact" class="btn btn-secondary glass-button">
 					<span>Get In Touch</span>
 					<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
 						<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>

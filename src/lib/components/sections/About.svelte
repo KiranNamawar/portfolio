@@ -1,43 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { personalInfo, skills, experience, stats } from '../../data/personal.js';
 
 	let skillsVisible = false;
 	let aboutRef: HTMLElement;
-
-	const skills = [
-		{ name: 'JavaScript/TypeScript', level: 95, icon: '🟨' },
-		{ name: 'Svelte/SvelteKit', level: 90, icon: '🧡' },
-		{ name: 'React/Next.js', level: 85, icon: '⚛️' },
-		{ name: 'Node.js', level: 88, icon: '💚' },
-		{ name: 'CSS/Tailwind', level: 92, icon: '🎨' },
-		{ name: 'Python', level: 80, icon: '🐍' },
-		{ name: 'Database Design', level: 85, icon: '🗄️' },
-		{ name: 'DevOps/Docker', level: 75, icon: '🐳' }
-	];
-
-	const experience = [
-		{
-			title: 'Senior Full Stack Developer',
-			company: 'Tech Corp',
-			period: '2023 - Present',
-			description: 'Leading development of scalable web applications using modern frameworks and cloud technologies.',
-			technologies: ['SvelteKit', 'TypeScript', 'AWS', 'PostgreSQL']
-		},
-		{
-			title: 'Full Stack Developer',
-			company: 'Digital Agency',
-			period: '2021 - 2023',
-			description: 'Built responsive web applications and APIs for diverse clients across various industries.',
-			technologies: ['React', 'Node.js', 'MongoDB', 'Docker']
-		},
-		{
-			title: 'Frontend Developer',
-			company: 'Startup Inc',
-			period: '2020 - 2021',
-			description: 'Developed user interfaces and improved user experience for SaaS platform.',
-			technologies: ['Vue.js', 'JavaScript', 'SCSS', 'Figma']
-		}
-	];
 
 	onMount(() => {
 		const observer = new IntersectionObserver(
@@ -57,7 +23,7 @@
 	});
 </script>
 
-<section class="about-section" bind:this={aboutRef}>
+<section class="about-section" bind:this={aboutRef} id="about">
 	<div class="container">
 		<div class="section-header">
 			<h2 class="section-title">About Me</h2>
@@ -71,35 +37,26 @@
 				<div class="text-card glass-card">
 					<h3>My Story</h3>
 					<p>
-						I'm a passionate full-stack developer with over 4 years of experience creating 
-						digital solutions that make a difference. I love turning complex problems into 
-						simple, beautiful, and intuitive designs.
+						{personalInfo.bio}
 					</p>
 					<p>
-						When I'm not coding, you'll find me exploring new technologies, contributing to 
-						open-source projects, or mentoring aspiring developers in the community.
+						{personalInfo.description}
 					</p>
-					
+
 					<div class="stats">
-						<div class="stat-item">
-							<span class="stat-number">50+</span>
-							<span class="stat-label">Projects Completed</span>
-						</div>
-						<div class="stat-item">
-							<span class="stat-number">4+</span>
-							<span class="stat-label">Years Experience</span>
-						</div>
-						<div class="stat-item">
-							<span class="stat-number">20+</span>
-							<span class="stat-label">Happy Clients</span>
-						</div>
+						{#each stats as stat}
+							<div class="stat-item">
+								<span class="stat-number">{stat.number}</span>
+								<span class="stat-label">{stat.label}</span>
+							</div>
+						{/each}
 					</div>
 
-					<a href="/resume.pdf" class="resume-btn glass-button" download>
+					<a href={personalInfo.resumeUrl} class="resume-btn glass-button" download>
 						<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-							<polyline points="7,10 12,15 17,10"/>
-							<line x1="12" y1="15" x2="12" y2="3"/>
+							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+							<polyline points="7,10 12,15 17,10" />
+							<line x1="12" y1="15" x2="12" y2="3" />
 						</svg>
 						Download Resume
 					</a>
@@ -118,8 +75,8 @@
 									<span class="skill-percentage">{skill.level}%</span>
 								</div>
 								<div class="skill-bar">
-									<div 
-										class="skill-progress" 
+									<div
+										class="skill-progress"
 										class:animate={skillsVisible}
 										style="width: {skillsVisible ? skill.level : 0}%"
 									></div>
@@ -130,7 +87,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div class="experience-section">
 			<h3>Professional Experience</h3>
 			<div class="timeline">
@@ -160,10 +116,12 @@
 <style>
 	.about-section {
 		padding: 5rem 0;
-		background: linear-gradient(135deg, 
-			var(--color-bg-primary) 0%, 
-			var(--color-bg-secondary) 50%, 
-			var(--color-bg-primary) 100%);
+		background: linear-gradient(
+			135deg,
+			var(--color-bg-primary) 0%,
+			var(--color-bg-secondary) 50%,
+			var(--color-bg-primary) 100%
+		);
 		position: relative;
 		overflow: hidden;
 	}
@@ -175,7 +133,11 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background: radial-gradient(circle at 30% 30%, rgba(var(--primary-500), 0.05) 0%, transparent 50%);
+		background: radial-gradient(
+			circle at 30% 30%,
+			rgba(var(--primary-500), 0.05) 0%,
+			transparent 50%
+		);
 		pointer-events: none;
 	}
 	.container {
@@ -224,7 +186,9 @@
 		border-radius: 1rem;
 		padding: 2rem;
 		box-shadow: 0 8px 32px var(--glass-shadow);
-		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		transition:
+			transform 0.3s ease,
+			box-shadow 0.3s ease;
 		width: 100%;
 		box-sizing: border-box;
 		overflow: hidden;
@@ -477,7 +441,7 @@
 		to {
 			transform: scaleX(1);
 		}
-	}	/* Responsive Design */
+	} /* Responsive Design */
 	@media (max-width: 768px) {
 		.about-content {
 			grid-template-columns: 1fr;

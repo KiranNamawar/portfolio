@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter } from '@lucide/svelte';
+	import { contactInfo, socialLinks } from '../../data/personal.js';
 
 	let formData = {
 		name: '',
@@ -25,54 +26,24 @@
 		// Reset form after success
 		setTimeout(() => {
 			formData = { name: '', email: '', subject: '', message: '' };
-			submitStatus = 'idle';
-		}, 3000);
+			submitStatus = 'idle';		}, 3000);
 	}
+	// Icon mapping for contact methods
+	const contactIcons: Record<string, any> = {
+		email: Mail,
+		phone: Phone,
+		location: MapPin
+	};
 
-	const contactInfo = [
-		{
-			icon: Mail,
-			label: 'Email',
-			value: 'kiran@example.com',
-			href: 'mailto:kiran@example.com'
-		},
-		{
-			icon: Phone,
-			label: 'Phone',
-			value: '+1 (555) 123-4567',
-			href: 'tel:+15551234567'
-		},
-		{
-			icon: MapPin,
-			label: 'Location',
-			value: 'San Francisco, CA',
-			href: 'https://maps.google.com'
-		}
-	];
-
-	const socialLinks = [
-		{
-			icon: Github,
-			label: 'GitHub',
-			href: 'https://github.com/yourusername',
-			color: '#333'
-		},
-		{
-			icon: Linkedin,
-			label: 'LinkedIn',
-			href: 'https://linkedin.com/in/yourusername',
-			color: '#0077b5'
-		},
-		{
-			icon: Twitter,
-			label: 'Twitter',
-			href: 'https://twitter.com/yourusername',
-			color: '#1da1f2'
-		}
-	];
+	// Icon mapping for social links
+	const socialIcons: Record<string, any> = {
+		GitHub: Github,
+		LinkedIn: Linkedin,
+		Twitter: Twitter
+	};
 </script>
 
-<section class="contact-section">
+<section class="contact-section" id="contact">
 	<div class="container">
 		<div class="section-header">
 			<h2 class="section-title">Get In Touch</h2>
@@ -88,13 +59,11 @@
 					<p>
 						I'm always interested in hearing about new opportunities and exciting projects. 
 						Whether you have a question or just want to say hi, I'll try my best to get back to you!
-					</p>
-
-					<div class="contact-methods">
+					</p>					<div class="contact-methods">
 						{#each contactInfo as contact}
 							<a href={contact.href} class="contact-method">
 								<div class="contact-icon">
-									<svelte:component this={contact.icon} size={20} />
+									<svelte:component this={contactIcons[contact.type]} size={20} />
 								</div>
 								<div class="contact-details">
 									<span class="contact-label">{contact.label}</span>
@@ -105,8 +74,7 @@
 					</div>
 
 					<div class="social-links">
-						<h4>Follow Me</h4>
-						<div class="social-grid">
+						<h4>Follow Me</h4>						<div class="social-grid">
 							{#each socialLinks as social}
 								<a 
 									href={social.href} 
@@ -115,7 +83,7 @@
 									rel="noopener noreferrer"
 									style="--social-color: {social.color}"
 								>
-									<svelte:component this={social.icon} size={20} />
+									<svelte:component this={socialIcons[social.label]} size={20} />
 									<span>{social.label}</span>
 								</a>
 							{/each}
