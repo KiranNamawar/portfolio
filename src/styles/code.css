@@ -211,3 +211,106 @@ pre.language-terminal {
 	border-left-color: #7ee787;
 	color: #7ee787;
 }
+
+/* Line highlighting fixes for dark mode */
+.highlight-line,
+.line-highlight,
+pre[data-line] .line-highlight,
+.code-highlight {
+	background: rgba(255, 255, 255, 0.05) !important;
+	display: block;
+	margin: 0 -1rem;
+	padding: 0 1rem;
+}
+
+[data-theme="light"] .highlight-line,
+[data-theme="light"] .line-highlight,
+[data-theme="light"] pre[data-line] .line-highlight,
+[data-theme="light"] .code-highlight {
+	background: rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="dark"] .highlight-line,
+[data-theme="dark"] .line-highlight,
+[data-theme="dark"] pre[data-line] .line-highlight,
+[data-theme="dark"] .code-highlight {
+	background: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Fix for any prism.js line highlighting */
+.line-numbers .line-numbers-rows > span:before {
+	color: var(--color-text-tertiary);
+}
+
+[data-theme="dark"] .line-numbers .line-numbers-rows > span:before {
+	color: #6e7681;
+}
+
+/* Remove any default line highlighting that might be too bright */
+pre[class*="language-"] .line-highlight {
+	background: none !important;
+	background-image: none !important;
+}
+
+[data-theme="dark"] pre[class*="language-"] .line-highlight {
+	background: rgba(255, 255, 255, 0.02) !important;
+	background-image: none !important;
+}
+
+/* Additional dark mode fixes for various syntax highlighting libraries */
+[data-theme="dark"] {
+	/* Override any bright backgrounds from external libraries */
+	--prism-highlight-background: rgba(255, 255, 255, 0.03);
+	--prism-line-number-color: #6e7681;
+}
+
+/* Fix for mdsvex/prism highlighting */
+[data-theme="dark"] .prism-code,
+[data-theme="dark"] .token-line {
+	background: transparent !important;
+}
+
+[data-theme="dark"] .highlight {
+	background: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Fix any remaining bright line highlights */
+[data-theme="dark"] pre code .line,
+[data-theme="dark"] pre code span.line {
+	background: transparent !important;
+}
+
+[data-theme="dark"] .highlighted-line,
+[data-theme="dark"] .highlight-source-js {
+	background: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Aggressive fixes for line highlighting in dark mode */
+[data-theme="dark"] pre *,
+[data-theme="dark"] code *,
+[data-theme="dark"] .code-block * {
+	background-color: transparent !important;
+	background-image: none !important;
+	background: none !important;
+}
+
+[data-theme="dark"] pre,
+[data-theme="dark"] pre code {
+	background: #1a1a1a !important;
+}
+
+/* Only allow subtle line highlighting if needed */
+[data-theme="dark"] .line-highlight,
+[data-theme="dark"] .highlight-line {
+	background: rgba(255, 255, 255, 0.02) !important;
+	background-color: rgba(255, 255, 255, 0.02) !important;
+	background-image: none !important;
+}
+
+/* Remove any box shadows or borders that might appear bright */
+[data-theme="dark"] pre *,
+[data-theme="dark"] code * {
+	box-shadow: none !important;
+	border: none !important;
+	text-shadow: none !important;
+}
