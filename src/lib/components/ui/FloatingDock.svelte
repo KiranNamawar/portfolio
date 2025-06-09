@@ -1,4 +1,4 @@
-<script lang="ts">	import { Home, FileText, Search, Mail, FolderOpen } from '@lucide/svelte';
+<script lang="ts">	import { Home, FileText, Search, FolderOpen } from '@lucide/svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';

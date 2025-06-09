@@ -1,11 +1,17 @@
 <script lang="ts">
-	import { Github, ExternalLink, Star, GitFork } from '@lucide/svelte';
+	import { Github, ExternalLink } from '@lucide/svelte';
 	import { onMount } from 'svelte';
+	import { getFeaturedProjects } from '$lib/utils/project.js';
+	import type { Project } from '$lib/types/project.js';
 
 	let projectsRef: HTMLElement;
 	let isVisible = false;
+	let featuredProjects: Project[] = [];	onMount(() => {
+		// Load featured projects
+		getFeaturedProjects().then(projects => {
+			featuredProjects = projects;
+		});
 
-	onMount(() => {
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				isVisible = entry.isIntersecting;
@@ -19,58 +25,6 @@
 
 		return () => observer.disconnect();
 	});
-
-	const projects = [
-		{
-			id: 1,
-			title: 'Portfolio Website',
-			description: 'A modern, responsive portfolio built with SvelteKit, featuring glassmorphism design, dark/light themes, and smooth animations.',
-			image: '/project-1.jpg',
-			tech: ['SvelteKit', 'TypeScript', 'CSS3', 'Vercel'],
-			github: 'https://github.com/username/portfolio',
-			demo: 'https://portfolio-demo.vercel.app',
-			stars: 42,
-			forks: 12,
-			featured: true
-		},
-		{
-			id: 2,
-			title: 'Task Management App',
-			description: 'Full-stack task management application with real-time collaboration, drag-and-drop functionality, and team workspaces.',
-			image: '/project-2.jpg',
-			tech: ['React', 'Node.js', 'MongoDB', 'Socket.io'],
-			github: 'https://github.com/username/task-app',
-			demo: 'https://task-app-demo.vercel.app',
-			stars: 128,
-			forks: 34,
-			featured: true
-		},
-		{
-			id: 3,
-			title: 'E-commerce Platform',
-			description: 'Modern e-commerce solution with payment integration, inventory management, and admin dashboard.',
-			image: '/project-3.jpg',
-			tech: ['Next.js', 'Stripe', 'Prisma', 'PostgreSQL'],
-			github: 'https://github.com/username/ecommerce',
-			demo: 'https://ecommerce-demo.vercel.app',
-			stars: 89,
-			forks: 23,
-			featured: false
-		},
-		{
-			id: 4,
-			title: 'Weather Dashboard',
-			description: 'Beautiful weather dashboard with location-based forecasts, interactive maps, and weather alerts.',
-			image: '/project-4.jpg',
-			tech: ['Vue.js', 'D3.js', 'OpenWeather API', 'Netlify'],
-			github: 'https://github.com/username/weather-dashboard',
-			demo: 'https://weather-dashboard-demo.netlify.app',
-			stars: 67,
-			forks: 18,
-			featured: false
-		}
-	];
-	$: featuredProjects = projects.filter(project => project.featured);
 </script>
 
 <section 
@@ -96,11 +50,10 @@
 						class="project-card featured"
 						class:reverse={index % 2 === 1}
 						style="animation-delay: {index * 0.2}s"
-					>
-						<div class="project-image">
-							<img src={project.image} alt={project.title} />
-							<div class="project-overlay">
-								<div class="project-links">
+					>						<div class="project-image">
+							<img src={project.image || '/placeholder-project.jpg'} alt={project.title} />
+							<div class="project-overlay">							<div class="project-links">
+								{#if project.github}
 									<a 
 										href={project.github} 
 										target="_blank" 
@@ -110,6 +63,8 @@
 									>
 										<Github size={20} />
 									</a>
+								{/if}
+								{#if project.demo}
 									<a 
 										href={project.demo} 
 										target="_blank" 
@@ -119,50 +74,44 @@
 									>
 										<ExternalLink size={20} />
 									</a>
-								</div>
+								{/if}
 							</div>
-						</div>
-
-						<div class="project-content">
-							<div class="project-stats">
-								<span class="stat">
-									<Star size={16} />
-									{project.stars}
-								</span>
-								<span class="stat">
-									<GitFork size={16} />
-									{project.forks}
-								</span>
 							</div>
-
+						</div>						<div class="project-content">
 							<h3 class="project-title">{project.title}</h3>
-							<p class="project-description">{project.description}</p>
-
-							<div class="project-tech">
-								{#each project.tech as tech}
+							<p class="project-description">{project.description}</p>							<div class="project-tech">
+								{#each project.technologies || [] as tech}
 									<span class="tech-tag">{tech}</span>
 								{/each}
-							</div>
-
-							<div class="project-actions">
+							</div>							<div class="project-actions">
 								<a 
-									href={project.github} 
-									target="_blank" 
-									rel="noopener noreferrer"
-									class="btn btn-outline"
-								>
-									<Github size={18} />
-									Code
-								</a>
-								<a 
-									href={project.demo} 
-									target="_blank" 
-									rel="noopener noreferrer"
+									href="/projects/{project.slug}"
 									class="btn btn-primary"
 								>
-									<ExternalLink size={18} />
-									Live Demo
+									View Details
 								</a>
+								{#if project.github}
+									<a 
+										href={project.github} 
+										target="_blank" 
+										rel="noopener noreferrer"
+										class="btn btn-outline"
+									>
+										<Github size={18} />
+										Code
+									</a>
+								{/if}
+								{#if project.demo}
+									<a 
+										href={project.demo} 
+										target="_blank" 
+										rel="noopener noreferrer"
+										class="btn btn-outline"
+									>
+										<ExternalLink size={18} />
+										Demo
+									</a>
+								{/if}
 							</div>
 						</div>
 					</article>
@@ -226,15 +175,6 @@
 		max-width: 600px;
 		margin: 0 auto;
 		line-height: var(--line-height-relaxed);
-	}
-
-	.subsection-title {
-		font-family: var(--font-serif);
-		font-size: var(--font-size-3xl);
-		font-weight: var(--font-weight-semibold);
-		color: var(--color-text-primary);
-		text-align: center;
-		margin-bottom: var(--space-12);
 	}
 	/* Featured Projects */
 	.featured-projects {
@@ -324,23 +264,8 @@
 		color: white;
 		transform: scale(1.1);
 	}
-
 	.project-content {
 		padding: var(--space-6);
-	}
-
-	.project-stats {
-		display: flex;
-		gap: var(--space-4);
-		margin-bottom: var(--space-4);
-	}
-
-	.stat {
-		display: flex;
-		align-items: center;
-		gap: var(--space-1);
-		font-size: var(--font-size-sm);
-		color: var(--color-text-secondary);
 	}
 
 	.project-title {

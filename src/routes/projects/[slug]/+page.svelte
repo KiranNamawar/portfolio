@@ -161,10 +161,8 @@
 		transform: translateY(-3px);
 		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 	}
-
 	.project-header-content {
 		text-align: center;
-		space-y: 1.5rem;
 	}
 
 	.project-title {
@@ -244,9 +242,8 @@
 		min-width: 150px;
 		justify-content: center;
 	}
-
 	.project-action-btn.primary {
-		background: var(--primary);
+		background: var(--primary-600);
 		color: white;
 	}
 
