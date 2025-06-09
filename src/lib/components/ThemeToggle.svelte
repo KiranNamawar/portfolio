@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Sun, Moon } from '@lucide/svelte';
 	import { theme } from '$lib/stores/theme';
-	import { onMount } from 'svelte';
 
 	// Component props
 	interface Props {
@@ -9,11 +8,6 @@
 	}
 
 	let { class: className = '' }: Props = $props();
-
-	// Initialize theme on mount
-	onMount(() => {
-		theme.init();
-	});
 
 	// Handle theme toggle
 	function handleToggle() {

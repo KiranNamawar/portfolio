@@ -3,13 +3,14 @@
 	import ThemeToggle from './ThemeToggle.svelte';
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
-
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	// Navigation items
 	const navItems = [
-		{ icon: Home, label: 'Home', href: '/', active: true },
-		{ icon: FileText, label: 'Blog', href: '/blog', active: false },
-		{ icon: User, label: 'About', href: '/about', active: false },
-		{ icon: Mail, label: 'Contact', href: '/contact', active: false }
+		{ icon: Home, label: 'Home', href: '/' },
+		{ icon: FileText, label: 'Blog', href: '/blog' },
+		{ icon: User, label: 'About', href: '/about' },
+		{ icon: Mail, label: 'Contact', href: '/contact' }
 	];
 
 	let mounted = false;
@@ -20,12 +21,7 @@
 
 	// Handle navigation item click
 	function handleNavClick(item: typeof navItems[0]) {
-		// Update active state (in a real app, this would be handled by the router)
-		navItems.forEach(nav => nav.active = false);
-		item.active = true;
-		
-		// Navigate to the href (placeholder for now)
-		console.log(`Navigating to: ${item.href}`);
+		goto(item.href);
 	}
 
 	// Handle search click
@@ -46,7 +42,7 @@
 			{#each navItems as item}
 				<button
 					class="dock-item"
-					class:active={item.active}
+					class:active={$page.url.pathname === item.href || ($page.url.pathname.startsWith('/blog') && item.href === '/blog')}
 					onclick={() => handleNavClick(item)}
 					aria-label={item.label}
 					title={item.label}
@@ -77,18 +73,17 @@
 		in:fly={{ y: 100, duration: 500, delay: 300 }}
 		aria-label="Mobile navigation"
 	>
-		<div class="mobile-container">
-			{#each navItems.slice(0, 4) as item}
+		<div class="mobile-container">			{#each navItems.slice(0, 4) as item}
 				<button
 					class="mobile-item"
-					class:active={item.active}
+					class:active={$page.url.pathname === item.href || ($page.url.pathname.startsWith('/blog') && item.href === '/blog')}
 					onclick={() => handleNavClick(item)}
 					aria-label={item.label}
 				>
 					<svelte:component this={item.icon} size={20} />
 					<span class="mobile-label">{item.label}</span>
 				</button>
-			{/each}			<!-- Mobile Theme Toggle -->
+			{/each}<!-- Mobile Theme Toggle -->
 			<ThemeToggle class="mobile-theme-toggle" />
 		</div>
 	</nav>

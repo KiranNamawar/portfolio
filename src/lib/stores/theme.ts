@@ -9,14 +9,22 @@ function createThemeStore() {
 
 	return {
 		subscribe,
-		set,
+		set: (value: Theme) => {
+			set(value);
+			applyTheme(value);
+		},
 		update,
-		toggle: () => update((theme) => (theme === 'light' ? 'dark' : 'light')),
+		toggle: () =>
+			update((theme) => {
+				const newTheme = theme === 'light' ? 'dark' : 'light';
+				applyTheme(newTheme);
+				return newTheme;
+			}),
 		init: () => {
 			if (!browser) return;
 
-			// Check for saved theme preference or default to 'light'
-			const savedTheme = localStorage.getItem('theme') as Theme;
+			// Check for saved theme preference or default to system preference
+			const savedTheme = localStorage.getItem('theme') as Theme | null;
 			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 			const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
 
@@ -33,10 +41,7 @@ export function applyTheme(newTheme: Theme) {
 	if (!browser) return;
 
 	document.documentElement.setAttribute('data-theme', newTheme);
+	document.documentElement.classList.remove('light', 'dark');
+	document.documentElement.classList.add(newTheme);
 	localStorage.setItem('theme', newTheme);
-}
-
-// Subscribe to theme changes and apply them
-if (browser) {
-	theme.subscribe(applyTheme);
 }

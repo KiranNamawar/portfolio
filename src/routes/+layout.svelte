@@ -1,6 +1,12 @@
 <script lang="ts">
 	import '../app.css';
 	import FloatingDock from '$lib/components/FloatingDock.svelte';
+	import { theme } from '$lib/stores/theme.js';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		theme.init();
+	});
 </script>
 
 <main>
