@@ -1,13 +1,14 @@
 ---
-title: "E-commerce Platform"
-description: "Modern e-commerce solution with payment integration, inventory management, and admin dashboard"
-date: "2024-10-20"
-image: "/project-3.jpg"
-technologies: ["Next.js", "Stripe", "Prisma", "PostgreSQL", "Tailwind CSS"]
-github: "https://github.com/username/ecommerce-platform"
-demo: "https://ecommerce-demo.vercel.app"
+title: 'E-commerce Platform'
+description: 'Modern e-commerce solution with payment integration, inventory management, and admin dashboard'
+date: '2024-10-20'
+image: '/project-3.jpg'
+technologies: ['Next.js', 'Stripe', 'Prisma', 'PostgreSQL', 'Tailwind CSS']
+github: 'https://github.com/username/ecommerce-platform'
+demo: 'https://ecommerce-demo.vercel.app'
 featured: false
 published: true
+readingTime: 5
 ---
 
 # E-commerce Platform
@@ -17,6 +18,7 @@ A modern, scalable e-commerce platform built with Next.js and powered by a robus
 ## Features
 
 ### Customer Experience
+
 - Responsive, mobile-first design
 - Product search and filtering
 - Shopping cart and wishlist
@@ -24,6 +26,7 @@ A modern, scalable e-commerce platform built with Next.js and powered by a robus
 - Order tracking and history
 
 ### Admin Dashboard
+
 - Product management (CRUD operations)
 - Inventory tracking
 - Order management
@@ -31,6 +34,7 @@ A modern, scalable e-commerce platform built with Next.js and powered by a robus
 - Sales reporting
 
 ### Payment Integration
+
 - Stripe payment processing
 - Multiple payment methods
 - Subscription billing support
@@ -39,6 +43,7 @@ A modern, scalable e-commerce platform built with Next.js and powered by a robus
 ## Technical Implementation
 
 ### Frontend
+
 - **Next.js 14** with App Router
 - **TypeScript** for type safety
 - **Tailwind CSS** for styling
@@ -46,12 +51,14 @@ A modern, scalable e-commerce platform built with Next.js and powered by a robus
 - **Zustand** for state management
 
 ### Backend
+
 - **Prisma ORM** with PostgreSQL
 - **NextAuth.js** for authentication
 - **Stripe API** for payments
 - **Cloudinary** for image management
 
 ### Performance Optimizations
+
 - Static Site Generation (SSG) for product pages
 - Image optimization with Next.js Image component
 - Lazy loading and code splitting
@@ -83,6 +90,7 @@ CREATE TABLE orders (
 ## Deployment
 
 The application is deployed using:
+
 - **Vercel** for frontend hosting
 - **Supabase** for PostgreSQL database
 - **Stripe** for payment processing

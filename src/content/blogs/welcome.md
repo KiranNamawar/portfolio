@@ -5,6 +5,8 @@ date: 2024-01-15
 author: Kiran
 tags: ['welcome', 'first-post']
 published: true
+featured: true
+readingTime: 2
 ---
 
 # Welcome to My Blog

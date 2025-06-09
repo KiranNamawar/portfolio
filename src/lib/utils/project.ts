@@ -1,18 +1,24 @@
 import type { Project } from '$lib/types/project.js';
-import { extractReadingTime } from './string.js';
 
 export async function getProjects(): Promise<Project[]> {
 	const modules = import.meta.glob('../../content/projects/*.md', { eager: true });
 	const projects: Project[] = [];
 
 	for (const path in modules) {
-		const mod = modules[path] as { metadata?: Project; default?: unknown; __content?: string };
+		const mod = modules[path] as { metadata?: Project; default?: unknown };
 		if (mod?.metadata) {
 			const slug = path.split('/').pop()?.replace('.md', '') || '';
+
+			// Calculate reading time based on description length as a fallback
+			const estimatedWords = mod.metadata.description
+				? mod.metadata.description.split(' ').length * 8
+				: 80;
+			const readingTime = Math.max(1, Math.ceil(estimatedWords / 200));
+
 			projects.push({
 				...mod.metadata,
 				slug,
-				readingTime: mod.__content ? extractReadingTime(mod.__content) : undefined
+				readingTime: mod.metadata.readingTime || readingTime
 			});
 		}
 	}

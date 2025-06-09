@@ -1,13 +1,14 @@
 ---
-title: "Sample Project"
-description: "A sample project to demonstrate the project structure"
-date: "2024-12-01"
-image: "/project-1.jpg"
-technologies: ["Svelte", "TypeScript", "CSS"]
-github: "https://github.com/username/sample-project"
-demo: "https://sample-project.demo.com"
+title: 'Sample Project'
+description: 'A sample project to demonstrate the project structure'
+date: '2024-12-01'
+image: '/project-1.jpg'
+technologies: ['Svelte', 'TypeScript', 'CSS']
+github: 'https://github.com/username/sample-project'
+demo: 'https://sample-project.demo.com'
 featured: true
 published: true
+readingTime: 3
 ---
 
 # Sample Project

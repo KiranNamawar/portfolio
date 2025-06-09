@@ -1,18 +1,24 @@
 import type { BlogPost } from '$lib/types/blog.js';
-import { extractReadingTime } from './string.js';
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
 	const modules = import.meta.glob('../../content/blogs/*.md', { eager: true });
 	const posts: BlogPost[] = [];
 
 	for (const path in modules) {
-		const mod = modules[path] as { metadata?: BlogPost; default?: unknown; __content?: string };
+		const mod = modules[path] as { metadata?: BlogPost; default?: unknown };
 		if (mod?.metadata) {
 			const slug = path.split('/').pop()?.replace('.md', '') || '';
+
+			// Calculate reading time based on description length as a fallback
+			const estimatedWords = mod.metadata.description
+				? mod.metadata.description.split(' ').length * 10
+				: 100;
+			const readingTime = Math.max(1, Math.ceil(estimatedWords / 200));
+
 			posts.push({
 				...mod.metadata,
 				slug,
-				readingTime: mod.__content ? extractReadingTime(mod.__content) : undefined
+				readingTime: mod.metadata.readingTime || readingTime
 			});
 		}
 	}

@@ -1,9 +1,10 @@
-<script lang="ts">	import { Search, X, FileText, FolderOpen, Hash, Calendar, Clock } from '@lucide/svelte';
+<script lang="ts">
+	import { Search, X, FileText, FolderOpen, Hash, Calendar, Clock } from '@lucide/svelte';
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 	import { getBlogPosts } from '$lib/utils/blog.js';
 	import { getProjects } from '$lib/utils/project.js';
-	import { searchContent, type SearchResult } from '$lib/utils/search';
+	import { searchContent } from '$lib/utils/search';
 	import { goto } from '$app/navigation';
 	import type { BlogPost } from '$lib/types/blog.js';
 	import type { Project } from '$lib/types/project.js';
@@ -29,10 +30,7 @@
 
 	async function loadData() {
 		try {
-			[blogPosts, projects] = await Promise.all([
-				getBlogPosts(),
-				getProjects()
-			]);
+			[blogPosts, projects] = await Promise.all([getBlogPosts(), getProjects()]);
 		} catch (error) {
 			console.error('Error loading search data:', error);
 		}
@@ -162,9 +160,10 @@
 
 <svelte:window on:keydown={handleKeyDown} />
 
-{#if isOpen}	<!-- Backdrop -->
-	<div 
-		class="search-backdrop" 
+{#if isOpen}
+	<!-- Backdrop -->
+	<div
+		class="search-backdrop"
 		transition:fade={{ duration: 200 }}
 		on:click={handleBackdropClick}
 		on:keydown={handleBackdropKeydown}
@@ -174,10 +173,7 @@
 		tabindex="-1"
 	>
 		<!-- Search Dialog -->
-		<div 
-			class="search-dialog" 
-			transition:fly={{ y: -50, duration: 300 }}
-		>
+		<div class="search-dialog" transition:fly={{ y: -50, duration: 300 }}>
 			<!-- Search Header -->
 			<div class="search-header">
 				<div class="search-input-container">
@@ -192,11 +188,7 @@
 						autocomplete="off"
 						spellcheck="false"
 					/>
-					<button
-						class="close-button"
-						on:click={closeDialog}
-						aria-label="Close search"
-					>
+					<button class="close-button" on:click={closeDialog} aria-label="Close search">
 						<X size={18} />
 					</button>
 				</div>
@@ -220,7 +212,8 @@
 								<kbd>Esc</kbd> Close
 							</span>
 						</div>
-					</div>				{:else if searchResults.length === 0}
+					</div>
+				{:else if searchResults.length === 0}
 					<div class="search-no-results">
 						<FileText size={48} class="empty-icon" />
 						<h3>No results found</h3>
@@ -241,28 +234,28 @@
 								<div class="result-icon">
 									<svelte:component this={typeInfo.icon} size={20} />
 								</div>
-								
+
 								<div class="result-content">
 									<div class="result-header">
 										<h4 class="result-title">{item.title}</h4>
 										<span class="result-type">{typeInfo.type}</span>
 									</div>
-									
+
 									<p class="result-description">{item.description}</p>
-									
+
 									<div class="result-meta">
 										<div class="result-meta-item">
 											<Calendar size={14} />
 											<span>{formatDate(item.date)}</span>
 										</div>
-										
+
 										{#if item.readingTime}
 											<div class="result-meta-item">
 												<Clock size={14} />
 												<span>{item.readingTime} min read</span>
 											</div>
 										{/if}
-										
+
 										{#if typeInfo.badge.length > 0}
 											<div class="result-badges">
 												{#each typeInfo.badge as badge}
@@ -279,7 +272,8 @@
 						{/each}
 					</div>
 				{/if}
-			</div>			<!-- Search Footer -->
+			</div>
+			<!-- Search Footer -->
 			{#if searchQuery.trim() !== '' && searchResults.length > 0}
 				<div class="search-footer">
 					<span class="results-count">
@@ -318,7 +312,7 @@
 		-webkit-backdrop-filter: var(--glass-backdrop);
 		border: 1px solid var(--glass-border);
 		border-radius: var(--radius-xl);
-		box-shadow: 
+		box-shadow:
 			0 20px 60px var(--glass-shadow),
 			0 1px 0 rgba(255, 255, 255, 0.1) inset;
 		display: flex;
@@ -459,14 +453,15 @@
 	}
 
 	.result-item.selected {
-		background: var(--primary-500);
+		background: var(--primary-700);
 		color: white;
 	}
-
 	.result-item.selected .result-title,
 	.result-item.selected .result-description,
 	.result-item.selected .result-type,
-	.result-item.selected .result-meta {
+	.result-item.selected .result-meta,
+	.result-item.selected .result-meta-item,
+	.result-item.selected .result-meta-item span {
 		color: inherit;
 	}
 

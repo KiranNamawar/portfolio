@@ -1,13 +1,14 @@
 ---
-title: "Task Management App"
-description: "A full-stack task management application with real-time collaboration and team workspaces"
-date: "2024-11-15"
-image: "/project-2.jpg"
-technologies: ["React", "Node.js", "MongoDB", "Socket.io", "Express"]
-github: "https://github.com/username/task-management-app"
-demo: "https://task-app-demo.vercel.app"
+title: 'Task Management App'
+description: 'A full-stack task management application with real-time collaboration and team workspaces'
+date: '2024-11-15'
+image: '/project-2.jpg'
+technologies: ['React', 'Node.js', 'MongoDB', 'Socket.io', 'Express']
+github: 'https://github.com/username/task-management-app'
+demo: 'https://task-app-demo.vercel.app'
 featured: true
 published: true
+readingTime: 4
 ---
 
 # Task Management App
@@ -17,17 +18,20 @@ A comprehensive task management application built to streamline team collaborati
 ## Key Features
 
 ### Real-time Collaboration
+
 - Live updates across all connected clients
 - Real-time notifications for task changes
 - Collaborative editing with conflict resolution
 
 ### Intuitive Interface
+
 - Drag and drop task management
 - Kanban board view
 - List and calendar views
 - Advanced filtering and sorting
 
 ### Team Management
+
 - Multi-workspace support
 - Role-based permissions
 - Team member invitations
@@ -45,6 +49,7 @@ A comprehensive task management application built to streamline team collaborati
 ## Architecture
 
 The application follows a microservices architecture with separate services for:
+
 - User authentication and authorization
 - Task and project management
 - Real-time communication
@@ -71,6 +76,7 @@ npm run dev
 ## API Documentation
 
 The REST API provides endpoints for:
+
 - User management
 - Project operations
 - Task CRUD operations
