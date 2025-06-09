@@ -43,7 +43,6 @@
 		searchResults = searchContent(searchQuery, blogPosts, projects);
 		selectedIndex = 0; // Reset selection when results change
 	}
-
 	// Handle keyboard navigation
 	function handleKeyDown(event: KeyboardEvent) {
 		if (!isOpen) return;
@@ -54,10 +53,12 @@
 			case 'ArrowDown':
 				event.preventDefault();
 				selectedIndex = Math.min(selectedIndex + 1, searchResults.length - 1);
+				scrollToSelectedItem();
 				break;
 			case 'ArrowUp':
 				event.preventDefault();
 				selectedIndex = Math.max(selectedIndex - 1, 0);
+				scrollToSelectedItem();
 				break;
 			case 'Enter':
 				event.preventDefault();
@@ -66,6 +67,21 @@
 				}
 				break;
 		}
+	}
+
+	// Scroll the selected item into view
+	function scrollToSelectedItem() {
+		// Use a small delay to ensure the DOM has updated
+		setTimeout(() => {
+			const selectedElement = document.querySelector('.result-item.selected');
+			if (selectedElement) {
+				selectedElement.scrollIntoView({
+					behavior: 'smooth',
+					block: 'nearest',
+					inline: 'nearest'
+				});
+			}
+		}, 0);
 	}
 
 	// Navigate to selected result
