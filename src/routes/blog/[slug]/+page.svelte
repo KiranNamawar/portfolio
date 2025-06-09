@@ -1,8 +1,12 @@
 <script lang="ts">	import type { PageData } from './$types';
 	import { formatDate } from '$lib/utils/date.js';
+	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
 
 	let { data }: { data: PageData } = $props();
 </script>
+
+<!-- Reading Progress Indicator -->
+<ReadingProgress />
 
 <article class="blog-post">
 	<header class="blog-post-header">

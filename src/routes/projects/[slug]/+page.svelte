@@ -1,6 +1,7 @@
 <script lang="ts">	import type { PageData } from './$types';
 	import { formatDate } from '$lib/utils/date.js';
 	import { ExternalLink, Github, ArrowLeft } from '@lucide/svelte';
+	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -9,6 +10,9 @@
 	<title>{data.project.title} | Projects</title>
 	<meta name="description" content={data.project.description} />
 </svelte:head>
+
+<!-- Reading Progress Indicator -->
+<ReadingProgress />
 
 <article class="project-detail">
 	<header class="project-header">
