@@ -70,9 +70,7 @@
 			featured: false
 		}
 	];
-
 	$: featuredProjects = projects.filter(project => project.featured);
-	$: otherProjects = projects.filter(project => !project.featured);
 </script>
 
 <section 
@@ -169,60 +167,12 @@
 						</div>
 					</article>
 				{/each}
-			</div>
-
-			<!-- Other Projects Grid -->
-			<div class="other-projects">
-				<h3 class="subsection-title">Other Projects</h3>
-				<div class="projects-grid">
-					{#each otherProjects as project, index}
-						<article 
-							class="project-card compact"
-							style="animation-delay: {(featuredProjects.length + index) * 0.1}s"
-						>
-							<div class="project-header">
-								<h4 class="project-title">{project.title}</h4>
-								<div class="project-links">
-									<a 
-										href={project.github} 
-										target="_blank" 
-										rel="noopener noreferrer"
-										class="project-link"
-									>
-										<Github size={18} />
-									</a>
-									<a 
-										href={project.demo} 
-										target="_blank" 
-										rel="noopener noreferrer"
-										class="project-link"
-									>
-										<ExternalLink size={18} />
-									</a>
-								</div>
-							</div>
-
-							<p class="project-description">{project.description}</p>
-
-							<div class="project-tech">
-								{#each project.tech as tech}
-									<span class="tech-tag">{tech}</span>
-								{/each}
-							</div>
-
-							<div class="project-stats">
-								<span class="stat">
-									<Star size={14} />
-									{project.stars}
-								</span>
-								<span class="stat">
-									<GitFork size={14} />
-									{project.forks}
-								</span>
-							</div>
-						</article>
-					{/each}
-				</div>
+			</div>			<!-- View All Projects Button -->
+			<div class="view-all-projects">
+				<a href="/projects" class="btn btn-primary btn-large">
+					View All Projects
+					<ExternalLink size={18} />
+				</a>
 			</div>
 		</div>
 	</div>
@@ -286,10 +236,9 @@
 		text-align: center;
 		margin-bottom: var(--space-12);
 	}
-
 	/* Featured Projects */
 	.featured-projects {
-		margin-bottom: var(--space-20);
+		margin-bottom: var(--space-12);
 	}
 
 	.project-card.featured {
@@ -461,7 +410,6 @@
 		border-color: var(--glass-border);
 		backdrop-filter: blur(10px);
 	}
-
 	.btn-outline:hover {
 		background: var(--primary-500);
 		color: white;
@@ -469,61 +417,13 @@
 		transform: translateY(-2px);
 	}
 
-	/* Other Projects Grid */
-	.other-projects {
-		margin-top: var(--space-20);
+	.btn-large {
+		padding: var(--space-4) var(--space-8);
+		font-size: var(--font-size-lg);
 	}
-
-	.projects-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-		gap: var(--space-8);
-	}
-
-	.project-card.compact {
-		padding: var(--space-6);
-		background: var(--glass-bg);
-		border: 1px solid var(--glass-border);
-		border-radius: var(--radius-2xl);
-		backdrop-filter: blur(20px);
-		box-shadow: 0 8px 32px var(--glass-shadow);
-		transition: all var(--transition-normal);
-		opacity: 0;
-		transform: translateY(30px);
-	}
-
-	.projects-section.visible .project-card.compact {
-		opacity: 1;
-		transform: translateY(0);
-		animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-	}
-
-	.project-card.compact:hover {
-		transform: translateY(-8px);
-		box-shadow: 0 16px 48px var(--glass-shadow);
-		border-color: var(--primary-400);
-	}
-
-	.project-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		margin-bottom: var(--space-4);
-	}
-
-	.project-card.compact .project-title {
-		font-size: var(--font-size-xl);
-		margin-bottom: 0;
-	}
-
-	.project-card.compact .project-description {
-		font-size: var(--font-size-base);
-		margin-bottom: var(--space-4);
-	}
-
-	.project-card.compact .project-stats {
-		margin-top: var(--space-4);
-		margin-bottom: 0;
+	.view-all-projects {
+		text-align: center;
+		margin-top: var(--space-8);
 	}
 	/* Responsive Design */
 	@media (max-width: 768px) {
@@ -541,19 +441,8 @@
 			margin-left: 0;
 			margin-right: 0;
 		}
-
 		.project-card.featured.reverse {
 			direction: ltr;
-		}
-
-		.projects-grid {
-			grid-template-columns: 1fr;
-			gap: var(--space-6);
-		}
-
-		.project-card.compact {
-			margin-left: 0;
-			margin-right: 0;
 		}
 
 		.project-actions {
@@ -569,11 +458,6 @@
 		.container {
 			padding: 0 var(--space-2);
 		}
-
-		.project-card.compact {
-			padding: var(--space-4);
-		}
-
 		.project-content {
 			padding: var(--space-4);
 		}

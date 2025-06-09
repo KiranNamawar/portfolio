@@ -1,0 +1,236 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import { formatDate } from '$lib/utils/project.js';
+	import { ExternalLink, Github } from '@lucide/svelte';
+
+	let { data }: { data: PageData } = $props();
+</script>
+
+<div class="container">
+	<header class="text-center space-y-4">
+		<h1 class="text-5xl font-bold">Projects</h1>
+		<p class="text-xl text-secondary">My latest work and creations</p>
+	</header>
+
+	{#if data.projects.length > 0}
+		<div class="projects-grid">
+			{#each data.projects as project}
+				<article class="project-card glass hover-lift transition">
+					{#if project.image}
+						<div class="project-image">
+							<img src={project.image} alt={project.title} loading="lazy" />
+							<div class="project-overlay">
+								<div class="project-actions">
+									{#if project.demo}
+										<a href={project.demo} target="_blank" rel="noopener noreferrer" class="project-action-btn">
+											<ExternalLink size={20} />
+											<span>Demo</span>
+										</a>
+									{/if}
+									{#if project.github}
+										<a href={project.github} target="_blank" rel="noopener noreferrer" class="project-action-btn">
+											<Github size={20} />
+											<span>Code</span>
+										</a>
+									{/if}
+								</div>
+							</div>
+						</div>
+					{/if}
+					
+					<div class="project-content">
+						<h3 class="text-2xl">
+							<a href="/projects/{project.slug}" class="text-primary hover:text-primary-700">
+								{project.title}
+							</a>
+						</h3>
+						
+						<div class="project-meta">
+							<time>{formatDate(project.date)}</time>
+							{#if project.featured}
+								<span class="featured-badge">Featured</span>
+							{/if}
+						</div>
+						
+						{#if project.description}
+							<p class="description text-secondary">{project.description}</p>
+						{/if}
+						
+						{#if project.technologies && project.technologies.length > 0}
+							<div class="project-technologies">
+								{#each project.technologies as tech}
+									<span class="tech-tag">{tech}</span>
+								{/each}
+							</div>
+						{/if}
+
+						<div class="project-links">
+							<a href="/projects/{project.slug}" class="read-more-btn">
+								Read More →
+							</a>
+						</div>
+					</div>
+				</article>
+			{/each}
+		</div>
+	{:else}
+		<div class="text-center space-y-4">
+			<p class="text-lg text-secondary">No projects found.</p>
+		</div>
+	{/if}
+</div>
+
+<style>
+	.projects-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+		gap: 2rem;
+		margin-top: 3rem;
+	}
+
+	.project-card {
+		border-radius: 1rem;
+		overflow: hidden;
+		transition: all 0.3s ease;
+		background: var(--glass-bg);
+		backdrop-filter: blur(10px);
+		border: 1px solid var(--glass-border);
+	}
+
+	.project-image {
+		position: relative;
+		aspect-ratio: 16/9;
+		overflow: hidden;
+	}
+
+	.project-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.project-card:hover .project-image img {
+		transform: scale(1.05);
+	}
+
+	.project-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.7);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.project-card:hover .project-overlay {
+		opacity: 1;
+	}
+
+	.project-actions {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.project-action-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem 1.5rem;
+		background: var(--glass-bg);
+		backdrop-filter: blur(10px);
+		border: 1px solid var(--glass-border);
+		border-radius: 0.5rem;
+		color: var(--text-primary);
+		text-decoration: none;
+		transition: all 0.3s ease;
+		font-weight: 500;
+	}
+
+	.project-action-btn:hover {
+		background: var(--primary);
+		color: white;
+		transform: translateY(-2px);
+	}
+
+	.project-content {
+		padding: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.project-meta {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		font-size: 0.9rem;
+		color: var(--text-secondary);
+	}
+
+	.featured-badge {
+		background: var(--primary);
+		color: white;
+		padding: 0.25rem 0.75rem;
+		border-radius: 1rem;
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+
+	.description {
+		line-height: 1.6;
+	}
+
+	.project-technologies {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.tech-tag {
+		background: var(--glass-bg);
+		backdrop-filter: blur(10px);
+		border: 1px solid var(--glass-border);
+		padding: 0.25rem 0.75rem;
+		border-radius: 1rem;
+		font-size: 0.85rem;
+		color: var(--text-primary);
+		font-weight: 500;
+	}
+
+	.project-links {
+		margin-top: auto;
+	}
+
+	.read-more-btn {
+		color: var(--primary);
+		text-decoration: none;
+		font-weight: 500;
+		transition: color 0.3s ease;
+	}
+
+	.read-more-btn:hover {
+		color: var(--primary-700);
+	}
+
+	@media (max-width: 768px) {
+		.projects-grid {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+
+		.project-actions {
+			flex-direction: column;
+		}
+
+		.project-action-btn {
+			width: 100%;
+			justify-content: center;
+		}
+	}
+</style>

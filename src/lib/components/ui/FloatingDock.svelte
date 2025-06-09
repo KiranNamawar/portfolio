@@ -1,14 +1,13 @@
-<script lang="ts">	import { Home, FileText, Search, User, Mail } from '@lucide/svelte';
+<script lang="ts">	import { Home, FileText, Search, Mail, FolderOpen } from '@lucide/svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	
-	// Navigation items
+		// Navigation items
 	const navItems = [
 		{ icon: Home, label: 'Home', href: '/', action: 'navigate' },
-		{ icon: User, label: 'About', href: '#about', action: 'scroll' },
+		{ icon: FolderOpen, label: 'Projects', href: '/projects', action: 'navigate' },
 		{ icon: FileText, label: 'Blog', href: '/blog', action: 'navigate' }
 	];
 
@@ -71,7 +70,8 @@
 					class:active={
 						($page.url.pathname === '/' && item.href === '/') ||
 						($page.url.pathname === item.href && item.action === 'navigate') ||
-						($page.url.pathname.startsWith('/blog') && item.href === '/blog')
+						($page.url.pathname.startsWith('/blog') && item.href === '/blog') ||
+						($page.url.pathname.startsWith('/projects') && item.href === '/projects')
 					}
 					onclick={() => handleNavClick(item)}
 					aria-label={item.label}
