@@ -1,27 +1,54 @@
-<script lang="ts">
-	import { Home, FileText, Search, User, Mail } from '@lucide/svelte';
+<script lang="ts">	import { Home, FileText, Search, User, Mail } from '@lucide/svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	
 	// Navigation items
 	const navItems = [
-		{ icon: Home, label: 'Home', href: '/' },
-		{ icon: FileText, label: 'Blog', href: '/blog' },
-		{ icon: User, label: 'About', href: '/about' },
-		{ icon: Mail, label: 'Contact', href: '/contact' }
+		{ icon: Home, label: 'Home', href: '/', action: 'navigate' },
+		{ icon: User, label: 'About', href: '#about', action: 'scroll' },
+		{ icon: FileText, label: 'Blog', href: '/blog', action: 'navigate' }
 	];
 
 	let mounted = false;
 
 	onMount(() => {
 		mounted = true;
-	});
-
-	// Handle navigation item click
+	});	// Handle navigation item click
 	function handleNavClick(item: typeof navItems[0]) {
-		goto(item.href);
+		if (item.action === 'navigate') {
+			goto(item.href);
+		} else if (item.action === 'scroll') {
+			// Check if we're on the home page
+			if ($page.url.pathname === '/') {
+				// Smooth scroll to section
+				const targetId = item.href.replace('#', '');
+				const element = document.getElementById(targetId);
+				if (element) {
+					element.scrollIntoView({ 
+						behavior: 'smooth',
+						block: 'start'
+					});
+				}
+			} else {
+				// Navigate to home page with hash, then scroll
+				goto('/').then(() => {
+					// Small delay to ensure page loads
+					setTimeout(() => {
+						const targetId = item.href.replace('#', '');
+						const element = document.getElementById(targetId);
+						if (element) {
+							element.scrollIntoView({ 
+								behavior: 'smooth',
+								block: 'start'
+							});
+						}
+					}, 100);
+				});
+			}
+		}
 	}
 
 	// Handle search click
@@ -39,10 +66,13 @@
 		aria-label="Main navigation"
 	>
 		<div class="dock-container">			<!-- Navigation Items -->
-			{#each navItems as item}
-				<button
+			{#each navItems as item}				<button
 					class="dock-item"
-					class:active={$page.url.pathname === item.href || ($page.url.pathname.startsWith('/blog') && item.href === '/blog')}
+					class:active={
+						($page.url.pathname === '/' && item.href === '/') ||
+						($page.url.pathname === item.href && item.action === 'navigate') ||
+						($page.url.pathname.startsWith('/blog') && item.href === '/blog')
+					}
 					onclick={() => handleNavClick(item)}
 					aria-label={item.label}
 					title={item.label}
@@ -66,24 +96,41 @@
 			<ThemeToggle class="dock-theme-toggle" />
 		</div>
 	</nav>
-
 	<!-- Mobile Bottom Bar -->
 	<nav
 		class="floating-dock mobile-dock"
 		in:fly={{ y: 100, duration: 500, delay: 300 }}
 		aria-label="Mobile navigation"
 	>
-		<div class="mobile-container">			{#each navItems.slice(0, 4) as item}
+		<div class="mobile-container">
+			<!-- Main Navigation Items -->
+			{#each navItems as item}
 				<button
 					class="mobile-item"
-					class:active={$page.url.pathname === item.href || ($page.url.pathname.startsWith('/blog') && item.href === '/blog')}
+					class:active={
+						($page.url.pathname === '/' && item.href === '/') ||
+						($page.url.pathname === item.href && item.action === 'navigate') ||
+						($page.url.pathname.startsWith('/blog') && item.href === '/blog')
+					}
 					onclick={() => handleNavClick(item)}
 					aria-label={item.label}
 				>
-					<svelte:component this={item.icon} size={20} />
+					<svelte:component this={item.icon} size={18} />
 					<span class="mobile-label">{item.label}</span>
 				</button>
-			{/each}<!-- Mobile Theme Toggle -->
+			{/each}
+
+			<!-- Search Button -->
+			<button
+				class="mobile-item"
+				onclick={handleSearchClick}
+				aria-label="Search"
+			>
+				<Search size={18} />
+				<span class="mobile-label">Search</span>
+			</button>
+
+			<!-- Mobile Theme Toggle -->
 			<ThemeToggle class="mobile-theme-toggle" />
 		</div>
 	</nav>
@@ -164,28 +211,29 @@
 		-webkit-backdrop-filter: var(--glass-backdrop);
 		border-top: 1px solid var(--glass-border);
 		box-shadow: 0 -4px 20px var(--glass-shadow);
-	}
-	.mobile-container {
+	}	.mobile-container {
 		display: flex;
 		align-items: center;
 		justify-content: space-around;
-		padding: var(--space-1) var(--space-3) calc(var(--space-1) + env(safe-area-inset-bottom));
-		max-width: 500px;
+		padding: var(--space-1) var(--space-2) calc(var(--space-1) + env(safe-area-inset-bottom));
+		max-width: 600px;
 		margin: 0 auto;
-	}
-	.mobile-item {
+		gap: var(--space-1);
+	}	.mobile-item {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		padding: var(--space-1);
-		min-width: 44px;
+		min-width: 40px;
 		border: none;
 		background: transparent;
 		color: var(--color-text-secondary);
 		cursor: pointer;
 		transition: all var(--transition-fast);
 		border-radius: var(--radius-md);
+		flex: 1;
+		max-width: 60px;
 	}
 	.mobile-item:hover,
 	.mobile-item:active {
@@ -194,11 +242,15 @@
 
 	.mobile-item.active {
 		color: var(--primary-500);
-	}
-	.mobile-label {
-		font-size: var(--font-size-2xs);
-		margin-top: var(--space-px);
+	}	.mobile-label {
+		font-size: var(--font-size-3xs);
+		margin-top: 2px;
 		font-weight: 500;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 100%;
 	}
 
 	/* Responsive Breakpoints */

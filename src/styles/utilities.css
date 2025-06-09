@@ -9,13 +9,21 @@
 }
 
 .glass-card {
-	@apply glass;
+	background: var(--glass-bg);
+	backdrop-filter: var(--glass-backdrop);
+	border: 1px solid var(--glass-border);
+	box-shadow: 0 4px 6px -1px var(--glass-shadow);
 	border-radius: var(--radius-xl);
 	padding: var(--space-6);
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .glass-button {
-	@apply glass;
+	background: var(--glass-bg);
+	backdrop-filter: var(--glass-backdrop);
+	border: 1px solid var(--glass-border);
+	box-shadow: 0 4px 6px -1px var(--glass-shadow);
 	border-radius: var(--radius-lg);
 	padding: var(--space-3) var(--space-6);
 	transition: all var(--transition-fast);
