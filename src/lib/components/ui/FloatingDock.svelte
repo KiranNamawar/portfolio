@@ -1,5 +1,6 @@
 <script lang="ts">	import { Home, FileText, Search, FolderOpen } from '@lucide/svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
+	import SearchDialog from './SearchDialog.svelte';
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
@@ -12,6 +13,7 @@
 	];
 
 	let mounted = false;
+	let isSearchOpen = false;
 
 	onMount(() => {
 		mounted = true;
@@ -49,11 +51,14 @@
 			}
 		}
 	}
-
 	// Handle search click
 	function handleSearchClick() {
-		console.log('Opening search dialog');
-		// This would trigger a search modal/dialog
+		isSearchOpen = true;
+	}
+
+	// Handle search dialog close
+	function handleSearchClose() {
+		isSearchOpen = false;
 	}
 </script>
 
@@ -135,6 +140,9 @@
 		</div>
 	</nav>
 {/if}
+
+<!-- Search Dialog -->
+<SearchDialog bind:isOpen={isSearchOpen} onclose={handleSearchClose} />
 
 <style>
 	.floating-dock {
