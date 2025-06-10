@@ -1,4 +1,5 @@
-<script lang="ts">	import type { PageData } from './$types';
+<script lang="ts">
+	import type { PageData } from './$types';
 	import { formatDate } from '$lib/utils/date.js';
 	import { ExternalLink, Github } from '@lucide/svelte';
 
@@ -21,13 +22,23 @@
 							<div class="project-overlay">
 								<div class="project-actions">
 									{#if project.demo}
-										<a href={project.demo} target="_blank" rel="noopener noreferrer" class="project-action-btn">
+										<a
+											href={project.demo}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="project-action-btn"
+										>
 											<ExternalLink size={20} />
 											<span>Demo</span>
 										</a>
 									{/if}
 									{#if project.github}
-										<a href={project.github} target="_blank" rel="noopener noreferrer" class="project-action-btn">
+										<a
+											href={project.github}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="project-action-btn"
+										>
 											<Github size={20} />
 											<span>Code</span>
 										</a>
@@ -36,25 +47,29 @@
 							</div>
 						</div>
 					{/if}
-					
+
 					<div class="project-content">
 						<h3 class="text-2xl">
 							<a href="/projects/{project.slug}" class="text-primary hover:text-primary-700">
 								{project.title}
 							</a>
 						</h3>
-						
 						<div class="project-meta">
 							<time>{formatDate(project.date)}</time>
 							{#if project.featured}
 								<span class="featured-badge">Featured</span>
 							{/if}
+							{#if project.readingTime}
+								<span class="reading-time">
+									{project.readingTime} min read
+								</span>
+							{/if}
 						</div>
-						
+
 						{#if project.description}
 							<p class="description text-secondary">{project.description}</p>
 						{/if}
-						
+
 						{#if project.technologies && project.technologies.length > 0}
 							<div class="project-technologies">
 								{#each project.technologies as tech}
@@ -64,9 +79,7 @@
 						{/if}
 
 						<div class="project-links">
-							<a href="/projects/{project.slug}" class="read-more-btn">
-								Read More →
-							</a>
+							<a href="/projects/{project.slug}" class="read-more-btn"> Read More → </a>
 						</div>
 					</div>
 				</article>
@@ -163,7 +176,6 @@
 		flex-direction: column;
 		gap: 1rem;
 	}
-
 	.project-meta {
 		display: flex;
 		align-items: center;
@@ -172,13 +184,18 @@
 		color: var(--text-secondary);
 	}
 
+	.reading-time {
+		color: var(--text-secondary);
+	}
 	.featured-badge {
-		background: var(--primary);
+		background: var(--primary-500);
 		color: white;
 		padding: 0.25rem 0.75rem;
 		border-radius: 1rem;
 		font-size: 0.8rem;
 		font-weight: 500;
+		border: 1px solid var(--primary-600);
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 	}
 
 	.description {

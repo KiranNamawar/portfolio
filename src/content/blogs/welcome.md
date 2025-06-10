@@ -6,7 +6,6 @@ author: Kiran
 tags: ['welcome', 'first-post']
 published: true
 featured: true
-readingTime: 2
 layout: blog
 ---
 
@@ -23,7 +22,6 @@ I decided to start this blog to document my learning process, share insights abo
 <Callout type="info" title="Note">
 This is an informational callout that will look great!
 </Callout>
-
 
 ## Features
 

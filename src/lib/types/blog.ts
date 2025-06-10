@@ -8,6 +8,7 @@ export interface BlogPost {
 	published: boolean;
 	featured?: boolean;
 	readingTime?: number;
+	wordCount?: number;
 	image?: string;
 	content?: string;
 }

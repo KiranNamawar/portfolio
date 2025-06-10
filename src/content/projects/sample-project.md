@@ -8,7 +8,6 @@ github: 'https://github.com/username/sample-project'
 demo: 'https://sample-project.demo.com'
 featured: true
 published: true
-readingTime: 3
 layout: project
 ---
 

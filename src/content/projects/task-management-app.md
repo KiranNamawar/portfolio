@@ -8,7 +8,6 @@ github: 'https://github.com/username/task-management-app'
 demo: 'https://task-app-demo.vercel.app'
 featured: true
 published: true
-readingTime: 4
 layout: project
 ---
 

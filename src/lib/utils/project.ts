@@ -1,24 +1,33 @@
 import type { Project } from '$lib/types/project.js';
+import { calculateReadingTime } from './readingTime.js';
 
 export async function getProjects(): Promise<Project[]> {
 	const modules = import.meta.glob('../../content/projects/*.md', { eager: true });
+	const rawModules = import.meta.glob('../../content/projects/*.md', { eager: true, as: 'raw' });
 	const projects: Project[] = [];
 
 	for (const path in modules) {
 		const mod = modules[path] as { metadata?: Project; default?: unknown };
+		const rawContent = rawModules[path] as string;
+
 		if (mod?.metadata) {
 			const slug = path.split('/').pop()?.replace('.md', '') || '';
 
-			// Calculate reading time based on description length as a fallback
-			const estimatedWords = mod.metadata.description
-				? mod.metadata.description.split(' ').length * 8
-				: 80;
-			const readingTime = Math.max(1, Math.ceil(estimatedWords / 200));
+			// Always calculate reading time from actual content
+			let readingTime = 1;
+			let wordCount = 0;
+
+			if (rawContent) {
+				const readingTimeResult = calculateReadingTime(rawContent);
+				readingTime = readingTimeResult.minutes;
+				wordCount = readingTimeResult.words;
+			}
 
 			projects.push({
 				...mod.metadata,
 				slug,
-				readingTime: mod.metadata.readingTime || readingTime
+				readingTime,
+				wordCount
 			});
 		}
 	}
@@ -30,12 +39,20 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function getProject(slug: string) {
 	try {
-		// Use relative import path to fix Vite dynamic import issue
+		// Get the module normally for content
 		const module = await import(`../../content/projects/${slug}.md`);
+		
+		// Get the calculated data from the list function
+		const allProjects = await getProjects();
+		const projectData = allProjects.find(project => project.slug === slug);
 
 		return {
 			content: module.default,
-			metadata: module.metadata
+			metadata: {
+				...module.metadata,
+				readingTime: projectData?.readingTime || 1,
+				wordCount: projectData?.wordCount || 0
+			}
 		};
 	} catch (error) {
 		console.error(`Error loading project ${slug}:`, error);

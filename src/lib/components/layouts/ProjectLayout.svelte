@@ -4,7 +4,8 @@
 	export { Callout };
 </script>
 
-<script lang="ts">	import { formatDate } from '$lib/utils/date.js';
+<script lang="ts">
+	import { formatDate } from '$lib/utils/date.js';
 	import { ExternalLink, Github, ArrowLeft } from '@lucide/svelte';
 	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
 	import CodeBlockEnhancer from '$lib/components/ui/CodeBlockEnhancer.svelte';
@@ -19,6 +20,7 @@
 	export let demo: string | undefined = undefined;
 	export let featured: boolean | undefined = undefined;
 	export let readingTime: number | undefined = undefined;
+	export let wordCount: number | undefined = undefined;
 </script>
 
 <svelte:head>
@@ -58,21 +60,25 @@
 
 		<div class="project-header-content">
 			<h1 class="project-title">{title}</h1>
-			
 			<div class="project-meta">
 				<time class="project-date">{formatDate(date)}</time>
 				{#if featured}
 					<span class="featured-badge">Featured Project</span>
 				{/if}
 				{#if readingTime}
-					<span class="reading-time">{readingTime} min read</span>
+					<span class="reading-time">
+						{readingTime} min read
+						{#if wordCount}
+							<span class="word-count">({wordCount} words)</span>
+						{/if}
+					</span>
 				{/if}
 			</div>
-			
+
 			{#if description}
 				<p class="project-description">{description}</p>
 			{/if}
-			
+
 			{#if technologies && technologies.length > 0}
 				<div class="project-technologies">
 					{#each technologies as tech}
@@ -83,13 +89,23 @@
 
 			<div class="project-actions">
 				{#if demo}
-					<a href={demo} target="_blank" rel="noopener noreferrer" class="project-action-btn primary">
+					<a
+						href={demo}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="project-action-btn primary"
+					>
 						<ExternalLink size={20} />
 						<span>Live Demo</span>
 					</a>
 				{/if}
 				{#if github}
-					<a href={github} target="_blank" rel="noopener noreferrer" class="project-action-btn secondary">
+					<a
+						href={github}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="project-action-btn secondary"
+					>
 						<Github size={20} />
 						<span>Source Code</span>
 					</a>
@@ -211,7 +227,6 @@
 		color: var(--color-text-secondary);
 		font-size: var(--font-size-sm);
 	}
-
 	.featured-badge {
 		background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
 		color: white;
@@ -221,6 +236,8 @@
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.5px;
+		border: 1px solid var(--primary-600);
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 	}
 
 	.reading-time {

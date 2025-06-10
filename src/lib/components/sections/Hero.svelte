@@ -9,7 +9,7 @@
 	onMount(() => {
 		function typeWriter() {
 			const currentPhrase = heroTypingPhrases[currentIndex];
-			
+
 			if (isDeleting) {
 				typingText = currentPhrase.substring(0, typingText.length - 1);
 			} else {
@@ -20,7 +20,8 @@
 
 			if (!isDeleting && typingText === currentPhrase) {
 				typeSpeed = 2000;
-				isDeleting = true;			} else if (isDeleting && typingText === '') {
+				isDeleting = true;
+			} else if (isDeleting && typingText === '') {
 				isDeleting = false;
 				currentIndex = (currentIndex + 1) % heroTypingPhrases.length;
 				typeSpeed = 500;
@@ -38,44 +39,46 @@
 		<div class="particles" aria-hidden="true"></div>
 		<div class="gradient-overlay"></div>
 	</div>
-	
-	<div class="hero-content">		<div class="hero-text">
+
+	<div class="hero-content">
+		<div class="hero-text">
 			<h1 class="hero-title">
 				<span class="greeting">Hello, I'm</span>
 				<span class="name">{personalInfo.name}</span>
 			</h1>
-			
+
 			<div class="hero-subtitle">
 				<span class="typing-container">
 					<span class="typing-text">{typingText}</span>
 					<span class="cursor" aria-hidden="true">|</span>
-				</span>			</div>
-			
+				</span>
+			</div>
+
 			<p class="hero-description">
 				{personalInfo.bio}
 			</p>
-			
+
 			<div class="hero-actions">
-				<a href="/projets" class="btn btn-primary glass-button">
+				<a href="/projects" class="btn btn-primary glass-button">
 					<span>View My Work</span>
 					<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-						<path d="m9 18 6-6-6-6"/>
+						<path d="m9 18 6-6-6-6" />
 					</svg>
 				</a>
-				
+
 				<a href="#contact" class="btn btn-secondary glass-button">
 					<span>Get In Touch</span>
 					<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-						<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+						<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
 					</svg>
 				</a>
 			</div>
 		</div>
-		
+
 		<div class="hero-image">
 			<div class="profile-container">
-				<div class="profile-ring"></div>				
-                <div class="profile-image">
+				<div class="profile-ring"></div>
+				<div class="profile-image">
 					<img src="/profile.svg" alt="Kiran's Profile" />
 				</div>
 				<div class="floating-elements" aria-hidden="true">
@@ -83,8 +86,8 @@
 					<div class="floating-element element-2">🚀</div>
 					<div class="floating-element element-3">⚡</div>
 				</div>
-			</div>		
-        </div>
+			</div>
+		</div>
 	</div>
 </section>
 
@@ -108,19 +111,22 @@
 	.particles {
 		position: absolute;
 		inset: 0;
-		background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-		            radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-		            radial-gradient(circle at 40% 80%, rgba(120, 200, 255, 0.1) 0%, transparent 50%);
+		background:
+			radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+			radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+			radial-gradient(circle at 40% 80%, rgba(120, 200, 255, 0.1) 0%, transparent 50%);
 		animation: float 20s ease-in-out infinite;
 	}
 
 	.gradient-overlay {
 		position: absolute;
 		inset: 0;
-		background: linear-gradient(135deg, 
-			var(--color-bg-primary) 0%, 
-			transparent 50%, 
-			var(--color-bg-primary) 100%);
+		background: linear-gradient(
+			135deg,
+			var(--color-bg-primary) 0%,
+			transparent 50%,
+			var(--color-bg-primary) 100%
+		);
 		opacity: 0.8;
 	}
 
@@ -318,17 +324,32 @@
 	}
 
 	@keyframes blink {
-		0%, 50% { opacity: 1; }
-		51%, 100% { opacity: 0; }
+		0%,
+		50% {
+			opacity: 1;
+		}
+		51%,
+		100% {
+			opacity: 0;
+		}
 	}
 
 	@keyframes float {
-		0%, 100% { transform: translateY(0px); }
-		50% { transform: translateY(-10px); }
+		0%,
+		100% {
+			transform: translateY(0px);
+		}
+		50% {
+			transform: translateY(-10px);
+		}
 	}
 	@keyframes rotate {
-		from { transform: rotate(0deg); }
-		to { transform: rotate(360deg); }
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	/* Responsive Design */

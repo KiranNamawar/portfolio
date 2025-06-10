@@ -8,7 +8,6 @@
 	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
 	import CodeBlockEnhancer from '$lib/components/ui/CodeBlockEnhancer.svelte';
 	import { formatDate } from '$lib/utils/date.js';
-
 	// All frontmatter values are available as props
 	export let title: string;
 	export let description: string;
@@ -16,6 +15,8 @@
 	export let author: string | undefined = undefined;
 	export let tags: string[] | undefined = undefined;
 	export let readingTime: number | undefined = undefined;
+	export let wordCount: number | undefined = undefined;
+	export let featured: boolean | undefined = undefined;
 </script>
 
 <!-- Reading Progress -->
@@ -27,21 +28,28 @@
 <article class="blog-post">
 	<header class="blog-post-header">
 		<h1 class="blog-post-title">{title}</h1>
-		
 		<div class="blog-post-meta">
 			<time class="blog-post-date">{formatDate(date)}</time>
 			{#if author}
 				<span class="blog-post-author">by {author}</span>
 			{/if}
+			{#if featured}
+				<span class="featured-badge">Featured Post</span>
+			{/if}
 			{#if readingTime}
-				<span class="blog-post-reading-time">{readingTime} min read</span>
+				<span class="blog-post-reading-time">
+					{readingTime} min read
+					{#if wordCount}
+						<span class="word-count">({wordCount} words)</span>
+					{/if}
+				</span>
 			{/if}
 		</div>
-		
+
 		{#if description}
 			<p class="blog-post-description">{description}</p>
 		{/if}
-		
+
 		{#if tags && tags.length > 0}
 			<div class="blog-post-tags">
 				{#each tags as tag}

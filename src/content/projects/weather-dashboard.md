@@ -8,7 +8,6 @@ github: 'https://github.com/username/weather-dashboard'
 demo: 'https://weather-dashboard-demo.netlify.app'
 featured: false
 published: true
-readingTime: 6
 layout: project
 ---
 

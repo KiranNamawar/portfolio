@@ -1,28 +1,39 @@
 import type { BlogPost } from '$lib/types/blog.js';
+import { calculateReadingTime } from './readingTime.js';
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
 	const modules = import.meta.glob('../../content/blogs/*.md', { eager: true });
+	const rawModules = import.meta.glob('../../content/blogs/*.md', {
+		eager: true,
+		query: '?raw',
+		import: 'default'
+	});
 	const posts: BlogPost[] = [];
 
 	for (const path in modules) {
 		const mod = modules[path] as { metadata?: BlogPost; default?: unknown };
+		const rawContent = rawModules[path] as string;
 		if (mod?.metadata) {
 			const slug = path.split('/').pop()?.replace('.md', '') || '';
 
-			// Calculate reading time based on description length as a fallback
-			const estimatedWords = mod.metadata.description
-				? mod.metadata.description.split(' ').length * 10
-				: 100;
-			const readingTime = Math.max(1, Math.ceil(estimatedWords / 200));
+			// Always calculate reading time from actual content (ignore frontmatter)
+			let readingTime = 1;
+			let wordCount = 0;
+
+			if (rawContent) {
+				const readingTimeResult = calculateReadingTime(rawContent);
+				readingTime = readingTimeResult.minutes;
+				wordCount = readingTimeResult.words;
+			}
 
 			posts.push({
 				...mod.metadata,
 				slug,
-				readingTime: mod.metadata.readingTime || readingTime
+				readingTime,
+				wordCount
 			});
 		}
 	}
-
 	return posts
 		.filter((post) => post.published)
 		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -30,12 +41,20 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 
 export async function getBlogPost(slug: string) {
 	try {
-		// Use relative import path to fix Vite dynamic import issue
+		// Get the module normally for content
 		const module = await import(`../../content/blogs/${slug}.md`);
+		
+		// Get the calculated data from the list function
+		const allPosts = await getBlogPosts();
+		const postData = allPosts.find(post => post.slug === slug);
 
 		return {
 			content: module.default,
-			metadata: module.metadata
+			metadata: {
+				...module.metadata,
+				readingTime: postData?.readingTime || 1,
+				wordCount: postData?.wordCount || 0
+			}
 		};
 	} catch (error) {
 		console.error(`Error loading blog post ${slug}:`, error);

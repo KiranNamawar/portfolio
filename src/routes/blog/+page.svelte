@@ -1,4 +1,5 @@
-<script lang="ts">	import type { PageData } from './$types';
+<script lang="ts">
+	import type { PageData } from './$types';
 	import { formatDate } from '$lib/utils/date.js';
 
 	let { data }: { data: PageData } = $props();
@@ -19,18 +20,25 @@
 							{post.title}
 						</a>
 					</h3>
-					
 					<div class="blog-meta">
 						<time>{formatDate(post.date)}</time>
 						{#if post.author}
 							<span>by {post.author}</span>
 						{/if}
+						{#if post.featured}
+							<span class="featured-badge">Featured</span>
+						{/if}
+						{#if post.readingTime}
+							<span class="reading-time">
+								{post.readingTime} min read
+							</span>
+						{/if}
 					</div>
-					
+
 					{#if post.description}
 						<p class="description text-secondary">{post.description}</p>
 					{/if}
-					
+
 					{#if post.tags && post.tags.length > 0}
 						<div class="blog-tags">
 							{#each post.tags as tag}
@@ -48,4 +56,15 @@
 	{/if}
 </div>
 
-
+<style>
+	.featured-badge {
+		background: var(--primary-500);
+		color: white;
+		padding: 0.25rem 0.75rem;
+		border-radius: 1rem;
+		font-size: 0.8rem;
+		font-weight: 500;
+		border: 1px solid var(--primary-600);
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	}
+</style>

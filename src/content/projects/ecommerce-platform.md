@@ -8,7 +8,6 @@ github: 'https://github.com/username/ecommerce-platform'
 demo: 'https://ecommerce-demo.vercel.app'
 featured: false
 published: true
-readingTime: 5
 layout: project
 ---
 

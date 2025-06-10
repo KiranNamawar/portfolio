@@ -10,5 +10,6 @@ export interface Project {
 	featured?: boolean;
 	published: boolean;
 	readingTime?: number;
+	wordCount?: number;
 	content?: string;
 }

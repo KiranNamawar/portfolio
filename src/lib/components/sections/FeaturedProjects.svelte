@@ -6,9 +6,10 @@
 
 	let projectsRef: HTMLElement;
 	let isVisible = false;
-	let featuredProjects: Project[] = [];	onMount(() => {
+	let featuredProjects: Project[] = [];
+	onMount(() => {
 		// Load featured projects
-		getFeaturedProjects().then(projects => {
+		getFeaturedProjects().then((projects) => {
 			featuredProjects = projects;
 		});
 
@@ -27,73 +28,73 @@
 	});
 </script>
 
-<section 
-	bind:this={projectsRef}
-	class="projects-section" 
-	class:visible={isVisible}
-	id="projects"
->
+<section bind:this={projectsRef} class="projects-section" class:visible={isVisible} id="projects">
 	<div class="container">
 		<div class="content-wrapper">
 			<!-- Section Header -->
 			<header class="section-header">
 				<h2 class="section-title">Featured Projects</h2>
-				<p class="section-subtitle">
-					A showcase of my recent work and creative explorations
-				</p>
+				<p class="section-subtitle">A showcase of my recent work and creative explorations</p>
 			</header>
 
 			<!-- Featured Projects -->
 			<div class="featured-projects">
 				{#each featuredProjects as project, index}
-					<article 
+					<article
 						class="project-card featured"
 						class:reverse={index % 2 === 1}
 						style="animation-delay: {index * 0.2}s"
-					>						<div class="project-image">
+					>
+						<div class="project-image">
 							<img src={project.image || '/placeholder-project.jpg'} alt={project.title} />
-							<div class="project-overlay">							<div class="project-links">
-								{#if project.github}
-									<a 
-										href={project.github} 
-										target="_blank" 
-										rel="noopener noreferrer"
-										class="project-link"
-										aria-label="View on GitHub"
-									>
-										<Github size={20} />
-									</a>
-								{/if}
-								{#if project.demo}
-									<a 
-										href={project.demo} 
-										target="_blank" 
-										rel="noopener noreferrer"
-										class="project-link"
-										aria-label="View live demo"
-									>
-										<ExternalLink size={20} />
-									</a>
-								{/if}
+							<div class="project-overlay">
+								<div class="project-links">
+									{#if project.github}
+										<a
+											href={project.github}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="project-link"
+											aria-label="View on GitHub"
+										>
+											<Github size={20} />
+										</a>
+									{/if}
+									{#if project.demo}
+										<a
+											href={project.demo}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="project-link"
+											aria-label="View live demo"
+										>
+											<ExternalLink size={20} />
+										</a>
+									{/if}
+								</div>
 							</div>
-							</div>
-						</div>						<div class="project-content">
+						</div>
+						<div class="project-content">
 							<h3 class="project-title">{project.title}</h3>
-							<p class="project-description">{project.description}</p>							<div class="project-tech">
+							<div class="project-meta">
+								{#if project.readingTime}
+									<span class="reading-time">
+										{project.readingTime} min read
+									</span>
+								{/if}
+							</div>
+							<p class="project-description">{project.description}</p>
+							<div class="project-tech">
 								{#each project.technologies || [] as tech}
 									<span class="tech-tag">{tech}</span>
 								{/each}
-							</div>							<div class="project-actions">
-								<a 
-									href="/projects/{project.slug}"
-									class="btn btn-primary"
-								>
-									View Details
-								</a>
+							</div>
+							<div class="project-actions">
+								<a href="/projects/{project.slug}" class="btn btn-primary"> View Details </a>
 								{#if project.github}
-									<a 
-										href={project.github} 
-										target="_blank" 
+									<a
+										href={project.github}
+										target="_blank"
 										rel="noopener noreferrer"
 										class="btn btn-outline"
 									>
@@ -102,9 +103,9 @@
 									</a>
 								{/if}
 								{#if project.demo}
-									<a 
-										href={project.demo} 
-										target="_blank" 
+									<a
+										href={project.demo}
+										target="_blank"
 										rel="noopener noreferrer"
 										class="btn btn-outline"
 									>
@@ -116,7 +117,8 @@
 						</div>
 					</article>
 				{/each}
-			</div>			<!-- View All Projects Button -->
+			</div>
+			<!-- View All Projects Button -->
 			<div class="view-all-projects">
 				<a href="/projects" class="btn btn-primary btn-large">
 					View All Projects
@@ -274,6 +276,19 @@
 		font-weight: var(--font-weight-semibold);
 		color: var(--color-text-primary);
 		margin-bottom: var(--space-3);
+	}
+
+	.project-meta {
+		display: flex;
+		align-items: center;
+		gap: var(--space-4);
+		margin-bottom: var(--space-3);
+		font-size: var(--font-size-sm);
+		color: var(--color-text-secondary);
+	}
+
+	.reading-time {
+		color: var(--color-text-secondary);
 	}
 
 	.project-description {
