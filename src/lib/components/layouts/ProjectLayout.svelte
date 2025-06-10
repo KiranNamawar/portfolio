@@ -17,7 +17,7 @@
 	} from '@lucide/svelte';
 	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
 	import CodeBlockEnhancer from '$lib/components/ui/CodeBlockEnhancer.svelte';
-	// import Image from '../ui/Image.svelte';
+	import { getTechIcon } from '$lib/utils/techIcons';
 	import { onMount } from 'svelte';
 
 	// All frontmatter values are available as props
@@ -76,6 +76,12 @@
 <svelte:head>
 	<title>{title} | Projects</title>
 	<meta name="description" content={description} />
+	<!-- Devicon for technology icons -->
+	<link
+		rel="stylesheet"
+		type="text/css"
+		href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+	/>
 </svelte:head>
 
 <!-- Reading Progress Indicator -->
@@ -118,7 +124,16 @@
 						{#if technologies && technologies.length > 0}
 							<div class="desktop-tech-stack">
 								{#each technologies as tech}
-									<span class="tech-tag">{tech}</span>
+									{@const techIcon = getTechIcon(tech)}
+									<span class="tech-tag">
+										{#if techIcon.type === 'devicon'}
+											<i class="devicon-{techIcon.icon}-{techIcon.variant || 'original'} tech-icon"
+											></i>
+										{:else if techIcon.type === 'lucide' && techIcon.component}
+											<svelte:component this={techIcon.component} size={14} class="tech-icon" />
+										{/if}
+										{tech}
+									</span>
 								{/each}
 							</div>
 						{/if}
@@ -250,7 +265,18 @@
 					{#if technologies && technologies.length > 0}
 						<div class="tech-stack">
 							{#each technologies as tech}
-								<span class="tech-tag">{tech}</span>
+								{@const techIcon = getTechIcon(tech)}
+								<span class="tech-tag">
+									{#if techIcon.type === 'devicon'}
+										<i
+											class="devicon-{techIcon.icon}-{techIcon.variant ||
+												'original'} colored tech-icon"
+										></i>
+									{:else if techIcon.type === 'lucide' && techIcon.component}
+										<svelte:component this={techIcon.component} size={14} class="tech-icon" />
+									{/if}
+									{tech}
+								</span>
 							{/each}
 						</div>
 					{/if}
@@ -306,7 +332,18 @@
 				{#if technologies && technologies.length > 0}
 					<div class="tech-stack">
 						{#each technologies as tech}
-							<span class="tech-tag">{tech}</span>
+							{@const techIcon = getTechIcon(tech)}
+							<span class="tech-tag">
+								{#if techIcon.type === 'devicon'}
+									<i
+										class="devicon-{techIcon.icon}-{techIcon.variant ||
+											'original'} colored tech-icon"
+									></i>
+								{:else if techIcon.type === 'lucide' && techIcon.component}
+									<svelte:component this={techIcon.component} size={14} class="tech-icon" />
+								{/if}
+								{tech}
+							</span>
 						{/each}
 					</div>
 				{/if}
@@ -833,6 +870,9 @@
 		color: var(--primary-600);
 		font-weight: 600;
 		transition: all var(--transition-fast);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
 	}
 
 	.tech-tag:hover {
@@ -840,6 +880,13 @@
 		color: white;
 		border-color: var(--primary-500);
 		transform: translateY(-1px);
+	}
+
+	.tech-icon {
+		flex-shrink: 0;
+		width: 14px;
+		height: 14px;
+		color: inherit;
 	}
 
 	.project-actions {
@@ -1305,6 +1352,12 @@
 		.tech-tag {
 			font-size: var(--font-size-xs);
 			padding: 0.25rem 0.5rem;
+			gap: 0.25rem;
+		}
+
+		.tech-icon {
+			width: 12px;
+			height: 12px;
 		}
 
 		.modal-nav {
