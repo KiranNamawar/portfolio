@@ -26,12 +26,16 @@
 	--color-text-tertiary: #c2410c;
 	--color-border-primary: #fed7aa;
 	--color-border-secondary: #fdba74;
-
 	/* Glass Effects - Warm Tint */
 	--glass-bg: rgba(255, 251, 247, 0.7);
 	--glass-border: rgba(249, 115, 22, 0.2);
 	--glass-shadow: rgba(194, 65, 12, 0.1);
 	--glass-backdrop: blur(20px);
+
+	/* Code Block Glass Effects */
+	--code-glass-bg: rgba(255, 251, 247, 0.8);
+	--code-glass-border: rgba(249, 115, 22, 0.25);
+	--code-glass-shadow: rgba(194, 65, 12, 0.15);
 
 	/* Spacing */
 	--space-px: 1px;
@@ -129,11 +133,15 @@
 	--color-text-secondary: #bae6fd;
 	--color-text-tertiary: #7dd3fc;
 	--color-border-primary: #334155;
-	--color-border-secondary: #475569;
-	/* Cool Glass Effects */
+	--color-border-secondary: #475569; /* Cool Glass Effects */
 	--glass-bg: rgba(12, 20, 32, 0.8);
 	--glass-border: rgba(56, 189, 248, 0.2);
 	--glass-shadow: rgba(14, 165, 233, 0.2);
+
+	/* Code Block Glass Effects */
+	--code-glass-bg: rgba(12, 20, 32, 0.9);
+	--code-glass-border: rgba(56, 189, 248, 0.3);
+	--code-glass-shadow: rgba(14, 165, 233, 0.25);
 
 	/* Dark Surface Colors */
 	--color-surface: rgba(255, 255, 255, 0.1);

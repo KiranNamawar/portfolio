@@ -4,10 +4,10 @@
 	export { Callout };
 </script>
 
-<script lang="ts">
-	import { formatDate } from '$lib/utils/date.js';
+<script lang="ts">	import { formatDate } from '$lib/utils/date.js';
 	import { ExternalLink, Github, ArrowLeft } from '@lucide/svelte';
 	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
+	import CodeBlockEnhancer from '$lib/components/ui/CodeBlockEnhancer.svelte';
 
 	// All frontmatter values are available as props
 	export let title: string;
@@ -28,6 +28,9 @@
 
 <!-- Reading Progress Indicator -->
 <ReadingProgress />
+
+<!-- Code Block Enhancer -->
+<CodeBlockEnhancer />
 
 <article class="project-detail">
 	<header class="project-header">

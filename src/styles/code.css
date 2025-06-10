@@ -11,7 +11,7 @@ code {
 	border: 1px solid var(--color-border-primary);
 }
 
-/* Code Blocks */
+/* Code Blocks - Enhanced for glass effect */
 pre {
 	background: var(--color-bg-secondary);
 	color: var(--color-text-primary);
@@ -25,6 +25,13 @@ pre {
 	line-height: 1.5;
 }
 
+/* Enhanced code blocks - override default styling */
+.enhanced-code-block pre {
+	margin: 0;
+	border: none;
+	background: transparent;
+}
+
 pre code {
 	background: transparent;
 	color: inherit;
@@ -35,12 +42,12 @@ pre code {
 }
 
 /* Dark mode specific code styling */
-[data-theme="dark"] pre {
+[data-theme='dark'] pre {
 	background: #1a1a1a;
 	border-color: var(--color-border-primary);
 }
 
-[data-theme="dark"] code {
+[data-theme='dark'] code {
 	background: #2a2a2a;
 	border-color: var(--color-border-primary);
 }
@@ -102,104 +109,104 @@ pre code {
 }
 
 /* Dark mode syntax highlighting */
-[data-theme="dark"] .token.comment,
-[data-theme="dark"] .token.prolog,
-[data-theme="dark"] .token.doctype,
-[data-theme="dark"] .token.cdata {
+[data-theme='dark'] .token.comment,
+[data-theme='dark'] .token.prolog,
+[data-theme='dark'] .token.doctype,
+[data-theme='dark'] .token.cdata {
 	color: #8b949e;
 }
 
-[data-theme="dark"] .token.property,
-[data-theme="dark"] .token.tag,
-[data-theme="dark"] .token.boolean,
-[data-theme="dark"] .token.number,
-[data-theme="dark"] .token.constant,
-[data-theme="dark"] .token.symbol,
-[data-theme="dark"] .token.deleted {
+[data-theme='dark'] .token.property,
+[data-theme='dark'] .token.tag,
+[data-theme='dark'] .token.boolean,
+[data-theme='dark'] .token.number,
+[data-theme='dark'] .token.constant,
+[data-theme='dark'] .token.symbol,
+[data-theme='dark'] .token.deleted {
 	color: #ff7b72;
 }
 
-[data-theme="dark"] .token.selector,
-[data-theme="dark"] .token.attr-name,
-[data-theme="dark"] .token.string,
-[data-theme="dark"] .token.char,
-[data-theme="dark"] .token.builtin,
-[data-theme="dark"] .token.inserted {
+[data-theme='dark'] .token.selector,
+[data-theme='dark'] .token.attr-name,
+[data-theme='dark'] .token.string,
+[data-theme='dark'] .token.char,
+[data-theme='dark'] .token.builtin,
+[data-theme='dark'] .token.inserted {
 	color: #7ee787;
 }
 
-[data-theme="dark"] .token.operator,
-[data-theme="dark"] .token.entity,
-[data-theme="dark"] .token.url,
-[data-theme="dark"] .language-css .token.string,
-[data-theme="dark"] .style .token.string {
+[data-theme='dark'] .token.operator,
+[data-theme='dark'] .token.entity,
+[data-theme='dark'] .token.url,
+[data-theme='dark'] .language-css .token.string,
+[data-theme='dark'] .style .token.string {
 	color: #ffa657;
 }
 
-[data-theme="dark"] .token.atrule,
-[data-theme="dark"] .token.attr-value,
-[data-theme="dark"] .token.keyword {
+[data-theme='dark'] .token.atrule,
+[data-theme='dark'] .token.attr-value,
+[data-theme='dark'] .token.keyword {
 	color: #79c0ff;
 }
 
-[data-theme="dark"] .token.function,
-[data-theme="dark"] .token.class-name {
+[data-theme='dark'] .token.function,
+[data-theme='dark'] .token.class-name {
 	color: #d2a8ff;
 }
 
-[data-theme="dark"] .token.regex,
-[data-theme="dark"] .token.important,
-[data-theme="dark"] .token.variable {
+[data-theme='dark'] .token.regex,
+[data-theme='dark'] .token.important,
+[data-theme='dark'] .token.variable {
 	color: #ffa657;
 }
 
 /* Light mode terminal command styling */
-[data-theme="light"] pre.language-bash .token.comment,
-[data-theme="light"] pre.language-shell .token.comment,
-[data-theme="light"] pre.language-terminal .token.comment {
+[data-theme='light'] pre.language-bash .token.comment,
+[data-theme='light'] pre.language-shell .token.comment,
+[data-theme='light'] pre.language-terminal .token.comment {
 	color: #6a737d;
 }
 
-[data-theme="light"] pre.language-bash .token.string,
-[data-theme="light"] pre.language-shell .token.string,
-[data-theme="light"] pre.language-terminal .token.string {
+[data-theme='light'] pre.language-bash .token.string,
+[data-theme='light'] pre.language-shell .token.string,
+[data-theme='light'] pre.language-terminal .token.string {
 	color: #032f62;
 }
 
-[data-theme="light"] pre.language-bash .token.function,
-[data-theme="light"] pre.language-shell .token.function,
-[data-theme="light"] pre.language-terminal .token.function {
+[data-theme='light'] pre.language-bash .token.function,
+[data-theme='light'] pre.language-shell .token.function,
+[data-theme='light'] pre.language-terminal .token.function {
 	color: #6f42c1;
 }
 
-[data-theme="light"] pre.language-bash .token.keyword,
-[data-theme="light"] pre.language-shell .token.keyword,
-[data-theme="light"] pre.language-terminal .token.keyword {
+[data-theme='light'] pre.language-bash .token.keyword,
+[data-theme='light'] pre.language-shell .token.keyword,
+[data-theme='light'] pre.language-terminal .token.keyword {
 	color: #d73a49;
 }
 
 /* Dark mode terminal command styling */
-[data-theme="dark"] pre.language-bash .token.comment,
-[data-theme="dark"] pre.language-shell .token.comment,
-[data-theme="dark"] pre.language-terminal .token.comment {
+[data-theme='dark'] pre.language-bash .token.comment,
+[data-theme='dark'] pre.language-shell .token.comment,
+[data-theme='dark'] pre.language-terminal .token.comment {
 	color: #8b949e;
 }
 
-[data-theme="dark"] pre.language-bash .token.string,
-[data-theme="dark"] pre.language-shell .token.string,
-[data-theme="dark"] pre.language-terminal .token.string {
+[data-theme='dark'] pre.language-bash .token.string,
+[data-theme='dark'] pre.language-shell .token.string,
+[data-theme='dark'] pre.language-terminal .token.string {
 	color: #7ee787;
 }
 
-[data-theme="dark"] pre.language-bash .token.function,
-[data-theme="dark"] pre.language-shell .token.function,
-[data-theme="dark"] pre.language-terminal .token.function {
+[data-theme='dark'] pre.language-bash .token.function,
+[data-theme='dark'] pre.language-shell .token.function,
+[data-theme='dark'] pre.language-terminal .token.function {
 	color: #d2a8ff;
 }
 
-[data-theme="dark"] pre.language-bash .token.keyword,
-[data-theme="dark"] pre.language-shell .token.keyword,
-[data-theme="dark"] pre.language-terminal .token.keyword {
+[data-theme='dark'] pre.language-bash .token.keyword,
+[data-theme='dark'] pre.language-shell .token.keyword,
+[data-theme='dark'] pre.language-terminal .token.keyword {
 	color: #ff7b72;
 }
 
@@ -255,18 +262,18 @@ pre.language-terminal {
 }
 
 /* Light mode terminal styling */
-[data-theme="light"] pre.language-bash,
-[data-theme="light"] pre.language-shell,
-[data-theme="light"] pre.language-terminal {
+[data-theme='light'] pre.language-bash,
+[data-theme='light'] pre.language-shell,
+[data-theme='light'] pre.language-terminal {
 	background: #f8f9fa;
 	color: #24292f;
 	border-left-color: var(--primary);
 }
 
 /* Dark mode terminal styling */
-[data-theme="dark"] pre.language-bash,
-[data-theme="dark"] pre.language-shell,
-[data-theme="dark"] pre.language-terminal {
+[data-theme='dark'] pre.language-bash,
+[data-theme='dark'] pre.language-shell,
+[data-theme='dark'] pre.language-terminal {
 	background: #0d1117;
 	border-left-color: #7ee787;
 	color: #7ee787;
@@ -283,17 +290,17 @@ pre[data-line] .line-highlight,
 	padding: 0 1rem;
 }
 
-[data-theme="light"] .highlight-line,
-[data-theme="light"] .line-highlight,
-[data-theme="light"] pre[data-line] .line-highlight,
-[data-theme="light"] .code-highlight {
+[data-theme='light'] .highlight-line,
+[data-theme='light'] .line-highlight,
+[data-theme='light'] pre[data-line] .line-highlight,
+[data-theme='light'] .code-highlight {
 	background: rgba(0, 0, 0, 0.05) !important;
 }
 
-[data-theme="dark"] .highlight-line,
-[data-theme="dark"] .line-highlight,
-[data-theme="dark"] pre[data-line] .line-highlight,
-[data-theme="dark"] .code-highlight {
+[data-theme='dark'] .highlight-line,
+[data-theme='dark'] .line-highlight,
+[data-theme='dark'] pre[data-line] .line-highlight,
+[data-theme='dark'] .code-highlight {
 	background: rgba(255, 255, 255, 0.03) !important;
 }
 
@@ -302,74 +309,74 @@ pre[data-line] .line-highlight,
 	color: var(--color-text-tertiary);
 }
 
-[data-theme="dark"] .line-numbers .line-numbers-rows > span:before {
+[data-theme='dark'] .line-numbers .line-numbers-rows > span:before {
 	color: #6e7681;
 }
 
 /* Remove any default line highlighting that might be too bright */
-pre[class*="language-"] .line-highlight {
+pre[class*='language-'] .line-highlight {
 	background: none !important;
 	background-image: none !important;
 }
 
-[data-theme="dark"] pre[class*="language-"] .line-highlight {
+[data-theme='dark'] pre[class*='language-'] .line-highlight {
 	background: rgba(255, 255, 255, 0.02) !important;
 	background-image: none !important;
 }
 
 /* Additional dark mode fixes for various syntax highlighting libraries */
-[data-theme="dark"] {
+[data-theme='dark'] {
 	/* Override any bright backgrounds from external libraries */
 	--prism-highlight-background: rgba(255, 255, 255, 0.03);
 	--prism-line-number-color: #6e7681;
 }
 
 /* Fix for mdsvex/prism highlighting */
-[data-theme="dark"] .prism-code,
-[data-theme="dark"] .token-line {
+[data-theme='dark'] .prism-code,
+[data-theme='dark'] .token-line {
 	background: transparent !important;
 }
 
-[data-theme="dark"] .highlight {
+[data-theme='dark'] .highlight {
 	background: rgba(255, 255, 255, 0.03) !important;
 }
 
 /* Fix any remaining bright line highlights */
-[data-theme="dark"] pre code .line,
-[data-theme="dark"] pre code span.line {
+[data-theme='dark'] pre code .line,
+[data-theme='dark'] pre code span.line {
 	background: transparent !important;
 }
 
-[data-theme="dark"] .highlighted-line,
-[data-theme="dark"] .highlight-source-js {
+[data-theme='dark'] .highlighted-line,
+[data-theme='dark'] .highlight-source-js {
 	background: rgba(255, 255, 255, 0.03) !important;
 }
 
 /* Aggressive fixes for line highlighting in dark mode */
-[data-theme="dark"] pre *,
-[data-theme="dark"] code *,
-[data-theme="dark"] .code-block * {
+[data-theme='dark'] pre *,
+[data-theme='dark'] code *,
+[data-theme='dark'] .code-block * {
 	background-color: transparent !important;
 	background-image: none !important;
 	background: none !important;
 }
 
-[data-theme="dark"] pre,
-[data-theme="dark"] pre code {
+[data-theme='dark'] pre,
+[data-theme='dark'] pre code {
 	background: #1a1a1a !important;
 }
 
 /* Only allow subtle line highlighting if needed */
-[data-theme="dark"] .line-highlight,
-[data-theme="dark"] .highlight-line {
+[data-theme='dark'] .line-highlight,
+[data-theme='dark'] .highlight-line {
 	background: rgba(255, 255, 255, 0.02) !important;
 	background-color: rgba(255, 255, 255, 0.02) !important;
 	background-image: none !important;
 }
 
 /* Remove any box shadows or borders that might appear bright */
-[data-theme="dark"] pre *,
-[data-theme="dark"] code * {
+[data-theme='dark'] pre *,
+[data-theme='dark'] code * {
 	box-shadow: none !important;
 	border: none !important;
 	text-shadow: none !important;
