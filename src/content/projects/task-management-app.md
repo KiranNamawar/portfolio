@@ -9,9 +9,8 @@ demo: 'https://task-app-demo.vercel.app'
 featured: true
 published: true
 readingTime: 4
+layout: project
 ---
-
-# Task Management App
 
 A comprehensive task management application built to streamline team collaboration and boost productivity. This full-stack application provides real-time updates, intuitive drag-and-drop functionality, and robust team workspace management.
 

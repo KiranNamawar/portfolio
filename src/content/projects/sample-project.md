@@ -9,9 +9,8 @@ demo: 'https://sample-project.demo.com'
 featured: true
 published: true
 readingTime: 3
+layout: project
 ---
-
-# Sample Project
 
 This is a sample project created to demonstrate the project structure. This file is written in markdown and supports all the features of mdsvex.
 

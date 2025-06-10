@@ -9,9 +9,8 @@ demo: 'https://weather-dashboard-demo.netlify.app'
 featured: false
 published: true
 readingTime: 6
+layout: project
 ---
-
-# Weather Dashboard
 
 An elegant and intuitive weather dashboard that provides comprehensive weather information with beautiful visualizations. Built with Vue.js and D3.js, this application offers real-time weather data, forecasts, and interactive maps.
 

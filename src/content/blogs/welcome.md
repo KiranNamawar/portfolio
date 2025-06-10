@@ -7,15 +7,22 @@ tags: ['welcome', 'first-post']
 published: true
 featured: true
 readingTime: 2
+layout: blog
 ---
-
-# Welcome to My Blog
 
 This is my first blog post using **mdsvex** and SvelteKit. I'm excited to share my journey in web development and showcase the projects I'm working on.
 
 ## Why I Started This Blog
 
 I decided to start this blog to document my learning process, share insights about web development, and connect with the developer community. As I continue to grow as a developer, I want to give back by sharing what I've learned along the way.
+
+<script>
+	import Callout from '$lib/components/blog/Callout.svelte';
+</script>
+
+<Callout type="info" title="Note">
+This is an informational callout that will look great!
+</Callout>
 
 ## Features
 

@@ -9,9 +9,8 @@ demo: 'https://ecommerce-demo.vercel.app'
 featured: false
 published: true
 readingTime: 5
+layout: project
 ---
-
-# E-commerce Platform
 
 A modern, scalable e-commerce platform built with Next.js and powered by a robust backend infrastructure. This platform provides everything needed to run a successful online store, from product management to payment processing.
 
