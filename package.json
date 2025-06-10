@@ -34,7 +34,7 @@
 	},
 	"dependencies": {
 		"@lucide/svelte": "^0.513.0",
-		"@types/marked": "^6.0.0",
-		"date-fns": "^4.1.0"
+		"date-fns": "^4.1.0",
+		"rehype-prism-plus": "^2.0.1"
 	}
 }

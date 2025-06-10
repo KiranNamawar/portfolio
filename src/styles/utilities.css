@@ -34,6 +34,116 @@
 	box-shadow: 0 8px 16px var(--glass-shadow);
 }
 
+/* Enhanced Glass Effects - ProjectGallery Style */
+.glass-overlay {
+	background: var(--glass-overlay-bg);
+	border: 1px solid var(--glass-overlay-border);
+	border-radius: 0.75rem;
+	backdrop-filter: blur(20px);
+	box-shadow: var(--glass-overlay-shadow);
+	transition: all 0.3s ease;
+}
+
+.glass-overlay:hover {
+	background: var(--glass-overlay-hover-bg);
+	transform: translateY(-1px);
+}
+
+.glass-overlay-auto-hide {
+	background: var(--glass-overlay-bg);
+	border: 1px solid var(--glass-overlay-border);
+	border-radius: 0.75rem;
+	backdrop-filter: blur(20px);
+	box-shadow: var(--glass-overlay-shadow);
+	opacity: 0;
+	transition:
+		opacity 0.3s ease,
+		transform 0.3s ease;
+	transform: translateY(10px);
+	pointer-events: none;
+}
+
+.glass-overlay-auto-hide.visible,
+.glass-overlay-container:hover .glass-overlay-auto-hide {
+	opacity: 0.95;
+	transform: translateY(0);
+	pointer-events: auto;
+}
+
+.glass-overlay-auto-hide:hover {
+	opacity: 1;
+}
+
+.glass-modal {
+	background: var(--glass-modal-bg);
+	border: 1px solid var(--glass-modal-border);
+	border-radius: 1rem;
+	backdrop-filter: blur(20px);
+	box-shadow: var(--glass-modal-shadow);
+	color: white;
+}
+
+.glass-modal-backdrop {
+	background: var(--glass-modal-backdrop);
+	backdrop-filter: blur(20px);
+}
+
+/* Glass Control Elements */
+.glass-control-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 0.5rem;
+	color: white;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	backdrop-filter: blur(10px);
+}
+
+.glass-control-btn:hover {
+	background: rgba(255, 255, 255, 0.2);
+	transform: scale(1.05);
+}
+
+.glass-control-btn.danger {
+	background: rgba(239, 68, 68, 0.2);
+	border-color: rgba(239, 68, 68, 0.3);
+}
+
+.glass-control-btn.danger:hover {
+	background: rgba(239, 68, 68, 0.3);
+}
+
+/* Glass Navigation */
+.glass-nav-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	background: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 50%;
+	color: white;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	backdrop-filter: blur(10px);
+}
+
+.glass-nav-btn:hover:not(:disabled) {
+	background: rgba(255, 255, 255, 0.2);
+	transform: scale(1.1);
+}
+
+.glass-nav-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
 /* Spacing utilities */
 .space-y-1 > * + * {
 	margin-top: var(--space-1);

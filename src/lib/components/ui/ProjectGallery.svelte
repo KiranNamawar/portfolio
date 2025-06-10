@@ -47,10 +47,10 @@
 	let isFullscreen = false;
 	let showAllOnMobile = false;
 	let isMobile = false;
-
 	// Refs
 	let galleryContainer: HTMLElement;
 	let lightboxImageContainer: HTMLElement;
+	let lightboxBackdrop: HTMLElement;
 
 	// Reactive layout determination
 	$: effectiveLayout = layout === 'auto' ? getAutoLayout() : layout;
@@ -86,10 +86,10 @@
 	function isVideo(item: GalleryItem): boolean {
 		return item.type === 'video' || /\.(mp4|webm|ogg)$/i.test(item.src);
 	}
-
 	function getVideoThumbnail(item: GalleryItem): string {
 		return item.thumbnail || item.src;
 	}
+
 	// Lightbox functions
 	function openLightbox(index: number) {
 		if (!enableLightbox) return;
@@ -106,13 +106,52 @@
 		resetZoom();
 		document.body.style.overflow = 'hidden';
 		onLightboxOpen?.({ index: actualIndex });
-	}
 
+		// Focus the lightbox for keyboard navigation
+		setTimeout(() => {
+			lightboxBackdrop?.focus();
+		}, 0);
+	}
 	function closeLightbox() {
 		showLightbox = false;
 		document.body.style.overflow = '';
 		if (isFullscreen) exitFullscreen();
 		onLightboxClose?.();
+	}
+	// Keyboard navigation for lightbox
+	function handleLightboxKeydown(event: KeyboardEvent) {
+		switch (event.key) {
+			case 'Escape':
+				event.preventDefault();
+				closeLightbox();
+				break;
+			case 'ArrowLeft':
+				event.preventDefault();
+				prevImage();
+				break;
+			case 'ArrowRight':
+				event.preventDefault();
+				nextImage();
+				break;
+			case '+':
+			case '=':
+				event.preventDefault();
+				zoomIn();
+				break;
+			case '-':
+				event.preventDefault();
+				zoomOut();
+				break;
+			case '0':
+				event.preventDefault();
+				resetZoom();
+				break;
+			case 'f':
+			case 'F':
+				event.preventDefault();
+				toggleFullscreen();
+				break;
+		}
 	}
 
 	function nextImage() {
@@ -179,9 +218,37 @@
 			constrainPan();
 		}
 	}
-
 	function handleMouseUp() {
 		isDragging = false;
+	}
+
+	// Keyboard handler for image container accessibility
+	function handleImageContainerKeydown(event: KeyboardEvent) {
+		if (zoomLevel > 1) {
+			const step = 20; // Pixels to move per keystroke
+			switch (event.key) {
+				case 'ArrowLeft':
+					event.preventDefault();
+					panX = Math.max(-100, panX - step);
+					constrainPan();
+					break;
+				case 'ArrowRight':
+					event.preventDefault();
+					panX = Math.min(100, panX + step);
+					constrainPan();
+					break;
+				case 'ArrowUp':
+					event.preventDefault();
+					panY = Math.max(-100, panY - step);
+					constrainPan();
+					break;
+				case 'ArrowDown':
+					event.preventDefault();
+					panY = Math.min(100, panY + step);
+					constrainPan();
+					break;
+			}
+		}
 	}
 
 	// Fullscreen functions
@@ -437,16 +504,22 @@
 <!-- Lightbox Modal -->
 {#if showLightbox && enableLightbox && gallery.length > 0}
 	<div
-		class="lightbox-backdrop"
+		class="lightbox-backdrop glass-modal-backdrop"
 		role="dialog"
 		aria-modal="true"
 		aria-label="Gallery lightbox"
+		tabindex="-1"
+		bind:this={lightboxBackdrop}
 		on:click={closeLightbox}
-		on:keydown|stopPropagation
+		on:keydown={handleLightboxKeydown}
 	>
-		<div class="lightbox-content" on:click|stopPropagation>
+		<div
+			class="lightbox-content glass-overlay-container"
+			on:click|stopPropagation
+			role="presentation"
+		>
 			<!-- Header Controls -->
-			<div class="lightbox-header">
+			<div class="lightbox-header glass-overlay-auto-hide">
 				<div class="lightbox-info">
 					<span class="image-counter">{currentIndex + 1} / {gallery.length}</span>
 					{#if gallery[currentIndex].caption}
@@ -456,33 +529,38 @@
 
 				<div class="lightbox-controls">
 					{#if enableZoom}
-						<button class="control-btn" on:click={zoomOut} aria-label="Zoom out">
+						<button class="glass-control-btn" on:click={zoomOut} aria-label="Zoom out">
 							<ZoomOut size={20} />
 						</button>
 						<span class="zoom-level">{Math.round(zoomLevel * 100)}%</span>
-						<button class="control-btn" on:click={zoomIn} aria-label="Zoom in">
+						<button class="glass-control-btn" on:click={zoomIn} aria-label="Zoom in">
 							<ZoomIn size={20} />
 						</button>
-						<button class="control-btn" on:click={resetZoom} aria-label="Reset zoom">
+						<button class="glass-control-btn" on:click={resetZoom} aria-label="Reset zoom">
 							<RotateCcw size={20} />
 						</button>
 					{/if}
 
-					<button class="control-btn" on:click={toggleFullscreen} aria-label="Toggle fullscreen">
+					<button
+						class="glass-control-btn"
+						on:click={toggleFullscreen}
+						aria-label="Toggle fullscreen"
+					>
 						<Maximize size={20} />
 					</button>
 
-					<button class="control-btn close-btn" on:click={closeLightbox} aria-label="Close">
+					<button class="glass-control-btn danger" on:click={closeLightbox} aria-label="Close">
 						<X size={24} />
 					</button>
 				</div>
 			</div>
-
 			<!-- Image Container -->
-			<div
+			<button
 				class="lightbox-image-container"
 				bind:this={lightboxImageContainer}
+				aria-label="Zoomable image viewer - use arrow keys to pan when zoomed, +/- to zoom, f for fullscreen"
 				on:mousedown={handleMouseDown}
+				on:keydown={handleImageContainerKeydown}
 				style="cursor: {zoomLevel > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'}"
 			>
 				{#if isVideo(gallery[currentIndex])}
@@ -505,13 +583,13 @@
 						draggable="false"
 					/>
 				{/if}
-			</div>
+			</button>
 
 			<!-- Navigation -->
 			{#if gallery.length > 1}
-				<div class="lightbox-navigation">
+				<div class="lightbox-navigation glass-overlay-auto-hide">
 					<button
-						class="nav-btn prev"
+						class="glass-nav-btn prev"
 						on:click={prevImage}
 						disabled={currentIndex === 0}
 						aria-label="Previous image"
@@ -542,7 +620,7 @@
 					</div>
 
 					<button
-						class="nav-btn next"
+						class="glass-nav-btn next"
 						on:click={nextImage}
 						disabled={currentIndex === gallery.length - 1}
 						aria-label="Next image"
@@ -804,8 +882,6 @@
 	.lightbox-backdrop {
 		position: fixed;
 		inset: 0;
-		background: var(--lightbox-backdrop);
-		backdrop-filter: blur(20px);
 		z-index: 9999;
 		display: flex;
 		align-items: center;
@@ -818,25 +894,24 @@
 		position: relative;
 		width: 100%;
 		height: 100%;
-		max-width: 95vw;
-		max-height: 95vh;
+		max-width: 98vw;
+		max-height: 98vh;
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
 	}
 
 	/* ===== LIGHTBOX HEADER ===== */
 	.lightbox-header {
+		position: absolute;
+		top: 2rem;
+		left: 2rem;
+		right: 2rem;
+		z-index: 10;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 1rem 1.5rem;
-		background: var(--lightbox-glass-bg);
-		border: 1px solid var(--lightbox-glass-border);
-		border-radius: 1rem;
-		backdrop-filter: blur(20px);
+		padding: 0.75rem 1rem;
 		color: white;
-		flex-shrink: 0;
 	}
 
 	.lightbox-info {
@@ -867,101 +942,54 @@
 		gap: 0.75rem;
 	}
 
-	.control-btn {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 40px;
-		height: 40px;
-		background: rgba(255, 255, 255, 0.1);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		border-radius: 0.5rem;
-		color: white;
-		cursor: pointer;
-		transition: var(--gallery-transition);
-	}
-
-	.control-btn:hover {
-		background: rgba(255, 255, 255, 0.2);
-		transform: scale(1.05);
-	}
-
-	.close-btn {
-		background: rgba(239, 68, 68, 0.2);
-		border-color: rgba(239, 68, 68, 0.3);
-	}
-
-	.close-btn:hover {
-		background: rgba(239, 68, 68, 0.3);
-	}
-
 	.zoom-level {
 		font-size: 0.75rem;
 		font-weight: 600;
 		min-width: 40px;
 		text-align: center;
 		opacity: 0.9;
+		color: white;
 	}
-
 	/* ===== LIGHTBOX IMAGE CONTAINER ===== */
 	.lightbox-image-container {
-		flex: 1;
+		position: absolute;
+		inset: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
-		border-radius: 1rem;
-		background: var(--lightbox-glass-bg);
-		border: 1px solid var(--lightbox-glass-border);
-		backdrop-filter: blur(20px);
-		position: relative;
+		background: transparent;
+		/* Button reset styles */
+		border: none;
+		padding: 0;
+		font: inherit;
+		color: inherit;
+		text-align: inherit;
+		cursor: inherit;
+		outline: inherit;
 	}
 
 	.lightbox-media {
-		max-width: 100%;
-		max-height: 100%;
+		max-width: 90vw;
+		max-height: 85vh;
+		width: auto;
+		height: auto;
 		object-fit: contain;
 		transition: transform 0.3s ease;
-		border-radius: 0.5rem;
 	}
 
 	/* ===== LIGHTBOX NAVIGATION ===== */
 	.lightbox-navigation {
+		position: absolute;
+		bottom: 2rem;
+		left: 2rem;
+		right: 2rem;
+		z-index: 10;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 1rem;
-		padding: 1rem;
-		background: var(--lightbox-glass-bg);
-		border: 1px solid var(--lightbox-glass-border);
-		border-radius: 1rem;
-		backdrop-filter: blur(20px);
-		flex-shrink: 0;
-	}
-
-	.nav-btn {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 48px;
-		height: 48px;
-		background: rgba(255, 255, 255, 0.1);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		border-radius: 50%;
-		color: white;
-		cursor: pointer;
-		transition: var(--gallery-transition);
-		flex-shrink: 0;
-	}
-
-	.nav-btn:hover:not(:disabled) {
-		background: rgba(255, 255, 255, 0.2);
-		transform: scale(1.1);
-	}
-
-	.nav-btn:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
+		padding: 0.75rem 1rem;
 	}
 
 	.lightbox-thumbnails {
@@ -1104,10 +1132,19 @@
 			width: 220px;
 		}
 
+		/* Mobile lightbox - always visible overlays */
 		.lightbox-header {
+			position: absolute;
+			top: 0.5rem;
+			left: 0.5rem;
+			right: 0.5rem;
 			flex-direction: column;
-			gap: 1rem;
+			gap: 0.75rem;
 			text-align: center;
+			padding: 0.5rem 0.75rem;
+			opacity: 0.95 !important;
+			transform: translateY(0) !important;
+			pointer-events: auto !important;
 		}
 
 		.lightbox-info {
@@ -1121,10 +1158,18 @@
 		}
 
 		.lightbox-navigation {
+			position: absolute;
+			bottom: 0.5rem;
+			left: 0.5rem;
+			right: 0.5rem;
 			flex-direction: row;
 			gap: 0.5rem;
 			align-items: center;
 			justify-content: space-between;
+			padding: 0.5rem 0.75rem;
+			opacity: 0.95 !important;
+			transform: translateY(0) !important;
+			pointer-events: auto !important;
 		}
 
 		.lightbox-thumbnails {
@@ -1134,10 +1179,15 @@
 			margin: 0 0.5rem;
 		}
 
-		.nav-btn {
+		.glass-nav-btn {
 			width: 44px;
 			height: 44px;
 			flex-shrink: 0;
+		}
+
+		.lightbox-media {
+			max-width: 96vw;
+			max-height: 80vh;
 		}
 	}
 
@@ -1172,12 +1222,12 @@
 			font-size: 0.8rem;
 		}
 
-		.control-btn {
+		.glass-control-btn {
 			width: 36px;
 			height: 36px;
 		}
 
-		.nav-btn {
+		.glass-nav-btn {
 			width: 40px;
 			height: 40px;
 		}
@@ -1188,7 +1238,7 @@
 		}
 
 		.lightbox-navigation {
-			padding: 0.75rem;
+			padding: 0.5rem;
 			gap: 0.25rem;
 		}
 
@@ -1249,8 +1299,8 @@
 		outline-offset: 2px;
 	}
 
-	.control-btn:focus-visible,
-	.nav-btn:focus-visible,
+	.glass-control-btn:focus-visible,
+	.glass-nav-btn:focus-visible,
 	.thumbnail-btn:focus-visible {
 		outline: 2px solid white;
 		outline-offset: 2px;
