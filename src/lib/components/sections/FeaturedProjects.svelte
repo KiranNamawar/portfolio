@@ -46,7 +46,22 @@
 						style="animation-delay: {index * 0.2}s"
 					>
 						<div class="project-image">
-							<img src={project.image || '/placeholder-project.jpg'} alt={project.title} />
+							<img
+								src={project.image || '/project-placeholder.svg'}
+								alt={project.title}
+								on:error={(e) => {
+									const target = e.target as HTMLImageElement;
+									if (
+										target &&
+										target.src !== window.location.origin + '/project-placeholder.svg'
+									) {
+										target.src = '/project-placeholder.svg';
+									}
+								}}
+							/>
+							{#if project.featured}
+								<div class="featured-badge-overlay">Featured</div>
+							{/if}
 							<div class="project-overlay">
 								<div class="project-links">
 									{#if project.github}
@@ -206,7 +221,6 @@
 	.project-card.featured.reverse > * {
 		direction: ltr;
 	}
-
 	.project-image {
 		position: relative;
 		overflow: hidden;
@@ -214,6 +228,25 @@
 		background: var(--glass-bg);
 		border: 1px solid var(--glass-border);
 		aspect-ratio: 16/10;
+	}
+	.featured-badge-overlay {
+		position: absolute;
+		top: var(--space-3);
+		right: var(--space-3);
+		z-index: 2;
+		background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+		color: white;
+		padding: var(--space-1) var(--space-3);
+		border-radius: var(--radius-full);
+		font-size: var(--font-size-xs);
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		border: 1px solid var(--primary-600);
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
 	}
 
 	.project-image img {

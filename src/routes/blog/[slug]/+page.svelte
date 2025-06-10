@@ -53,5 +53,3 @@
 		box-shadow: 0 4px 12px var(--glass-shadow);
 	}
 </style>
-
-

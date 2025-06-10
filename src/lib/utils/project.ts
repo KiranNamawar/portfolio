@@ -3,7 +3,11 @@ import { calculateReadingTime } from './readingTime.js';
 
 export async function getProjects(): Promise<Project[]> {
 	const modules = import.meta.glob('../../content/projects/*.md', { eager: true });
-	const rawModules = import.meta.glob('../../content/projects/*.md', { eager: true, as: 'raw' });
+	const rawModules = import.meta.glob('../../content/projects/*.md', {
+		eager: true,
+		query: '?raw',
+		import: 'default'
+	});
 	const projects: Project[] = [];
 
 	for (const path in modules) {
@@ -41,10 +45,10 @@ export async function getProject(slug: string) {
 	try {
 		// Get the module normally for content
 		const module = await import(`../../content/projects/${slug}.md`);
-		
+
 		// Get the calculated data from the list function
 		const allProjects = await getProjects();
-		const projectData = allProjects.find(project => project.slug === slug);
+		const projectData = allProjects.find((project) => project.slug === slug);
 
 		return {
 			content: module.default,

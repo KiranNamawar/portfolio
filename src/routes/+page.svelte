@@ -9,5 +9,3 @@
 <About />
 <Projects />
 <Contact />
-
-

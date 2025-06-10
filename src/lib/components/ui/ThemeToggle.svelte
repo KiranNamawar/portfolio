@@ -12,7 +12,7 @@
 	// Handle theme toggle
 	function handleToggle() {
 		theme.toggle();
-		
+
 		// Provide haptic feedback on mobile devices
 		if ('vibrate' in navigator) {
 			navigator.vibrate(50);
@@ -34,7 +34,8 @@
 	<span class="theme-label">Theme</span>
 </button>
 
-<style>	.theme-toggle {
+<style>
+	.theme-toggle {
 		position: relative;
 		display: flex;
 		align-items: center;
@@ -54,7 +55,8 @@
 	.theme-toggle:focus-visible {
 		outline: 2px solid var(--primary-500);
 		outline-offset: 2px;
-	}	.theme-toggle:hover {
+	}
+	.theme-toggle:hover {
 		color: var(--color-text-primary);
 		transform: translateY(-2px);
 	}
@@ -75,7 +77,7 @@
 			height: auto;
 			padding: var(--space-1);
 		}
-		
+
 		.theme-label {
 			display: block; /* Show on mobile */
 		}
@@ -86,12 +88,12 @@
 		.theme-toggle:hover {
 			transform: translateY(-4px) scale(1.05);
 		}
-	}	/* Reduced motion */
+	} /* Reduced motion */
 	@media (prefers-reduced-motion: reduce) {
 		.theme-toggle {
 			transition: none;
 		}
-		
+
 		.theme-toggle:hover {
 			transform: none;
 		}

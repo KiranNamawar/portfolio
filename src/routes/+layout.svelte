@@ -30,7 +30,7 @@
 		main {
 			padding-bottom: calc(var(--space-16) + var(--space-4)); /* Space for mobile dock */
 		}
-		
+
 		main:not(:has(.hero-section)) {
 			padding: var(--space-4);
 		}

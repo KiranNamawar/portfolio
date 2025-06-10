@@ -43,10 +43,10 @@ export async function getBlogPost(slug: string) {
 	try {
 		// Get the module normally for content
 		const module = await import(`../../content/blogs/${slug}.md`);
-		
+
 		// Get the calculated data from the list function
 		const allPosts = await getBlogPosts();
-		const postData = allPosts.find(post => post.slug === slug);
+		const postData = allPosts.find((post) => post.slug === slug);
 
 		return {
 			content: module.default,

@@ -14,12 +14,19 @@ html {
 body {
 	background-color: var(--color-bg-primary);
 	color: var(--color-text-primary);
-	transition: background-color var(--transition-normal), color var(--transition-normal);
+	transition:
+		background-color var(--transition-normal),
+		color var(--transition-normal);
 	min-height: 100vh;
 }
 
 /* Typography Styles */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	font-family: var(--font-serif);
 	font-weight: 600;
 	line-height: 1.2;
@@ -74,16 +81,17 @@ a:hover {
 	text-decoration: underline;
 }
 
-[data-theme="dark"] a {
+[data-theme='dark'] a {
 	color: var(--primary-400);
 }
 
-[data-theme="dark"] a:hover {
+[data-theme='dark'] a:hover {
 	color: var(--primary-300);
 }
 
 /* Lists */
-ul, ol {
+ul,
+ol {
 	margin-bottom: var(--space-4);
 	padding-left: var(--space-6);
 }
@@ -101,7 +109,10 @@ img {
 }
 
 /* Form Elements */
-button, input, textarea, select {
+button,
+input,
+textarea,
+select {
 	font-family: inherit;
 	font-size: inherit;
 }

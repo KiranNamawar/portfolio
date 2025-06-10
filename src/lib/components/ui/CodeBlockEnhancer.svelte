@@ -40,16 +40,17 @@
 			dart: '🎯'
 		};
 		return iconMap[langLower] || '📄';
-	};	const copyToClipboard = async (text: string, button: HTMLElement) => {
+	};
+	const copyToClipboard = async (text: string, button: HTMLElement) => {
 		try {
 			await navigator.clipboard.writeText(text);
 			const copyContent = button.querySelector('.copy-content') as HTMLElement;
 			const checkContent = button.querySelector('.check-content') as HTMLElement;
-			
+
 			if (copyContent && checkContent) {
 				copyContent.style.display = 'none';
 				checkContent.style.display = 'flex';
-				
+
 				setTimeout(() => {
 					copyContent.style.display = 'flex';
 					checkContent.style.display = 'none';
@@ -62,7 +63,7 @@
 
 	const enhanceCodeBlocks = () => {
 		const codeBlocks = document.querySelectorAll('pre:not(.enhanced)');
-		
+
 		codeBlocks.forEach((pre) => {
 			const codeElement = pre.querySelector('code');
 			if (!codeElement) return;
@@ -72,7 +73,7 @@
 
 			// Extract language from class name
 			const classes = Array.from(codeElement.classList);
-			const languageClass = classes.find(cls => cls.startsWith('language-'));
+			const languageClass = classes.find((cls) => cls.startsWith('language-'));
 			const language = languageClass ? languageClass.replace('language-', '') : '';
 
 			// Get the code content
@@ -114,7 +115,9 @@
 				${header}
 				<div class="code-block-wrapper">
 					${pre.outerHTML}
-					${!language ? `						<button class="copy-button copy-button-overlay" aria-label="Copy code to clipboard" title="Copy code">
+					${
+						!language
+							? `						<button class="copy-button copy-button-overlay" aria-label="Copy code to clipboard" title="Copy code">
 							<span class="copy-content">
 								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 									<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
@@ -127,7 +130,9 @@
 								</svg>
 							</span>
 						</button>
-					` : ''}
+					`
+							: ''
+					}
 				</div>
 			`;
 
@@ -166,7 +171,8 @@
 
 <!-- This component automatically enhances code blocks, no visible output -->
 
-<style>	:global(.enhanced-code-block) {
+<style>
+	:global(.enhanced-code-block) {
 		margin: var(--space-6) 0;
 		border-radius: var(--radius-xl);
 		overflow: hidden;
@@ -207,7 +213,8 @@
 
 	:global(.enhanced-code-block .language-name) {
 		text-transform: capitalize;
-	}	:global(.enhanced-code-block .copy-button) {
+	}
+	:global(.enhanced-code-block .copy-button) {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -337,69 +344,69 @@
 		border: none;
 		border-radius: 0;
 		font-size: inherit;
-	}	/* Dark mode specific adjustments */
-	:global([data-theme="dark"] .enhanced-code-block pre) {
+	} /* Dark mode specific adjustments */
+	:global([data-theme='dark'] .enhanced-code-block pre) {
 		background: rgba(0, 0, 0, 0.2);
 		scrollbar-color: var(--primary-500) rgba(255, 255, 255, 0.1);
 	}
 
-	:global([data-theme="dark"] .enhanced-code-block pre::-webkit-scrollbar-thumb) {
+	:global([data-theme='dark'] .enhanced-code-block pre::-webkit-scrollbar-thumb) {
 		background: var(--primary-500);
 	}
 
-	:global([data-theme="dark"] .enhanced-code-block pre::-webkit-scrollbar-thumb:hover) {
+	:global([data-theme='dark'] .enhanced-code-block pre::-webkit-scrollbar-thumb:hover) {
 		background: var(--primary-400);
 	}
 
-	:global([data-theme="dark"] .enhanced-code-block .code-block-header) {
+	:global([data-theme='dark'] .enhanced-code-block .code-block-header) {
 		background: rgba(0, 0, 0, 0.3);
 		border-bottom-color: rgba(255, 255, 255, 0.1);
 	}
-	:global([data-theme="dark"] .enhanced-code-block .code-block-header .copy-button) {
+	:global([data-theme='dark'] .enhanced-code-block .code-block-header .copy-button) {
 		background: rgba(255, 255, 255, 0.1);
 		border-color: rgba(255, 255, 255, 0.2);
 		color: rgba(255, 255, 255, 0.9);
 		font-weight: var(--font-weight-semibold);
 	}
 
-	:global([data-theme="dark"] .enhanced-code-block .code-block-header .copy-button:hover) {
+	:global([data-theme='dark'] .enhanced-code-block .code-block-header .copy-button:hover) {
 		background: var(--primary-600);
 		color: white;
 		border-color: var(--primary-500);
 		transform: translateY(-1px);
 		box-shadow: 0 4px 12px var(--primary-600/25);
-	}	/* Light mode specific adjustments */
-	:global([data-theme="light"] .enhanced-code-block pre) {
+	} /* Light mode specific adjustments */
+	:global([data-theme='light'] .enhanced-code-block pre) {
 		background: rgba(255, 255, 255, 0.3);
 		scrollbar-color: var(--primary-600) rgba(0, 0, 0, 0.1);
 	}
 
-	:global([data-theme="light"] .enhanced-code-block pre::-webkit-scrollbar-thumb) {
+	:global([data-theme='light'] .enhanced-code-block pre::-webkit-scrollbar-thumb) {
 		background: var(--primary-600);
 	}
 
-	:global([data-theme="light"] .enhanced-code-block pre::-webkit-scrollbar-thumb:hover) {
+	:global([data-theme='light'] .enhanced-code-block pre::-webkit-scrollbar-thumb:hover) {
 		background: var(--primary-700);
 	}
 
-	:global([data-theme="light"] .enhanced-code-block .code-block-header) {
+	:global([data-theme='light'] .enhanced-code-block .code-block-header) {
 		background: rgba(255, 255, 255, 0.5);
 		border-bottom-color: rgba(0, 0, 0, 0.1);
 	}
-	:global([data-theme="light"] .enhanced-code-block .code-block-header .copy-button) {
+	:global([data-theme='light'] .enhanced-code-block .code-block-header .copy-button) {
 		background: var(--primary-100);
 		border-color: var(--primary-300);
 		color: var(--primary-700);
 		font-weight: var(--font-weight-semibold);
 	}
 
-	:global([data-theme="light"] .enhanced-code-block .code-block-header .copy-button:hover) {
+	:global([data-theme='light'] .enhanced-code-block .code-block-header .copy-button:hover) {
 		background: var(--primary-500);
 		color: white;
 		border-color: var(--primary-600);
 		transform: translateY(-1px);
 		box-shadow: 0 4px 12px var(--primary-500/25);
-	}	/* Responsive design */
+	} /* Responsive design */
 	@media (max-width: 768px) {
 		:global(.enhanced-code-block) {
 			margin: var(--space-4) -var(--space-2);

@@ -13,9 +13,11 @@
 	backdrop-filter: var(--glass-backdrop);
 	border: 1px solid var(--glass-border);
 	border-radius: var(--radius-xl);
-	padding: var(--space-6);
+	overflow: hidden;
 	transition: all var(--transition-normal);
 	box-shadow: 0 4px 6px -1px var(--glass-shadow);
+	display: flex;
+	flex-direction: column;
 }
 
 .blog-card:hover {
@@ -24,12 +26,55 @@
 	border-color: var(--primary-400);
 }
 
-.blog-card h3 {
+.blog-image {
+	position: relative;
+	width: 100%;
+	height: 200px;
+	overflow: hidden;
+}
+
+.blog-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform var(--transition-slow);
+}
+
+.blog-card:hover .blog-image img {
+	transform: scale(1.05);
+}
+
+.featured-badge-overlay {
+	position: absolute;
+	top: var(--space-3);
+	right: var(--space-3);
+	background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+	color: white;
+	padding: 0.25rem 0.75rem;
+	border-radius: var(--radius-full);
+	font-size: var(--font-size-xs);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	border: 1px solid var(--primary-600);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	z-index: 2;
+}
+
+.blog-content {
+	padding: var(--space-6);
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.blog-content h3 {
 	margin-bottom: var(--space-3);
 	color: var(--color-text-primary);
 }
 
-.blog-card .description {
+.blog-content .description {
 	color: var(--color-text-secondary);
 	margin-bottom: var(--space-4);
 	line-height: var(--line-height-relaxed);
@@ -123,10 +168,6 @@
 	color: var(--color-text-secondary);
 }
 
-.blog-post-author {
-	color: var(--color-text-secondary);
-}
-
 .blog-post-description {
 	font-size: var(--font-size-xl);
 	color: var(--color-text-secondary);
@@ -175,19 +216,6 @@
 	border-color: var(--primary-400);
 }
 
-.featured-badge {
-	background: var(--primary-500);
-	color: white;
-	padding: 0.25rem 0.75rem;
-	border-radius: var(--radius-full);
-	font-size: var(--font-size-xs);
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	border: 1px solid var(--primary-600);
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
 /* Responsive design */
 @media (max-width: 768px) {
 	.blog-grid {
@@ -195,8 +223,12 @@
 		gap: var(--space-4);
 	}
 
-	.blog-card {
+	.blog-content {
 		padding: var(--space-4);
+	}
+
+	.blog-image {
+		height: 150px;
 	}
 
 	.blog-post {

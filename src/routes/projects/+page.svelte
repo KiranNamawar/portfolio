@@ -2,7 +2,6 @@
 	import type { PageData } from './$types';
 	import { formatDate } from '$lib/utils/date.js';
 	import { ExternalLink, Github } from '@lucide/svelte';
-
 	let { data }: { data: PageData } = $props();
 </script>
 
@@ -16,37 +15,48 @@
 		<div class="projects-grid">
 			{#each data.projects as project}
 				<article class="project-card glass hover-lift transition">
-					{#if project.image}
-						<div class="project-image">
-							<img src={project.image} alt={project.title} loading="lazy" />
-							<div class="project-overlay">
-								<div class="project-actions">
-									{#if project.demo}
-										<a
-											href={project.demo}
-											target="_blank"
-											rel="noopener noreferrer"
-											class="project-action-btn"
-										>
-											<ExternalLink size={20} />
-											<span>Demo</span>
-										</a>
-									{/if}
-									{#if project.github}
-										<a
-											href={project.github}
-											target="_blank"
-											rel="noopener noreferrer"
-											class="project-action-btn"
-										>
-											<Github size={20} />
-											<span>Code</span>
-										</a>
-									{/if}
-								</div>
+					<div class="project-image">
+						<img
+							src={project.image || '/project-placeholder.svg'}
+							alt={project.title}
+							loading="lazy"
+							onerror={(e) => {
+								const target = e.target as HTMLImageElement;
+								if (target && target.src !== window.location.origin + '/project-placeholder.svg') {
+									target.src = '/project-placeholder.svg';
+								}
+							}}
+						/>
+						{#if project.featured}
+							<div class="featured-badge-overlay">Featured</div>
+						{/if}
+						<div class="project-overlay">
+							<div class="project-actions">
+								{#if project.demo}
+									<a
+										href={project.demo}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="project-action-btn"
+									>
+										<ExternalLink size={20} />
+										<span>Demo</span>
+									</a>
+								{/if}
+								{#if project.github}
+									<a
+										href={project.github}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="project-action-btn"
+									>
+										<Github size={20} />
+										<span>Code</span>
+									</a>
+								{/if}
 							</div>
 						</div>
-					{/if}
+					</div>
 
 					<div class="project-content">
 						<h3 class="text-2xl">
@@ -56,9 +66,6 @@
 						</h3>
 						<div class="project-meta">
 							<time>{formatDate(project.date)}</time>
-							{#if project.featured}
-								<span class="featured-badge">Featured</span>
-							{/if}
 							{#if project.readingTime}
 								<span class="reading-time">
 									{project.readingTime} min read
@@ -108,11 +115,29 @@
 		backdrop-filter: blur(10px);
 		border: 1px solid var(--glass-border);
 	}
-
 	.project-image {
 		position: relative;
 		aspect-ratio: 16/9;
 		overflow: hidden;
+	}
+	.featured-badge-overlay {
+		position: absolute;
+		top: 0.75rem;
+		right: 0.75rem;
+		z-index: 2;
+		background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+		color: white;
+		padding: 0.375rem 0.875rem;
+		border-radius: var(--radius-full);
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		border: 1px solid var(--primary-600);
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
 	}
 
 	.project-image img {
@@ -183,19 +208,8 @@
 		font-size: 0.9rem;
 		color: var(--text-secondary);
 	}
-
 	.reading-time {
 		color: var(--text-secondary);
-	}
-	.featured-badge {
-		background: var(--primary-500);
-		color: white;
-		padding: 0.25rem 0.75rem;
-		border-radius: 1rem;
-		font-size: 0.8rem;
-		font-weight: 500;
-		border: 1px solid var(--primary-600);
-		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 	}
 
 	.description {

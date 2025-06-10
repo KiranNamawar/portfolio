@@ -19,8 +19,6 @@
 	export let github: string | undefined = undefined;
 	export let demo: string | undefined = undefined;
 	export let featured: boolean | undefined = undefined;
-	export let readingTime: number | undefined = undefined;
-	export let wordCount: number | undefined = undefined;
 </script>
 
 <svelte:head>
@@ -64,14 +62,6 @@
 				<time class="project-date">{formatDate(date)}</time>
 				{#if featured}
 					<span class="featured-badge">Featured Project</span>
-				{/if}
-				{#if readingTime}
-					<span class="reading-time">
-						{readingTime} min read
-						{#if wordCount}
-							<span class="word-count">({wordCount} words)</span>
-						{/if}
-					</span>
 				{/if}
 			</div>
 
@@ -238,11 +228,6 @@
 		letter-spacing: 0.5px;
 		border: 1px solid var(--primary-600);
 		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-	}
-
-	.reading-time {
-		color: var(--color-text-tertiary);
-		font-size: var(--font-size-xs);
 	}
 
 	.project-description {

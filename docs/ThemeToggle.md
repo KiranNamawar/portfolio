@@ -18,7 +18,7 @@ A modern, accessible theme toggle button component with glassmorphism design and
 
 ```svelte
 <script>
-  import { ThemeToggle } from '$lib';
+	import { ThemeToggle } from '$lib';
 </script>
 
 <ThemeToggle />
@@ -27,24 +27,21 @@ A modern, accessible theme toggle button component with glassmorphism design and
 ### With Props
 
 ```svelte
-<ThemeToggle 
-  size="lg" 
-  variant="floating" 
-  class="custom-class" 
-/>
+<ThemeToggle size="lg" variant="floating" class="custom-class" />
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the toggle button |
-| `variant` | `'default' \| 'floating' \| 'minimal'` | `'default'` | Visual style variant |
-| `class` | `string` | `''` | Additional CSS classes |
+| Prop      | Type                                   | Default     | Description               |
+| --------- | -------------------------------------- | ----------- | ------------------------- |
+| `size`    | `'sm' \| 'md' \| 'lg'`                 | `'md'`      | Size of the toggle button |
+| `variant` | `'default' \| 'floating' \| 'minimal'` | `'default'` | Visual style variant      |
+| `class`   | `string`                               | `''`        | Additional CSS classes    |
 
 ## Variants
 
 ### Default
+
 Standard glassmorphism button with backdrop blur and border.
 
 ```svelte
@@ -52,6 +49,7 @@ Standard glassmorphism button with backdrop blur and border.
 ```
 
 ### Floating
+
 Enhanced glass effect with additional shadow and glow.
 
 ```svelte
@@ -59,6 +57,7 @@ Enhanced glass effect with additional shadow and glow.
 ```
 
 ### Minimal
+
 Subtle hover effect without glass styling.
 
 ```svelte
@@ -77,15 +76,15 @@ The component uses a global theme store that can be accessed throughout your app
 
 ```svelte
 <script>
-  import { theme } from '$lib';
-  
-  // Subscribe to theme changes
-  $: console.log('Current theme:', $theme);
-  
-  // Programmatically toggle theme
-  function toggleTheme() {
-    theme.toggle();
-  }
+	import { theme } from '$lib';
+
+	// Subscribe to theme changes
+	$: console.log('Current theme:', $theme);
+
+	// Programmatically toggle theme
+	function toggleTheme() {
+		theme.toggle();
+	}
 </script>
 ```
 
@@ -101,16 +100,16 @@ The component uses CSS variables for consistent theming:
 
 ```css
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-shadow: rgba(0, 0, 0, 0.1);
-  --glass-backdrop: blur(20px);
+	--glass-bg: rgba(255, 255, 255, 0.1);
+	--glass-border: rgba(255, 255, 255, 0.2);
+	--glass-shadow: rgba(0, 0, 0, 0.1);
+	--glass-backdrop: blur(20px);
 }
 
-[data-theme="dark"] {
-  --glass-bg: rgba(0, 0, 0, 0.3);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: rgba(0, 0, 0, 0.3);
+[data-theme='dark'] {
+	--glass-bg: rgba(0, 0, 0, 0.3);
+	--glass-border: rgba(255, 255, 255, 0.1);
+	--glass-shadow: rgba(0, 0, 0, 0.3);
 }
 ```
 
@@ -134,7 +133,7 @@ The theme toggle is automatically included in the FloatingDock component and can
 
 ```svelte
 <script>
-  import { FloatingDock } from '$lib';
+	import { FloatingDock } from '$lib';
 </script>
 
 <FloatingDock />
@@ -148,10 +147,10 @@ The theme toggle is automatically included in the FloatingDock component and can
 <ThemeToggle class="my-custom-toggle" />
 
 <style>
-  :global(.my-custom-toggle) {
-    /* Custom styles */
-    --glass-bg: rgba(100, 200, 255, 0.1);
-  }
+	:global(.my-custom-toggle) {
+		/* Custom styles */
+		--glass-bg: rgba(100, 200, 255, 0.1);
+	}
 </style>
 ```
 
@@ -176,27 +175,29 @@ The component uses Lucide icons (`Sun` and `Moon`). You can create a similar com
 ## Troubleshooting
 
 ### Theme Not Persisting
+
 Ensure the theme store is properly initialized in your root layout:
 
 ```svelte
 <!-- +layout.svelte -->
 <script>
-  import { onMount } from 'svelte';
-  import { theme } from '$lib';
-  
-  onMount(() => {
-    theme.init();
-  });
+	import { onMount } from 'svelte';
+	import { theme } from '$lib';
+
+	onMount(() => {
+		theme.init();
+	});
 </script>
 ```
 
 ### Glass Effects Not Working
+
 Check if the browser supports backdrop-filter:
 
 ```css
 @supports (backdrop-filter: blur(20px)) {
-  .glass {
-    backdrop-filter: var(--glass-backdrop);
-  }
+	.glass {
+		backdrop-filter: var(--glass-backdrop);
+	}
 }
 ```

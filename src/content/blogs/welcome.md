@@ -2,7 +2,6 @@
 title: Welcome to My Blog
 description: This is my first blog post
 date: 2024-01-15
-author: Kiran
 tags: ['welcome', 'first-post']
 published: true
 featured: true

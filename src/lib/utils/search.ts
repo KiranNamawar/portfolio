@@ -82,7 +82,6 @@ function calculateBlogScore(
 		score += descMatch.score * 5; // Description gets 5x multiplier
 		matchedFields.push('description');
 	}
-
 	// Tags match
 	if (post.tags) {
 		const tagsText = post.tags.join(' ');
@@ -90,15 +89,6 @@ function calculateBlogScore(
 		if (tagsMatch.score > 0) {
 			score += tagsMatch.score * 3; // Tags get 3x multiplier
 			matchedFields.push('tags');
-		}
-	}
-
-	// Author match
-	if (post.author) {
-		const authorMatch = getTextMatch(post.author, searchTerm, searchWords);
-		if (authorMatch.score > 0) {
-			score += authorMatch.score * 2; // Author gets 2x multiplier
-			matchedFields.push('author');
 		}
 	}
 

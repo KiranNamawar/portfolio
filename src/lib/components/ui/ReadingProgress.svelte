@@ -18,26 +18,28 @@
 	const progress = new Tween(0, {
 		duration: smoothness,
 		easing: cubicOut
-	});	// Calculate progress percentage
+	}); // Calculate progress percentage
 	$: if (mounted && document) {
 		// Try to find either blog post or project detail article
-		const articleElement = document.querySelector('article.blog-post') || 
-		                      document.querySelector('article.project-detail');
-		
+		const articleElement =
+			document.querySelector('article.blog-post') ||
+			document.querySelector('article.project-detail');
+
 		if (articleElement) {
 			const htmlElement = articleElement as HTMLElement;
 			const articleTop = htmlElement.offsetTop;
 			const articleHeight = htmlElement.offsetHeight;
 			const windowHeight = innerHeight;
-			
+
 			// Calculate how much of the article has been scrolled through
 			const scrollStart = articleTop - windowHeight * 0.1; // Start when article is 10% visible
 			const scrollEnd = articleTop + articleHeight - windowHeight * 0.9; // End when 90% through
-			
-			const scrollProgress = Math.max(0, Math.min(1, 
-				(scrollY - scrollStart) / (scrollEnd - scrollStart)
-			));
-			
+
+			const scrollProgress = Math.max(
+				0,
+				Math.min(1, (scrollY - scrollStart) / (scrollEnd - scrollStart))
+			);
+
 			// Update animated progress
 			progress.set(scrollProgress * 100);
 		}
@@ -53,7 +55,8 @@
 
 <svelte:window bind:scrollY bind:innerHeight />
 
-{#if isVisible}	<div 
+{#if isVisible}
+	<div
 		class="reading-progress"
 		role="progressbar"
 		aria-valuenow={Math.round(progress.current)}
@@ -61,11 +64,8 @@
 		aria-valuemax="100"
 		aria-label="Reading progress"
 	>
-		<div 
-			class="reading-progress-bar"
-			style="width: {progress.current}%"
-		></div>
-		
+		<div class="reading-progress-bar" style="width: {progress.current}%"></div>
+
 		<!-- Optional percentage display -->
 		<div class="reading-progress-text">
 			{Math.round(progress.current)}%
@@ -91,12 +91,7 @@
 
 	.reading-progress-bar {
 		height: 100%;
-		background: linear-gradient(
-			90deg,
-			var(--primary-500),
-			var(--primary-600),
-			var(--accent-500)
-		);
+		background: linear-gradient(90deg, var(--primary-500), var(--primary-600), var(--accent-500));
 		border-radius: 0;
 		transition: width 0.1s ease-out;
 		position: relative;
@@ -110,12 +105,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background: linear-gradient(
-			90deg,
-			transparent,
-			rgba(255, 255, 255, 0.3),
-			transparent
-		);
+		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
 		animation: shimmer 2s infinite;
 	}
 
@@ -174,7 +164,7 @@
 		.reading-progress {
 			height: 3px;
 		}
-		
+
 		.reading-progress-text {
 			top: 6px;
 			right: var(--space-2);
@@ -184,23 +174,13 @@
 	}
 
 	/* Dark mode adjustments */
-	:global([data-theme="dark"]) .reading-progress-bar {
-		background: linear-gradient(
-			90deg,
-			var(--primary-400),
-			var(--primary-500),
-			var(--accent-400)
-		);
+	:global([data-theme='dark']) .reading-progress-bar {
+		background: linear-gradient(90deg, var(--primary-400), var(--primary-500), var(--accent-400));
 	}
 
 	/* Light mode adjustments */
-	:global([data-theme="light"]) .reading-progress-bar {
-		background: linear-gradient(
-			90deg,
-			var(--primary-600),
-			var(--primary-700),
-			var(--accent-600)
-		);
+	:global([data-theme='light']) .reading-progress-bar {
+		background: linear-gradient(90deg, var(--primary-600), var(--primary-700), var(--accent-600));
 	}
 
 	/* Reduced motion */
@@ -211,7 +191,7 @@
 			animation: none;
 			transition: none;
 		}
-		
+
 		.reading-progress-bar::after {
 			animation: none;
 		}
@@ -222,7 +202,7 @@
 		.reading-progress {
 			border-bottom: 2px solid var(--color-border);
 		}
-		
+
 		.reading-progress-bar {
 			background: var(--color-text-primary);
 		}

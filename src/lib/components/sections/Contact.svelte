@@ -15,18 +15,19 @@
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
 		isSubmitting = true;
-		
+
 		// Simulate form submission
-		await new Promise(resolve => setTimeout(resolve, 2000));
-		
+		await new Promise((resolve) => setTimeout(resolve, 2000));
+
 		// For demo purposes, we'll just show success
 		submitStatus = 'success';
 		isSubmitting = false;
-		
+
 		// Reset form after success
 		setTimeout(() => {
 			formData = { name: '', email: '', subject: '', message: '' };
-			submitStatus = 'idle';		}, 3000);
+			submitStatus = 'idle';
+		}, 3000);
 	}
 	// Icon mapping for contact methods
 	const contactIcons: Record<string, any> = {
@@ -57,9 +58,10 @@
 				<div class="contact-card glass-card">
 					<h3>Let's Connect</h3>
 					<p>
-						I'm always interested in hearing about new opportunities and exciting projects. 
-						Whether you have a question or just want to say hi, I'll try my best to get back to you!
-					</p>					<div class="contact-methods">
+						I'm always interested in hearing about new opportunities and exciting projects. Whether
+						you have a question or just want to say hi, I'll try my best to get back to you!
+					</p>
+					<div class="contact-methods">
 						{#each contactInfo as contact}
 							<a href={contact.href} class="contact-method">
 								<div class="contact-icon">
@@ -74,10 +76,11 @@
 					</div>
 
 					<div class="social-links">
-						<h4>Follow Me</h4>						<div class="social-grid">
+						<h4>Follow Me</h4>
+						<div class="social-grid">
 							{#each socialLinks as social}
-								<a 
-									href={social.href} 
+								<a
+									href={social.href}
 									class="social-link"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -95,7 +98,7 @@
 			<div class="contact-form-container">
 				<form class="contact-form glass-card" on:submit={handleSubmit}>
 					<h3>Send Me a Message</h3>
-					
+
 					{#if submitStatus === 'success'}
 						<div class="success-message">
 							<div class="success-icon">✓</div>
@@ -183,7 +186,11 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background: radial-gradient(circle at 70% 70%, rgba(var(--primary-500), 0.05) 0%, transparent 50%);
+		background: radial-gradient(
+			circle at 70% 70%,
+			rgba(var(--primary-500), 0.05) 0%,
+			transparent 50%
+		);
 		pointer-events: none;
 	}
 
@@ -232,7 +239,9 @@
 		border-radius: 1rem;
 		padding: 2.5rem;
 		box-shadow: 0 8px 32px var(--glass-shadow);
-		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		transition:
+			transform 0.3s ease,
+			box-shadow 0.3s ease;
 	}
 
 	.glass-card:hover {
@@ -476,7 +485,7 @@
 		100% {
 			transform: scale(1);
 		}
-	}	/* Responsive Design */
+	} /* Responsive Design */
 	@media (max-width: 768px) {
 		.contact-content {
 			grid-template-columns: 1fr;
