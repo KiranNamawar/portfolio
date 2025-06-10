@@ -2,7 +2,7 @@
 title: 'Weather Dashboard'
 description: 'Beautiful weather dashboard with location-based forecasts, interactive maps, and weather alerts'
 date: '2024-09-10'
-image: '/project-4.jpg'
+image: '/project-placeholder.svg'
 technologies: ['Vue.js', 'D3.js', 'OpenWeather API', 'Netlify', 'SCSS']
 github: 'https://github.com/username/weather-dashboard'
 demo: 'https://weather-dashboard-demo.netlify.app'

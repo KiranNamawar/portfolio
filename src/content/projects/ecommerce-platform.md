@@ -2,13 +2,26 @@
 title: 'E-commerce Platform'
 description: 'Modern e-commerce solution with payment integration, inventory management, and admin dashboard'
 date: '2024-10-20'
-image: '/project-3.jpg'
+image: '/project-placeholder.svg'
 technologies: ['Next.js', 'Stripe', 'Prisma', 'PostgreSQL', 'Tailwind CSS']
 github: 'https://github.com/username/ecommerce-platform'
 demo: 'https://ecommerce-demo.vercel.app'
 featured: false
 published: true
 layout: project
+gallery:
+  - src: '/gallery/ecommerce-dashboard.svg'
+    alt: 'Admin Dashboard Interface'
+    caption: 'Comprehensive admin dashboard with real-time analytics and management tools'
+  - src: '/gallery/ecommerce-products.svg'
+    alt: 'Product Catalog Page'
+    caption: 'User-friendly product browsing with advanced search and filtering capabilities'
+  - src: '/gallery/ecommerce-checkout.svg'
+    alt: 'Checkout Process Flow'
+    caption: 'Streamlined checkout process with secure payment integration'
+  - src: '/gallery/ecommerce-orders.svg'
+    alt: 'Order Management System'
+    caption: 'Real-time order tracking and management system for administrators'
 ---
 
 A modern, scalable e-commerce platform built with Next.js and powered by a robust backend infrastructure. This platform provides everything needed to run a successful online store, from product management to payment processing.
@@ -39,6 +52,25 @@ A modern, scalable e-commerce platform built with Next.js and powered by a robus
 - Refund management
 
 ## Technical Implementation
+
+### Architecture Overview
+
+The platform follows a modern full-stack architecture with clear separation of concerns:
+
+<script>
+  import Image from '$lib/components/ui/Image.svelte';
+</script>
+
+<Image 
+  src="/gallery/ecommerce-architecture.svg"
+  alt="E-commerce Platform Architecture Diagram"
+  caption="System architecture showing the flow from frontend to database and external services"
+  fit="contain"
+  radius="lg"
+  shadow={true}
+  clickToExpand={true}
+  aspectRatio="4/3"
+/>
 
 ### Frontend
 

@@ -2,13 +2,20 @@
 title: 'Task Management App'
 description: 'A full-stack task management application with real-time collaboration and team workspaces'
 date: '2024-11-15'
-image: '/project-2.jpg'
+image: '/project-placeholder.svg'
 technologies: ['React', 'Node.js', 'MongoDB', 'Socket.io', 'Express']
 github: 'https://github.com/username/task-management-app'
 demo: 'https://task-app-demo.vercel.app'
 featured: true
 published: true
 layout: project
+gallery:
+  - src: '/gallery/task-kanban.svg'
+    alt: 'Kanban Board Interface'
+    caption: 'Intuitive drag-and-drop Kanban board for visual task management'
+  - src: '/gallery/task-details.svg'
+    alt: 'Task Detail View'
+    caption: 'Comprehensive task details with priority indicators and progress tracking'
 ---
 
 A comprehensive task management application built to streamline team collaboration and boost productivity. This full-stack application provides real-time updates, intuitive drag-and-drop functionality, and robust team workspace management.

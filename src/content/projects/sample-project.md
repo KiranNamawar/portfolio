@@ -2,7 +2,7 @@
 title: 'Sample Project'
 description: 'A sample project to demonstrate the project structure'
 date: '2024-12-01'
-image: '/project-1.jpg'
+image: '/project-placeholder.svg'
 technologies: ['Svelte', 'TypeScript', 'CSS']
 github: 'https://github.com/username/sample-project'
 demo: 'https://sample-project.demo.com'

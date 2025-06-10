@@ -1,7 +1,9 @@
 <script context="module" lang="ts">
 	// Export custom components that can be used in mdsvex files
 	import Callout from '../blog/Callout.svelte';
-	export { Callout };
+	import Gallery from '../blog/Gallery.svelte';
+	import Image from '../ui/Image.svelte';
+	export { Callout, Gallery, Image };
 </script>
 
 <script lang="ts">
@@ -14,11 +16,15 @@
 	export let title: string;
 	export let description: string;
 	export let date: string;
-	export let image: string | undefined = undefined;
 	export let technologies: string[] | undefined = undefined;
 	export let github: string | undefined = undefined;
 	export let demo: string | undefined = undefined;
 	export let featured: boolean | undefined = undefined;
+	export let gallery: Array<{ src: string; alt: string; caption?: string }> | undefined = undefined;
+
+	// Note: image prop is intentionally removed from detail pages
+	// Banner images are now only used in project listing cards
+	// Gallery provides the visual showcase for individual project pages
 </script>
 
 <svelte:head>
@@ -34,28 +40,6 @@
 
 <article class="project-detail">
 	<header class="project-header">
-		{#if image}
-			<div class="project-hero-image">
-				<img src={image} alt={title} />
-				<div class="project-hero-overlay">
-					<div class="project-hero-actions">
-						{#if demo}
-							<a href={demo} target="_blank" rel="noopener noreferrer" class="hero-action-btn">
-								<ExternalLink size={24} />
-								<span>Live Demo</span>
-							</a>
-						{/if}
-						{#if github}
-							<a href={github} target="_blank" rel="noopener noreferrer" class="hero-action-btn">
-								<Github size={24} />
-								<span>Source Code</span>
-							</a>
-						{/if}
-					</div>
-				</div>
-			</div>
-		{/if}
-
 		<div class="project-header-content">
 			<h1 class="project-title">{title}</h1>
 			<div class="project-meta">
@@ -104,6 +88,28 @@
 		</div>
 	</header>
 
+	<!-- Image Gallery Section -->
+	{#if gallery && gallery.length > 0}
+		<section class="project-gallery">
+			<h2 class="gallery-title">Project Gallery</h2>
+			<div class="gallery-grid" class:single-image={gallery.length === 1}>
+				{#each gallery as image, index}
+					<Image
+						src={image.src}
+						alt={image.alt}
+						caption={image.caption}
+						fit="cover"
+						radius="lg"
+						shadow={true}
+						loading={index < 2 ? 'eager' : 'lazy'}
+						clickToExpand={true}
+						aspectRatio={gallery.length === 1 ? '16/10' : '4/3'}
+					/>
+				{/each}
+			</div>
+		</section>
+	{/if}
+
 	<main class="project-content">
 		<!-- The mdsvex content will be slotted here -->
 		<slot />
@@ -128,67 +134,36 @@
 		margin-bottom: 3rem;
 	}
 
-	.project-hero-image {
-		position: relative;
-		width: 100%;
-		height: 400px;
-		margin-bottom: 2rem;
-		border-radius: var(--radius-2xl);
-		overflow: hidden;
-		background: var(--glass-bg);
-		border: 1px solid var(--glass-border);
+	/* Gallery Section */
+	.project-gallery {
+		margin-bottom: var(--space-8);
 	}
 
-	.project-hero-image img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: transform var(--transition-slow);
+	.gallery-title {
+		font-size: var(--text-2xl);
+		font-weight: 700;
+		color: var(--color-text-primary);
+		margin-bottom: var(--space-6);
+		text-align: center;
 	}
 
-	.project-hero-overlay {
-		position: absolute;
-		inset: 0;
-		background: rgba(0, 0, 0, 0.7);
-		opacity: 0;
-		transition: opacity var(--transition-normal);
-		display: flex;
-		align-items: center;
-		justify-content: center;
+	.gallery-grid {
+		display: grid;
+		gap: var(--space-4);
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	}
 
-	.project-hero-image:hover .project-hero-overlay {
-		opacity: 1;
+	.gallery-grid.single-image {
+		grid-template-columns: 1fr;
+		max-width: 800px;
+		margin: 0 auto;
 	}
 
-	.project-hero-image:hover img {
-		transform: scale(1.05);
-	}
-
-	.project-hero-actions {
-		display: flex;
-		gap: 1rem;
-	}
-
-	.hero-action-btn {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 1rem 1.5rem;
-		background: var(--glass-bg);
-		backdrop-filter: blur(20px);
-		border: 1px solid var(--glass-border);
-		border-radius: var(--radius-full);
-		color: white;
-		text-decoration: none;
-		font-weight: 600;
-		transition: all var(--transition-fast);
-	}
-
-	.hero-action-btn:hover {
-		background: var(--primary-500);
-		transform: translateY(-2px);
-		box-shadow: 0 8px 20px rgba(var(--primary-500), 0.4);
+	@media (max-width: 768px) {
+		.gallery-grid {
+			grid-template-columns: 1fr;
+			gap: var(--space-3);
+		}
 	}
 
 	.project-header-content {
@@ -343,10 +318,6 @@
 			padding: 1rem;
 		}
 
-		.project-hero-image {
-			height: 250px;
-		}
-
 		.project-title {
 			font-size: 2rem;
 		}
@@ -366,21 +337,11 @@
 			max-width: 250px;
 			justify-content: center;
 		}
-
-		.hero-action-btn {
-			padding: 0.75rem 1rem;
-			font-size: var(--font-size-sm);
-		}
 	}
 
 	@media (max-width: 480px) {
 		.project-detail {
 			padding: 0.5rem;
-		}
-
-		.project-hero-actions {
-			flex-direction: column;
-			gap: 0.5rem;
 		}
 
 		.tech-badge {
