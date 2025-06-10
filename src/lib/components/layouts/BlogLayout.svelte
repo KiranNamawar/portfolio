@@ -1,9 +1,8 @@
 <script context="module" lang="ts">
 	// Export custom components that can be used in mdsvex files
-	import Callout from '../blog/Callout.svelte';
-	import Gallery from '../blog/Gallery.svelte';
+	import Callout from '../ui/Callout.svelte';
 	import Image from '../ui/Image.svelte';
-	export { Callout, Gallery, Image };
+	export { Callout, Image };
 </script>
 
 <script lang="ts">
