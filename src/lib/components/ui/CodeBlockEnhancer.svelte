@@ -1,45 +1,23 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { getTechIcon } from '$lib/utils/techIcons';
 
 	let mounted = false;
 
-	const getLanguageIcon = (lang: string) => {
-		const langLower = lang.toLowerCase();
-		const iconMap: Record<string, string> = {
-			javascript: '🟨',
-			js: '🟨',
-			typescript: '🔷',
-			ts: '🔷',
-			svelte: '🧡',
-			html: '🌐',
-			css: '🎨',
-			scss: '💜',
-			sass: '💜',
-			json: '📋',
-			markdown: '📝',
-			md: '📝',
-			bash: '💻',
-			shell: '💻',
-			sh: '💻',
-			terminal: '💻',
-			python: '🐍',
-			py: '🐍',
-			react: '⚛️',
-			jsx: '⚛️',
-			vue: '💚',
-			sql: '🗄️',
-			yaml: '📄',
-			yml: '📄',
-			xml: '📄',
-			php: '🐘',
-			java: '☕',
-			c: '🔧',
-			cpp: '🔧',
-			rust: '🦀',
-			go: '🐹',
-			dart: '🎯'
-		};
-		return iconMap[langLower] || '📄';
+	const getLanguageIconElement = (lang: string): string => {
+		const techIcon = getTechIcon(lang);
+
+		if (techIcon.type === 'devicon') {
+			const variant = techIcon.variant || 'original';
+			return `<i class="devicon-${techIcon.icon}-${variant}" style="font-size: 1rem;"></i>`;
+		} else {
+			// For Lucide icons, we'll use a simple SVG placeholder since we can't directly import the component here
+			// This maintains compatibility with the existing DOM manipulation approach
+			return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block;">
+				<polyline points="16,18 22,12 16,6"></polyline>
+				<polyline points="8,6 2,12 8,18"></polyline>
+			</svg>`;
+		}
 	};
 	const copyToClipboard = async (text: string, button: HTMLElement) => {
 		try {
@@ -89,7 +67,7 @@
 				header = `
 					<div class="code-block-header">
 						<div class="code-block-info">
-							<span class="language-icon">${getLanguageIcon(language)}</span>
+							<span class="language-icon">${getLanguageIconElement(language)}</span>
 							<span class="language-name">${language}</span>
 						</div>						<button class="copy-button" aria-label="Copy code to clipboard" title="Copy code">
 							<span class="copy-content">
