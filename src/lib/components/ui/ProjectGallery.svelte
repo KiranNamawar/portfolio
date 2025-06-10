@@ -9,7 +9,7 @@
 		Maximize,
 		Play
 	} from '@lucide/svelte';
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { onMount } from 'svelte';
 
 	// Types
 	interface GalleryItem {
@@ -17,17 +17,23 @@
 		alt: string;
 		caption?: string;
 		type?: 'image' | 'video';
-		thumbnail?: string; // For videos
+		thumbnail?: string;
 		width?: number;
 		height?: number;
-	} // Props
+	}
+
+	// Props
 	export let gallery: GalleryItem[] = [];
 	export let layout: 'auto' | 'masonry' | 'grid' | 'horizontal' = 'auto';
 	export let enableLightbox: boolean = true;
 	export let enableZoom: boolean = true;
 	export let enableLazyLoading: boolean = true;
-	export let columns: number = 3; // For grid layout
-	export let mobileLimit: number = 6; // Max items to show on mobile initially (3 rows of 2)
+	export let columns: number = 3;
+	export let mobileLimit: number = 6;
+
+	// Callback props (Svelte 5 style)
+	export let onLightboxOpen: ((event: { index: number }) => void) | undefined = undefined;
+	export let onLightboxClose: (() => void) | undefined = undefined;
 
 	// State
 	let showLightbox = false;
@@ -39,47 +45,58 @@
 	let dragStartX = 0;
 	let dragStartY = 0;
 	let isFullscreen = false;
-	let showAllOnMobile = false; // Track if showing all items on mobile
-	let isMobile = false; // Track if current viewport is mobile
+	let showAllOnMobile = false;
+	let isMobile = false;
 
-	// Gallery container ref
+	// Refs
 	let galleryContainer: HTMLElement;
 	let lightboxImageContainer: HTMLElement;
 
-	// Event dispatcher
-	const dispatch = createEventDispatcher();
 	// Reactive layout determination
-	$: effectiveLayout = layout === 'auto' ? getAutoLayout(gallery.length) : layout;
+	$: effectiveLayout = layout === 'auto' ? getAutoLayout() : layout;
+
 	// Mobile gallery display logic - only apply to non-horizontal layouts
 	$: displayedGallery =
 		isMobile && !showAllOnMobile && effectiveLayout !== 'horizontal'
 			? gallery.slice(0, mobileLimit)
 			: gallery;
 
-	$: hasMoreImages = gallery.length > mobileLimit;
+	$: hasMoreImages = gallery.length > mobileLimit && effectiveLayout !== 'horizontal';
 	$: remainingCount = gallery.length - mobileLimit;
-	function getAutoLayout(count: number): 'grid' | 'masonry' | 'horizontal' {
-		// For mobile, prefer horizontal scrolling
+
+	// Layout determination
+	function getAutoLayout(): 'grid' | 'masonry' | 'horizontal' {
 		if (isMobile) return 'horizontal';
-		return count <= 6 ? 'grid' : 'masonry';
+		return gallery.length <= 6 ? 'grid' : 'masonry';
 	}
 
+	// Mobile detection
+	function checkMobile() {
+		if (typeof window !== 'undefined') {
+			isMobile = window.innerWidth <= 767;
+		}
+	}
+
+	// Show more/less functionality
 	function toggleShowMore() {
 		showAllOnMobile = !showAllOnMobile;
 	}
-	function checkMobile() {
-		if (typeof window !== 'undefined') {
-			isMobile = window.innerWidth <= 767; // Match small screen breakpoint
-		}
+
+	// Video utilities
+	function isVideo(item: GalleryItem): boolean {
+		return item.type === 'video' || /\.(mp4|webm|ogg)$/i.test(item.src);
+	}
+
+	function getVideoThumbnail(item: GalleryItem): string {
+		return item.thumbnail || item.src;
 	}
 	// Lightbox functions
 	function openLightbox(index: number) {
 		if (!enableLightbox) return;
 
-		// If on mobile and showing limited gallery, we need to find the actual index in full gallery
+		// Map displayed index to actual gallery index
 		let actualIndex = index;
-		if (isMobile && !showAllOnMobile) {
-			// Find the actual item in the full gallery array
+		if (isMobile && !showAllOnMobile && effectiveLayout !== 'horizontal') {
 			const displayedItem = displayedGallery[index];
 			actualIndex = gallery.findIndex((item) => item.src === displayedItem.src);
 		}
@@ -88,14 +105,14 @@
 		showLightbox = true;
 		resetZoom();
 		document.body.style.overflow = 'hidden';
-		dispatch('lightboxOpen', { index: actualIndex });
+		onLightboxOpen?.({ index: actualIndex });
 	}
 
 	function closeLightbox() {
 		showLightbox = false;
 		document.body.style.overflow = '';
 		if (isFullscreen) exitFullscreen();
-		dispatch('lightboxClose');
+		onLightboxClose?.();
 	}
 
 	function nextImage() {
@@ -133,23 +150,20 @@
 	function zoomOut() {
 		if (zoomLevel > 0.5) {
 			zoomLevel -= 0.25;
-			// Constrain pan when zooming out
 			constrainPan();
 		}
 	}
 
 	function constrainPan() {
 		if (!lightboxImageContainer) return;
-
 		const container = lightboxImageContainer;
 		const maxPanX = (container.scrollWidth - container.clientWidth) / 2;
 		const maxPanY = (container.scrollHeight - container.clientHeight) / 2;
-
 		panX = Math.max(-maxPanX, Math.min(maxPanX, panX));
 		panY = Math.max(-maxPanY, Math.min(maxPanY, panY));
 	}
 
-	// Mouse/touch event handlers for pan
+	// Mouse/touch handlers for pan
 	function handleMouseDown(event: MouseEvent) {
 		if (zoomLevel > 1) {
 			isDragging = true;
@@ -225,8 +239,9 @@
 		}
 	}
 
-	// Lazy loading intersection observer
+	// Lazy loading
 	let observer: IntersectionObserver;
+
 	function setupLazyLoading() {
 		if (!enableLazyLoading || typeof window === 'undefined') return;
 
@@ -248,23 +263,15 @@
 		);
 	}
 
-	// Video handling
-	function getVideoThumbnail(item: GalleryItem): string {
-		return item.thumbnail || item.src;
-	}
-	function isVideo(item: GalleryItem): boolean {
-		return item.type === 'video' || item.src.match(/\.(mp4|webm|ogg)$/i) !== null;
-	}
 	// Masonry layout calculation
 	function calculateMasonryLayout() {
 		if (!galleryContainer || effectiveLayout !== 'masonry') return;
 
-		// Skip masonry positioning on mobile devices - let CSS handle it
-		if (isMobile || window.innerWidth <= 480) {
+		// Skip masonry on mobile - use CSS grid instead
+		if (isMobile) {
 			const items = galleryContainer.querySelectorAll('.gallery-item');
 			items.forEach((item: Element) => {
 				const htmlItem = item as HTMLElement;
-				// Reset any absolute positioning
 				htmlItem.style.position = '';
 				htmlItem.style.left = '';
 				htmlItem.style.top = '';
@@ -275,15 +282,13 @@
 		}
 
 		const items = galleryContainer.querySelectorAll('.gallery-item');
-		const columnWidth = 300; // Base column width
+		const columnWidth = 300;
 		const gap = 16;
 		const containerWidth = galleryContainer.clientWidth;
 		const actualColumns = Math.floor(containerWidth / (columnWidth + gap));
-
-		// Reset heights
 		const columnHeights = new Array(actualColumns).fill(0);
 
-		items.forEach((item: Element, index) => {
+		items.forEach((item: Element) => {
 			const htmlItem = item as HTMLElement;
 			const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
 
@@ -292,14 +297,15 @@
 			htmlItem.style.top = `${columnHeights[shortestColumnIndex]}px`;
 			htmlItem.style.width = `${columnWidth}px`;
 
-			// Update column height
 			columnHeights[shortestColumnIndex] += htmlItem.offsetHeight + gap;
 		});
 
-		// Set container height
 		galleryContainer.style.height = `${Math.max(...columnHeights)}px`;
 	}
+
+	// Lifecycle
 	onMount(() => {
+		// Event listeners
 		document.addEventListener('keydown', handleKeydown);
 		document.addEventListener('mousemove', handleMouseMove);
 		document.addEventListener('mouseup', handleMouseUp);
@@ -307,10 +313,11 @@
 			isFullscreen = document.fullscreenElement !== null;
 		});
 
-		// Check mobile on mount and resize
+		// Mobile detection
 		checkMobile();
 		window.addEventListener('resize', checkMobile);
 
+		// Lazy loading setup
 		setupLazyLoading();
 
 		// Observe lazy images
@@ -319,11 +326,12 @@
 			lazyImages?.forEach((img) => observer.observe(img));
 		}
 
-		// Setup masonry layout
+		// Masonry layout setup
 		if (effectiveLayout === 'masonry') {
 			calculateMasonryLayout();
 			window.addEventListener('resize', calculateMasonryLayout);
 		}
+
 		return () => {
 			document.removeEventListener('keydown', handleKeydown);
 			document.removeEventListener('mousemove', handleMouseMove);
@@ -404,25 +412,22 @@
 				{/each}
 			</div>
 
-			<!-- Show More Button for Mobile -->
-			{#if isMobile && hasMoreImages && !showAllOnMobile}
+			<!-- Show More/Less Buttons for Mobile (only for non-horizontal layouts) -->
+			{#if isMobile && hasMoreImages && effectiveLayout !== 'horizontal'}
 				<div class="show-more-container">
-					<button class="show-more-btn" on:click={toggleShowMore}>
-						<span class="show-more-text">
-							Show {remainingCount} more image{remainingCount !== 1 ? 's' : ''}
-						</span>
-						<ChevronRight size={20} />
-					</button>
-				</div>
-			{/if}
-
-			<!-- Show Less Button for Mobile -->
-			{#if isMobile && showAllOnMobile}
-				<div class="show-more-container">
-					<button class="show-more-btn" on:click={toggleShowMore}>
-						<span class="show-more-text">Show less</span>
-						<ChevronLeft size={20} />
-					</button>
+					{#if !showAllOnMobile}
+						<button class="show-more-btn" on:click={toggleShowMore}>
+							<span class="show-more-text">
+								Show {remainingCount} more image{remainingCount !== 1 ? 's' : ''}
+							</span>
+							<ChevronRight size={20} />
+						</button>
+					{:else}
+						<button class="show-more-btn" on:click={toggleShowMore}>
+							<span class="show-more-text">Show less</span>
+							<ChevronLeft size={20} />
+						</button>
+					{/if}
 				</div>
 			{/if}
 		</div>
@@ -564,23 +569,13 @@
 		--lightbox-glass-bg: rgba(255, 255, 255, 0.15);
 		--lightbox-glass-border: rgba(255, 255, 255, 0.25);
 	}
+
 	/* Dark mode adjustments */
 	:global(.dark) {
 		--gallery-glass-bg: rgba(0, 0, 0, 0.2);
 		--gallery-glass-border: rgba(255, 255, 255, 0.1);
 		--lightbox-glass-bg: rgba(0, 0, 0, 0.3);
 		--lightbox-glass-border: rgba(255, 255, 255, 0.15);
-	}
-
-	:global(.dark) .show-more-btn {
-		color: var(--color-text-primary, #f9fafb);
-		background: rgba(0, 0, 0, 0.3);
-		border-color: rgba(255, 255, 255, 0.15);
-	}
-
-	:global(.dark) .show-more-btn:hover {
-		background: rgba(0, 0, 0, 0.4);
-		border-color: var(--color-primary, #3b82f6);
 	}
 
 	/* ===== GALLERY CONTAINER ===== */
@@ -609,6 +604,7 @@
 		gap: var(--gallery-gap);
 		align-items: start;
 	}
+
 	/* Masonry Layout */
 	.gallery-grid.masonry {
 		position: relative;
@@ -699,6 +695,7 @@
 		object-fit: cover;
 		transition: var(--gallery-transition);
 	}
+
 	/* Lazy loading states */
 	.item-image.lazy {
 		opacity: 0.6;
@@ -731,6 +728,7 @@
 		transition: var(--gallery-transition);
 		backdrop-filter: blur(4px);
 	}
+
 	/* ===== CAPTIONS ===== */
 	.item-caption {
 		margin-top: 0.75rem;
@@ -770,11 +768,17 @@
 		transform: translateY(-2px) scale(1.02);
 		border-color: var(--color-primary, #3b82f6);
 		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-		background: var(--gallery-glass-bg);
 	}
 
-	.show-more-text {
-		font-weight: 600;
+	:global(.dark) .show-more-btn {
+		color: var(--color-text-primary, #f9fafb);
+		background: rgba(0, 0, 0, 0.3);
+		border-color: rgba(255, 255, 255, 0.15);
+	}
+
+	:global(.dark) .show-more-btn:hover {
+		background: rgba(0, 0, 0, 0.4);
+		border-color: var(--color-primary, #3b82f6);
 	}
 
 	/* ===== HOVER EFFECTS ===== */
@@ -1060,7 +1064,13 @@
 		.gallery-grid.masonry .gallery-item {
 			width: calc(50% - 0.5rem);
 		}
-	} /* Small screens */
+
+		.gallery-grid.horizontal .gallery-item {
+			width: 250px;
+		}
+	}
+
+	/* Small screens */
 	@media (max-width: 767px) {
 		.gallery-container {
 			padding: 0 0.75rem;
@@ -1071,8 +1081,18 @@
 			gap: 0.75rem;
 		}
 
+		.gallery-grid.masonry {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 0.75rem;
+			min-height: auto;
+		}
+
 		.gallery-grid.masonry .gallery-item {
-			width: calc(50% - 0.375rem);
+			position: relative !important;
+			left: 0 !important;
+			top: auto !important;
+			width: 100% !important;
 		}
 
 		.gallery-grid.horizontal {
@@ -1119,29 +1139,18 @@
 			height: 44px;
 			flex-shrink: 0;
 		}
-	} /* Extra small screens */
+	}
+
+	/* Extra small screens */
 	@media (max-width: 480px) {
 		.gallery-container {
 			padding: 0 0.5rem;
 		}
 
-		.gallery-grid.grid {
-			grid-template-columns: repeat(2, 1fr);
-			gap: 0.5rem;
-		}
-
-		.gallery-grid.masonry .gallery-item {
-			width: calc(50% - 0.25rem);
-			position: relative !important;
-			left: 0 !important;
-			top: auto !important;
-		}
-
+		.gallery-grid.grid,
 		.gallery-grid.masonry {
-			display: grid;
 			grid-template-columns: repeat(2, 1fr);
 			gap: 0.5rem;
-			min-height: auto;
 		}
 
 		.gallery-grid.horizontal {
@@ -1190,7 +1199,7 @@
 		}
 	}
 
-	/* ===== REDUCED MOTION ===== */
+	/* ===== ACCESSIBILITY & PREFERENCES ===== */
 	@media (prefers-reduced-motion: reduce) {
 		.gallery-item {
 			animation: none;
@@ -1212,7 +1221,6 @@
 		}
 	}
 
-	/* ===== HIGH CONTRAST MODE ===== */
 	@media (prefers-contrast: high) {
 		.image-container {
 			border-width: 3px;
@@ -1229,6 +1237,7 @@
 			border-width: 2px;
 		}
 	}
+
 	/* ===== FOCUS STATES ===== */
 	.item-button:focus-visible {
 		outline: 2px solid var(--color-primary, #3b82f6);
