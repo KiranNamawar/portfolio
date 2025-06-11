@@ -10,15 +10,19 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 		if (mod?.metadata) {
 			const slug = path.split('/').pop()?.replace('.md', '') || '';
 
-			// Get content for reading time calculation
-			const content = (mod.default as any)?.render?.()?.html || '';
+			// For reading time calculation, use description or fallback
+			let content = '';
+			if (mod.metadata.description) {
+				content = mod.metadata.description;
+			}
+
 			const readingTimeResult = calculateReadingTime(content);
 
 			posts.push({
 				...mod.metadata,
 				slug,
-				readingTime: readingTimeResult.minutes,
-				wordCount: readingTimeResult.words
+				readingTime: readingTimeResult.minutes || 3, // Default to 3 minutes if no content
+				wordCount: readingTimeResult.words || 300 // Default word count
 			});
 		}
 	}

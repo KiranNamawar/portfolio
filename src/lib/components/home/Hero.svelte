@@ -35,11 +35,6 @@
 </script>
 
 <section class="hero-section" id="hero">
-	<div class="hero-background">
-		<div class="particles" aria-hidden="true"></div>
-		<div class="gradient-overlay"></div>
-	</div>
-
 	<div class="hero-content">
 		<div class="hero-text">
 			<h1 class="hero-title">
@@ -100,34 +95,6 @@
 		justify-content: center;
 		overflow: hidden;
 		padding: var(--space-8) var(--space-4);
-	}
-
-	.hero-background {
-		position: absolute;
-		inset: 0;
-		z-index: -1;
-	}
-
-	.particles {
-		position: absolute;
-		inset: 0;
-		background:
-			radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-			radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-			radial-gradient(circle at 40% 80%, rgba(120, 200, 255, 0.1) 0%, transparent 50%);
-		animation: float 20s ease-in-out infinite;
-	}
-
-	.gradient-overlay {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(
-			135deg,
-			var(--color-bg-primary) 0%,
-			transparent 50%,
-			var(--color-bg-primary) 100%
-		);
-		opacity: 0.8;
 	}
 
 	.hero-content {

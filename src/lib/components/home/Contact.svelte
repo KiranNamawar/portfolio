@@ -175,7 +175,6 @@
 <style>
 	.contact-section {
 		padding: 5rem 0;
-		background: var(--color-bg-primary);
 		position: relative;
 	}
 

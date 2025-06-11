@@ -1,9 +1,18 @@
 <script lang="ts">
 	import '../app.css';
 	import FloatingDock from '$lib/components/ui/FloatingDock.svelte';
+	import Background from '$lib/components/ui/Background.svelte';
 	import { theme } from '$lib/stores/theme.js';
 	import { initializeCodeBlocks } from '$lib/utils/codeBlocks';
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
+
+	let isDetailPage = $state(false);
+	let backgroundVariant: 'default' | 'subtle' | 'vibrant' = 'default';
+	// Use $effect to reactively check when page changes
+	$effect(() => {
+		isDetailPage = page.route.id === '/blog/[slug]' || page.route.id === '/projects/[slug]';
+	});
 
 	onMount(() => {
 		theme.init();
@@ -20,6 +29,10 @@
 	/>
 </svelte:head>
 
+{#if !isDetailPage}
+	<Background variant={backgroundVariant} />
+{/if}
+
 <main>
 	<slot />
 </main>
@@ -29,21 +42,14 @@
 <style>
 	main {
 		min-height: 100vh;
-		padding-bottom: calc(var(--space-20) + var(--space-6)); /* Space for floating dock */
-	}
-
-	/* Add padding for non-home pages */
-	main:not(:has(.hero-section)) {
 		padding: var(--space-6);
+		padding-bottom: calc(var(--space-16) + var(--space-6)); /* Space for floating dock */
 	}
 
 	@media (max-width: 768px) {
 		main {
-			padding-bottom: calc(var(--space-16) + var(--space-4)); /* Space for mobile dock */
-		}
-
-		main:not(:has(.hero-section)) {
 			padding: var(--space-4);
+			padding-bottom: calc(var(--space-12) + var(--space-4)); /* Space for mobile dock */
 		}
 	}
 </style>

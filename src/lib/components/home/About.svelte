@@ -116,12 +116,6 @@
 <style>
 	.about-section {
 		padding: 5rem 0;
-		background: linear-gradient(
-			135deg,
-			var(--color-bg-primary) 0%,
-			var(--color-bg-secondary) 50%,
-			var(--color-bg-primary) 100%
-		);
 		position: relative;
 		overflow: hidden;
 	}

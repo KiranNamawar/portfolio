@@ -112,7 +112,7 @@
 	/* ===== CORE LAYOUT ===== */
 	.project-detail {
 		min-height: 100vh;
-		background: var(--color-bg-primary);
+		/* Removed solid background to allow neural network background to show through */
 	}
 
 	.container {
