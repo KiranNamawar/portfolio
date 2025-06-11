@@ -7,7 +7,6 @@
 
 <script lang="ts">
 	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
-	import CodeBlockEnhancer from '$lib/components/ui/CodeBlockEnhancer.svelte';
 	import { formatDate } from '$lib/utils/date.js';
 	// All frontmatter values are available as props
 	export let title: string;
@@ -19,9 +18,6 @@
 
 <!-- Reading Progress -->
 <ReadingProgress />
-
-<!-- Code Block Enhancer -->
-<CodeBlockEnhancer />
 
 <article class="blog-post">
 	<header class="blog-post-header">

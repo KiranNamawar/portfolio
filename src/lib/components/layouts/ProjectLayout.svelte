@@ -9,7 +9,6 @@
 	import { formatDate } from '$lib/utils/date.js';
 	import { ExternalLink, Github, ArrowLeft, Calendar } from '@lucide/svelte';
 	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
-	import CodeBlockEnhancer from '$lib/components/ui/CodeBlockEnhancer.svelte';
 	import ProjectGallery from '$lib/components/ui/ProjectGallery.svelte';
 	import { getTechIcon } from '$lib/utils/techIcons';
 
@@ -31,9 +30,6 @@
 
 <!-- Reading Progress Indicator -->
 <ReadingProgress />
-
-<!-- Code Block Enhancer -->
-<CodeBlockEnhancer />
 
 <article class="project-detail">
 	<!-- Project Header -->
