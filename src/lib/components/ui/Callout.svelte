@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { AlertTriangle, Info, CheckCircle, XCircle } from '@lucide/svelte';
+	import { AlertTriangle, Info, CheckCircle, XCircle } from '$lib/utils/icons.js';
 
 	export let type: 'info' | 'warning' | 'success' | 'error' = 'info';
 	export let title: string | undefined = undefined;

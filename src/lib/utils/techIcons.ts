@@ -1,4 +1,4 @@
-import { Code, Zap, Database, Globe, Smartphone, Monitor } from '@lucide/svelte';
+import { Code, Zap, Database, Globe, Smartphone, Monitor } from '$lib/utils/icons.js';
 import type { Component } from 'svelte';
 
 export interface TechIcon {

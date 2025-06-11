@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter } from '@lucide/svelte';
+	import { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter } from '$lib/utils/icons.js';
 	import { contactInfo, socialLinks } from '../../data/personal.js';
 
 	let formData = {

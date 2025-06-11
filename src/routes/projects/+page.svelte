@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { formatDate } from '$lib/utils/date.js';
-	import { ExternalLink, Github } from '@lucide/svelte';
+	import { ExternalLink, Github } from '$lib/utils/icons.js';
 	let { data }: { data: PageData } = $props();
 </script>
 

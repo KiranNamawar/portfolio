@@ -3,34 +3,22 @@ import { calculateReadingTime } from './readingTime.js';
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
 	const modules = import.meta.glob('../../content/blogs/*.md', { eager: true });
-	const rawModules = import.meta.glob('../../content/blogs/*.md', {
-		eager: true,
-		query: '?raw',
-		import: 'default'
-	});
 	const posts: BlogPost[] = [];
 
 	for (const path in modules) {
 		const mod = modules[path] as { metadata?: BlogPost; default?: unknown };
-		const rawContent = rawModules[path] as string;
 		if (mod?.metadata) {
 			const slug = path.split('/').pop()?.replace('.md', '') || '';
 
-			// Always calculate reading time from actual content (ignore frontmatter)
-			let readingTime = 1;
-			let wordCount = 0;
-
-			if (rawContent) {
-				const readingTimeResult = calculateReadingTime(rawContent);
-				readingTime = readingTimeResult.minutes;
-				wordCount = readingTimeResult.words;
-			}
+			// Get content for reading time calculation
+			const content = (mod.default as any)?.render?.()?.html || '';
+			const readingTimeResult = calculateReadingTime(content);
 
 			posts.push({
 				...mod.metadata,
 				slug,
-				readingTime,
-				wordCount
+				readingTime: readingTimeResult.minutes,
+				wordCount: readingTimeResult.words
 			});
 		}
 	}

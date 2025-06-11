@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Sun, Moon } from '@lucide/svelte';
+	import { Sun, Moon } from '$lib/utils/icons.js';
 	import { theme } from '$lib/stores/theme';
 
 	// Component props

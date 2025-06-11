@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Github, ExternalLink } from '@lucide/svelte';
+	import { Github, ExternalLink } from '$lib/utils/icons.js';
 	import { onMount } from 'svelte';
 	import { getFeaturedProjects } from '$lib/utils/project.js';
 	import type { Project } from '$lib/types/project.js';

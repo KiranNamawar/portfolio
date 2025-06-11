@@ -6,10 +6,22 @@ import { createHighlighter } from 'shiki';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Create Shiki highlighter
+// Optimized language list - only load what we actually use
+const SUPPORTED_LANGUAGES = [
+	'javascript',
+	'typescript',
+	'css',
+	'json',
+	'bash',
+	'svelte',
+	'html',
+	'markdown'
+];
+
+// Create Shiki highlighter with optimized config
 const highlighter = await createHighlighter({
 	themes: ['github-dark', 'github-light'],
-	langs: ['javascript', 'typescript', 'css', 'json', 'bash', 'svelte', 'html', 'markdown']
+	langs: SUPPORTED_LANGUAGES
 });
 
 // Helper function to get icon HTML based on language

@@ -3,35 +3,26 @@ import { calculateReadingTime } from './readingTime.js';
 
 export async function getProjects(): Promise<Project[]> {
 	const modules = import.meta.glob('../../content/projects/*.md', { eager: true });
-	const rawModules = import.meta.glob('../../content/projects/*.md', {
-		eager: true,
-		query: '?raw',
-		import: 'default'
-	});
 	const projects: Project[] = [];
 
 	for (const path in modules) {
-		const mod = modules[path] as { metadata?: Project; default?: unknown };
-		const rawContent = rawModules[path] as string;
+		const mod = modules[path] as {
+			metadata?: Project;
+			default?: { render?: () => { html: string } };
+		};
 
 		if (mod?.metadata) {
 			const slug = path.split('/').pop()?.replace('.md', '') || '';
 
-			// Always calculate reading time from actual content
-			let readingTime = 1;
-			let wordCount = 0;
-
-			if (rawContent) {
-				const readingTimeResult = calculateReadingTime(rawContent);
-				readingTime = readingTimeResult.minutes;
-				wordCount = readingTimeResult.words;
-			}
+			// Get content for reading time calculation
+			const content = mod.default?.render?.()?.html || '';
+			const readingTimeResult = calculateReadingTime(content);
 
 			projects.push({
 				...mod.metadata,
 				slug,
-				readingTime,
-				wordCount
+				readingTime: readingTimeResult.minutes,
+				wordCount: readingTimeResult.words
 			});
 		}
 	}

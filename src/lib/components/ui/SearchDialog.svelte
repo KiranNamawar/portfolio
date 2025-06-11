@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Search, X, FileText, FolderOpen, Hash, Calendar, Clock } from '@lucide/svelte';
+	import { Search, X, FileText, FolderOpen, Hash, Calendar, Clock } from '$lib/utils/icons.js';
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 	import { getBlogPosts } from '$lib/utils/blog.js';

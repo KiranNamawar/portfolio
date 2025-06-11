@@ -7,7 +7,7 @@
 
 <script lang="ts">
 	import { formatDate } from '$lib/utils/date.js';
-	import { ExternalLink, Github, ArrowLeft, Calendar } from '@lucide/svelte';
+	import { ExternalLink, Github, ArrowLeft, Calendar } from '$lib/utils/icons.js';
 	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
 	import ProjectGallery from '$lib/components/ui/ProjectGallery.svelte';
 	import { getTechIcon } from '$lib/utils/techIcons';
