@@ -7,8 +7,8 @@ import { dirname, join } from 'path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Function to detect languages used in markdown files
-export function getUsedLanguages() {
-	const usedLanguages = new Set();
+export function getUsedLanguages(): string[] {
+	const usedLanguages = new Set<string>();
 
 	// Default languages we always want
 	usedLanguages.add('javascript');
@@ -20,12 +20,12 @@ export function getUsedLanguages() {
 		// Find all markdown files
 		const markdownFiles = glob.sync(join(__dirname, '../content/**/*.md'));
 
-		markdownFiles.forEach((file) => {
+		markdownFiles.forEach((file: string) => {
 			const content = readFileSync(file, 'utf8');
 
 			// Extract code block languages using regex
 			const codeBlockRegex = /```(\w+)/g;
-			let match;
+			let match: RegExpExecArray | null;
 
 			while ((match = codeBlockRegex.exec(content)) !== null) {
 				const lang = match[1].toLowerCase();
@@ -42,7 +42,7 @@ export function getUsedLanguages() {
 }
 
 // Language mapping for Shiki
-export const languageAliases = {
+export const languageAliases: Record<string, string> = {
 	js: 'javascript',
 	ts: 'typescript',
 	bash: 'shell',
@@ -53,7 +53,7 @@ export const languageAliases = {
 	py: 'python'
 };
 
-export function normalizeLanguage(lang) {
+export function normalizeLanguage(lang: string): string {
 	const normalized = lang.toLowerCase();
 	return languageAliases[normalized] || normalized;
 }

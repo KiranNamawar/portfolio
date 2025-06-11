@@ -1,7 +1,8 @@
 // Ultra-lightweight copy functionality for code blocks
-export function initializeCodeBlocks() {
-	document.addEventListener('click', async (e) => {
-		const btn = e.target?.closest?.('.code-block-copy-btn');
+export function initializeCodeBlocks(): void {
+	document.addEventListener('click', async (e: Event) => {
+		const target = e.target as HTMLElement;
+		const btn = target?.closest?.('.code-block-copy-btn') as HTMLButtonElement;
 		if (!btn?.dataset?.code) return;
 
 		try {

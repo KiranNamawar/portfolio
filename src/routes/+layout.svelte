@@ -2,7 +2,7 @@
 	import '../app.css';
 	import FloatingDock from '$lib/components/ui/FloatingDock.svelte';
 	import { theme } from '$lib/stores/theme.js';
-	import { initializeCodeBlocks } from '$lib/utils/codeBlocks.js';
+	import { initializeCodeBlocks } from '$lib/utils/codeBlocks';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
