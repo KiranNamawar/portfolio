@@ -26,6 +26,7 @@
 		"mdsvex": "^0.12.6",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
+		"shiki": "^3.6.0",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",
@@ -34,7 +35,6 @@
 	},
 	"dependencies": {
 		"@lucide/svelte": "^0.513.0",
-		"date-fns": "^4.1.0",
-		"prismjs": "^1.30.0"
+		"date-fns": "^4.1.0"
 	}
 }

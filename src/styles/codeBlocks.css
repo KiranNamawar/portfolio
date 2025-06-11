@@ -1,0 +1,146 @@
+/* Enhanced Code Block Styles with Shiki Syntax Highlighting */
+.code-block-container {
+	margin: var(--space-4) 0;
+	border-radius: var(--radius-lg);
+	background: var(--glass-bg);
+	backdrop-filter: var(--glass-backdrop);
+	border: 1px solid var(--glass-border);
+	box-shadow: 0 4px 6px -1px var(--glass-shadow);
+	overflow: hidden;
+	transition: all var(--transition-fast);
+}
+
+.code-block-container:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 8px 15px -3px var(--glass-shadow);
+	border-color: var(--primary-400);
+}
+
+.code-block-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: var(--space-3) var(--space-4);
+	background: var(--glass-overlay-bg);
+	border-bottom: 1px solid var(--glass-border);
+}
+
+.code-block-lang {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+}
+
+.code-block-lang-devicon,
+.code-block-lang-lucide {
+	width: 16px;
+	height: 16px;
+	opacity: 0.9;
+}
+
+.code-block-lang-devicon {
+	font-size: 16px;
+}
+
+.code-block-lang-lucide {
+	color: var(--color-text-secondary);
+}
+
+.code-block-lang-title {
+	font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+	font-size: 0.75rem;
+	font-weight: 500;
+	color: var(--color-text-secondary);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.code-block-copy-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border: none;
+	background: var(--glass-overlay-bg);
+	border-radius: var(--radius-md);
+	color: var(--color-text-secondary);
+	cursor: pointer;
+	transition: all var(--transition-fast);
+}
+
+.code-block-copy-btn:hover {
+	background: var(--glass-overlay-hover-bg);
+	color: var(--color-text-primary);
+	transform: scale(1.05);
+}
+
+.code-block-copy-btn:active {
+	transform: scale(0.95);
+}
+
+.code-block-content {
+	position: relative;
+}
+
+/* Shiki theme switching */
+.code-block-content .light-theme {
+	display: block;
+}
+
+.code-block-content .dark-theme {
+	display: none;
+}
+
+[data-theme='dark'] .code-block-content .light-theme {
+	display: none;
+}
+
+[data-theme='dark'] .code-block-content .dark-theme {
+	display: block;
+}
+
+/* Reset Shiki styles to integrate with glass design */
+.code-block-content pre {
+	margin: 0 !important;
+	border: none !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	backdrop-filter: none !important;
+	box-shadow: none !important;
+	padding: var(--space-4) !important;
+	font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace !important;
+	font-size: 0.875rem !important;
+	line-height: 1.5 !important;
+	overflow-x: auto;
+}
+
+.code-block-content code {
+	font-family: inherit !important;
+}
+
+/* Fallback styles for unsupported languages */
+.code-block-content pre:not([class*='shiki']) {
+	color: var(--color-text-primary);
+	background: var(--glass-bg) !important;
+}
+
+/* Scrollbar styling for code blocks */
+.code-block-content pre::-webkit-scrollbar {
+	height: 6px;
+	width: 6px;
+}
+
+.code-block-content pre::-webkit-scrollbar-track {
+	background: transparent;
+	border-radius: var(--radius-full);
+}
+
+.code-block-content pre::-webkit-scrollbar-thumb {
+	background: var(--primary-400);
+	border-radius: var(--radius-full);
+}
+
+.code-block-content pre::-webkit-scrollbar-thumb:hover {
+	background: var(--primary-500);
+}

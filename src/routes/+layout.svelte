@@ -2,10 +2,12 @@
 	import '../app.css';
 	import FloatingDock from '$lib/components/ui/FloatingDock.svelte';
 	import { theme } from '$lib/stores/theme.js';
+	import { initializeCodeBlocks } from '$lib/utils/codeBlocks.js';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
 		theme.init();
+		initializeCodeBlocks();
 	});
 </script>
 
