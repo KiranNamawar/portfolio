@@ -34,12 +34,20 @@
 	let userHasScrolled = false;
 	let lastScrollTime = 0;
 	let hashScrollTime = 0;
-
 	// Utility functions
 	function extractHeadings(): TocHeading[] {
 		const headings = document.querySelectorAll('h2, h3, h4, h5, h6');
 		return Array.from(headings)
-			.filter((el) => el.textContent?.trim())
+			.filter((el) => {
+				// Filter out empty headings
+				if (!el.textContent?.trim()) return false;
+
+				// Filter out headings that are inside the TOC component itself
+				const tocContainer = el.closest('.toc-sidebar, .toc-content');
+				if (tocContainer) return false;
+
+				return true;
+			})
 			.map((el, index) => {
 				// Generate ID if missing
 				if (!el.id) {
