@@ -24,8 +24,8 @@ digital solutions that make a difference. I love turning complex problems into
 simple, beautiful, and intuitive designs.`,
 	description: `When I'm not coding, you'll find me exploring new technologies, contributing to 
 open-source projects, or mentoring aspiring developers in the community.`,
-	email: 'kiran@example.com',
-	location: 'Your City, Country',
+	email: 'kirannamawardev@gmail.com',
+	location: 'Mumbai, India',
 	resumeUrl: '/resume.pdf'
 };
 
@@ -41,30 +41,6 @@ export const heroTypingPhrases = [
 	'Creative Problem Solver',
 	'Technology Enthusiast',
 	'Digital Innovator'
-];
-
-/**
- * @typedef {Object} Stat
- * @property {string} number - The statistic number/value
- * @property {string} label - The statistic label/description
- */
-
-/**
- * @type {Stat[]}
- */
-export const stats = [
-	{
-		number: '50+',
-		label: 'Projects Completed'
-	},
-	{
-		number: '4+',
-		label: 'Years Experience'
-	},
-	{
-		number: '20+',
-		label: 'Happy Clients'
-	}
 ];
 
 /**
@@ -89,44 +65,6 @@ export const skills = [
 ];
 
 /**
- * @typedef {Object} Experience
- * @property {string} title - Job title
- * @property {string} company - Company name
- * @property {string} period - Employment period
- * @property {string} description - Job description
- * @property {string[]} technologies - Technologies used
- */
-
-/**
- * @type {Experience[]}
- */
-export const experience = [
-	{
-		title: 'Senior Full Stack Developer',
-		company: 'Tech Corp',
-		period: '2023 - Present',
-		description:
-			'Leading development of scalable web applications using modern frameworks and cloud technologies.',
-		technologies: ['SvelteKit', 'TypeScript', 'AWS', 'PostgreSQL']
-	},
-	{
-		title: 'Full Stack Developer',
-		company: 'Digital Agency',
-		period: '2021 - 2023',
-		description:
-			'Built responsive web applications and APIs for diverse clients across various industries.',
-		technologies: ['React', 'Node.js', 'MongoDB', 'Docker']
-	},
-	{
-		title: 'Frontend Developer',
-		company: 'Startup Inc',
-		period: '2020 - 2021',
-		description: 'Developed user interfaces and improved user experience for SaaS platform.',
-		technologies: ['Vue.js', 'JavaScript', 'SCSS', 'Figma']
-	}
-];
-
-/**
  * @typedef {Object} ContactInfo
  * @property {string} label - Contact method label
  * @property {string} value - Contact value (display text)
@@ -140,19 +78,13 @@ export const experience = [
 export const contactInfo = [
 	{
 		label: 'Email',
-		value: 'kiran@example.com',
-		href: 'mailto:kiran@example.com',
+		value: 'kirannamawardev@gmail.com',
+		href: 'mailto:kirannamawardev@gmail.com',
 		type: 'email'
 	},
 	{
-		label: 'Phone',
-		value: '+1 (555) 123-4567',
-		href: 'tel:+15551234567',
-		type: 'phone'
-	},
-	{
 		label: 'Location',
-		value: 'San Francisco, CA',
+		value: 'Mumbai, India',
 		href: 'https://maps.google.com',
 		type: 'location'
 	}
@@ -172,20 +104,14 @@ export const contactInfo = [
 export const socialLinks = [
 	{
 		label: 'GitHub',
-		href: 'https://github.com/yourusername',
+		href: 'https://github.com/kirannamawar',
 		color: '#333',
-		username: 'yourusername'
+		username: 'kirannamawar'
 	},
 	{
 		label: 'LinkedIn',
-		href: 'https://linkedin.com/in/yourusername',
+		href: 'https://linkedin.com/in/kirannamawardev',
 		color: '#0077b5',
-		username: 'yourusername'
-	},
-	{
-		label: 'Twitter',
-		href: 'https://twitter.com/yourusername',
-		color: '#1da1f2',
-		username: 'yourusername'
+		username: 'kirannamawardev'
 	}
 ];

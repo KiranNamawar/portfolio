@@ -3,7 +3,17 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<link rel="apple-touch-icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<!-- DNS Prefetch for performance -->
+		<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+		<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+		<link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+
+		<!-- Manifest for PWA -->
+		<link rel="manifest" href="%sveltekit.assets%/manifest.json" />
+
 		<script>
 			// Prevent flash of incorrect theme
 			(function () {

@@ -2,8 +2,35 @@
 	import type { PageData } from './$types';
 	import { formatDate } from '$lib/utils/date.js';
 	import { ExternalLink, Github } from '$lib/utils/icons.js';
+	import SEOHead from '$lib/components/ui/SEOHead.svelte';
 	let { data }: { data: PageData } = $props();
 </script>
+
+<SEOHead
+	data={{
+		title: 'Projects',
+		description:
+			'Explore my latest work and creations. A collection of web applications, tools, and experiments showcasing my development skills and passion for technology.',
+		keywords: [
+			'projects',
+			'portfolio',
+			'web development',
+			'applications',
+			'software',
+			'full stack',
+			'javascript',
+			'typescript',
+			'react',
+			'svelte'
+		],
+		url: '/projects',
+		type: 'website'
+	}}
+	breadcrumbs={[
+		{ name: 'Home', url: '/' },
+		{ name: 'Projects', url: '/projects' }
+	]}
+/>
 
 <div class="container">
 	<header class="text-center space-y-4">

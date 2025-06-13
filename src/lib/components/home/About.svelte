@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { personalInfo, skills, experience, stats } from '../../data/personal.js';
+	import { personalInfo, skills } from '../../data/personal.js';
 
 	let skillsVisible = false;
 	let aboutRef: HTMLElement;
@@ -43,15 +43,6 @@
 						{personalInfo.description}
 					</p>
 
-					<div class="stats">
-						{#each stats as stat}
-							<div class="stat-item">
-								<span class="stat-number">{stat.number}</span>
-								<span class="stat-label">{stat.label}</span>
-							</div>
-						{/each}
-					</div>
-
 					<a href={personalInfo.resumeUrl} class="resume-btn glass-button" download>
 						<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
 							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -85,29 +76,6 @@
 						{/each}
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="experience-section">
-			<h3>Professional Experience</h3>
-			<div class="timeline">
-				{#each experience as exp, index}
-					<div class="timeline-item" style="animation-delay: {index * 0.2}s">
-						<div class="timeline-marker"></div>
-						<div class="timeline-content glass-card">
-							<div class="exp-header">
-								<h4 class="exp-title">{exp.title}</h4>
-								<span class="exp-period">{exp.period}</span>
-							</div>
-							<p class="exp-company">{exp.company}</p>
-							<p class="exp-description">{exp.description}</p>
-							<div class="exp-technologies">
-								{#each exp.technologies as tech}
-									<span class="tech-tag">{tech}</span>
-								{/each}
-							</div>
-						</div>
-					</div>
-				{/each}
 			</div>
 		</div>
 	</div>
@@ -206,34 +174,6 @@
 		margin-bottom: 1.5rem;
 	}
 
-	.stats {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 1.5rem;
-		margin: 2rem 0;
-		padding: 1.5rem 0;
-		border-top: 1px solid var(--color-border-primary);
-		border-bottom: 1px solid var(--color-border-primary);
-	}
-
-	.stat-item {
-		text-align: center;
-	}
-
-	.stat-number {
-		display: block;
-		font-size: 2rem;
-		font-weight: 700;
-		color: var(--primary-500);
-		margin-bottom: 0.5rem;
-	}
-
-	.stat-label {
-		font-size: 0.875rem;
-		color: var(--color-text-secondary);
-		font-weight: 500;
-	}
-
 	.resume-btn {
 		display: inline-flex;
 		align-items: center;
@@ -322,101 +262,6 @@
 		animation: fillBar 1.5s ease forwards;
 	}
 
-	.experience-section h3 {
-		font-size: 2rem;
-		font-weight: 600;
-		color: var(--color-text-primary);
-		text-align: center;
-		margin-bottom: 3rem;
-	}
-
-	.timeline {
-		position: relative;
-		padding-left: 2rem;
-	}
-
-	.timeline::before {
-		content: '';
-		position: absolute;
-		left: 1rem;
-		top: 0;
-		bottom: 0;
-		width: 2px;
-		background: linear-gradient(to bottom, var(--primary-500), var(--primary-700));
-	}
-
-	.timeline-item {
-		position: relative;
-		margin-bottom: 3rem;
-		opacity: 0;
-		animation: slideUp 0.6s ease forwards;
-	}
-
-	.timeline-marker {
-		position: absolute;
-		left: -2rem;
-		top: 1.5rem;
-		width: 12px;
-		height: 12px;
-		background: var(--primary-500);
-		border-radius: 50%;
-		border: 3px solid var(--color-bg-primary);
-		z-index: 2;
-	}
-
-	.timeline-content {
-		margin-left: 1rem;
-	}
-
-	.exp-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: 1rem;
-		margin-bottom: 0.5rem;
-	}
-
-	.exp-title {
-		font-size: 1.25rem;
-		font-weight: 600;
-		color: var(--color-text-primary);
-	}
-
-	.exp-period {
-		font-size: 0.875rem;
-		color: var(--primary-500);
-		font-weight: 600;
-		white-space: nowrap;
-	}
-
-	.exp-company {
-		color: var(--color-text-secondary);
-		font-weight: 500;
-		margin-bottom: 1rem;
-	}
-
-	.exp-description {
-		color: var(--color-text-secondary);
-		line-height: 1.6;
-		margin-bottom: 1.5rem;
-	}
-
-	.exp-technologies {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-	}
-
-	.tech-tag {
-		background: var(--color-bg-tertiary);
-		color: var(--color-text-primary);
-		padding: 0.25rem 0.75rem;
-		border-radius: 1rem;
-		font-size: 0.75rem;
-		font-weight: 500;
-		border: 1px solid var(--color-border-primary);
-	}
-
 	@keyframes slideUp {
 		from {
 			opacity: 0;
@@ -455,23 +300,6 @@
 			font-size: 2.5rem;
 		}
 
-		.stats {
-			grid-template-columns: 1fr;
-			gap: 1rem;
-		}
-
-		.exp-header {
-			flex-direction: column;
-			gap: 0.5rem;
-		}
-
-		.timeline {
-			padding-left: 1.5rem;
-		}
-
-		.timeline-marker {
-			left: -1.5rem;
-		}
 	}
 
 	@media (max-width: 480px) {

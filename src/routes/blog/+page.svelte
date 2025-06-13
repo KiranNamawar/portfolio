@@ -1,9 +1,36 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { formatDate } from '$lib/utils/date.js';
+	import SEOHead from '$lib/components/ui/SEOHead.svelte';
 
 	let { data }: { data: PageData } = $props();
 </script>
+
+<SEOHead
+	data={{
+		title: 'Blog',
+		description:
+			'Thoughts, tutorials, and insights on web development, technology, and software engineering. Stay updated with the latest trends and best practices.',
+		keywords: [
+			'blog',
+			'web development',
+			'tutorials',
+			'programming',
+			'technology',
+			'software engineering',
+			'javascript',
+			'typescript',
+			'svelte',
+			'react'
+		],
+		url: '/blog',
+		type: 'website'
+	}}
+	breadcrumbs={[
+		{ name: 'Home', url: '/' },
+		{ name: 'Blog', url: '/blog' }
+	]}
+/>
 
 <div class="container">
 	<header class="text-center space-y-4">

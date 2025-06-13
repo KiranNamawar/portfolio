@@ -1,8 +1,29 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import SEOHead from '$lib/components/ui/SEOHead.svelte';
 
 	let { data }: { data: PageData } = $props();
 </script>
+
+{#if data.project}
+	<SEOHead
+		data={{
+			title: data.project.title,
+			description: data.project.description || data.project.title,
+			keywords: [...(data.project.tech || []), 'project', 'web development', 'portfolio'],
+			url: `/projects/${data.project.slug}`,
+			type: 'article',
+			publishedTime: new Date(data.project.date).toISOString(),
+			image: data.project.image || '/project-placeholder.svg',
+			tags: data.project.tech || []
+		}}
+		breadcrumbs={[
+			{ name: 'Home', url: '/' },
+			{ name: 'Projects', url: '/projects' },
+			{ name: data.project.title, url: `/projects/${data.project.slug}` }
+		]}
+	/>
+{/if}
 
 <!-- The ProjectLayout component is automatically applied by mdsvex -->
 {#if data.ContentComponent}

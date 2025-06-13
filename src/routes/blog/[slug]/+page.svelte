@@ -1,8 +1,30 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import SEOHead from '$lib/components/ui/SEOHead.svelte';
 
 	let { data }: { data: PageData } = $props();
 </script>
+
+{#if data.post}
+	<SEOHead
+		data={{
+			title: data.post.title,
+			description: data.post.description || data.post.title,
+			keywords: data.post.tags || [],
+			url: `/blog/${data.post.slug}`,
+			type: 'article',
+			publishedTime: new Date(data.post.date).toISOString(),
+			image: data.post.image || '/blog-placeholder.svg',
+			readingTime: data.post.readingTime,
+			tags: data.post.tags || []
+		}}
+		breadcrumbs={[
+			{ name: 'Home', url: '/' },
+			{ name: 'Blog', url: '/blog' },
+			{ name: data.post.title, url: `/blog/${data.post.slug}` }
+		]}
+	/>
+{/if}
 
 <!-- The BlogLayout component is automatically applied by mdsvex -->
 {#if data.ContentComponent}

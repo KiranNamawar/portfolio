@@ -1,0 +1,26 @@
+{
+	"name": "Kiran's Portfolio - Full Stack Developer",
+	"short_name": "Kiran Portfolio",
+	"description": "Full Stack Developer creating digital solutions. Passionate about web development, technology, and open source.",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#6366f1",
+	"orientation": "portrait-primary",
+	"categories": ["business", "developer"],
+	"lang": "en",
+	"icons": [
+		{
+			"src": "/favicon.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any maskable"
+		},
+		{
+			"src": "/favicon.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any maskable"
+		}
+	]
+}
