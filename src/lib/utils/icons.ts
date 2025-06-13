@@ -23,7 +23,10 @@ export { ExternalLink, ArrowLeft } from '@lucide/svelte';
 export { Link } from '@lucide/svelte';
 
 // Callout types
-export { AlertTriangle, Info, CheckCircle, XCircle } from '@lucide/svelte';
+export { AlertTriangle, Info, CheckCircle, XCircle, AlertCircle, Eye } from '@lucide/svelte';
+
+// Enhanced components
+export { Copy, Check } from '@lucide/svelte';
 
 // Tech icons fallbacks (used in techIcons.ts)
 export { Code, Zap, Database, Globe, Smartphone, Monitor } from '@lucide/svelte';

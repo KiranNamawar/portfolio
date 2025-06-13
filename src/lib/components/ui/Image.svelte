@@ -1,401 +1,336 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
+	import { Copy, Check } from '$lib/utils/icons.js';
 
 	export let src: string;
-	export let alt: string;
-	export let caption: string | undefined = undefined;
-	export let loading: 'lazy' | 'eager' = 'lazy';
-	export let width: string | number | undefined = undefined;
-	export let height: string | number | undefined = undefined;
-	export let aspectRatio: string | undefined = undefined;
-	export let fit: 'cover' | 'contain' | 'fill' | 'scale-down' | 'none' = 'cover';
-	export let radius: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full' = 'md';
-	export let shadow: boolean = true;
-	export let border: boolean = false;
-	export let placeholder: string | undefined = undefined;
-	export let fadeIn: boolean = true;
-	export let clickToExpand: boolean = false;
+	export let alt: string = '';
+	export let caption: string = '';
+	export let zoomable: boolean = true;
+	export let lazy: boolean = true;
+	export let width: string | number = 'auto';
+	export let height: string | number = 'auto';
 
 	let imageElement: HTMLImageElement;
 	let isLoaded = false;
-	let hasError = false;
-	let isExpanded = false;
+	let isError = false;
+	let isZoomed = false;
+	let copied = false;
+
+	onMount(() => {
+		if (imageElement && lazy) {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							imageElement.src = src;
+							observer.unobserve(imageElement);
+						}
+					});
+				},
+				{ threshold: 0.1 }
+			);
+			observer.observe(imageElement);
+		}
+	});
 
 	function handleLoad() {
 		isLoaded = true;
 	}
 
 	function handleError() {
-		hasError = true;
-		isLoaded = true;
+		isError = true;
 	}
 
-	function handleImageClick() {
-		if (clickToExpand) {
-			isExpanded = true;
-			if (typeof document !== 'undefined') {
-				document.body.style.overflow = 'hidden';
-			}
-		}
-	}
-
-	function closeExpanded() {
-		isExpanded = false;
-		if (typeof document !== 'undefined') {
-			document.body.style.overflow = '';
+	function toggleZoom() {
+		if (zoomable) {
+			isZoomed = !isZoomed;
 		}
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
-		if (isExpanded && event.key === 'Escape') {
-			closeExpanded();
+		if (event.key === 'Escape' && isZoomed) {
+			isZoomed = false;
 		}
 	}
-	// Calculate responsive dimensions
-	$: computedWidth = typeof width === 'number' ? `${width}px` : width;
-	$: computedHeight = typeof height === 'number' ? `${height}px` : height;
 
-	// Compute radius class
-	$: radiusClass = `radius-${radius}`;
-	// Cleanup on component destroy
-	onDestroy(() => {
-		if (typeof document !== 'undefined') {
-			document.body.style.overflow = '';
+	async function copyImageUrl() {
+		try {
+			await navigator.clipboard.writeText(src);
+			copied = true;
+			setTimeout(() => {
+				copied = false;
+			}, 2000);
+		} catch (err) {
+			console.error('Failed to copy image URL:', err);
 		}
-	});
+	}
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
 
-<figure class="image-container" class:has-caption={caption}>
-	<div
-		class="image-wrapper {radiusClass}"
-		class:shadow
-		class:border
-		style:width={computedWidth}
-		style:height={computedHeight}
-		style:aspect-ratio={aspectRatio}
-	>
-		<!-- Loading Skeleton -->
-		{#if !isLoaded}
-			<div class="skeleton {radiusClass}">
-				<div class="skeleton-shimmer"></div>
-				<div class="skeleton-content">
-					<div class="skeleton-icon">
-						<svg
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z"
-								stroke="currentColor"
-								stroke-width="2"
-							/>
-							<path
-								d="M8.5 10C9.32843 10 10 9.32843 10 8.5C10 7.67157 9.32843 7 8.5 7C7.67157 7 7 7.67157 7 8.5C7 9.32843 7.67157 10 8.5 10Z"
-								stroke="currentColor"
-								stroke-width="2"
-							/>
-							<path d="M21 15L16 10L5 21" stroke="currentColor" stroke-width="2" />
-						</svg>
-					</div>
-				</div>
+<figure class="enhanced-image" class:zoomable>
+	<div class="image-container">
+		{#if lazy}
+			<img
+				bind:this={imageElement}
+				{alt}
+				style="width: {typeof width === 'number' ? width + 'px' : width}; height: {typeof height ===
+				'number'
+					? height + 'px'
+					: height};"
+				class:loaded={isLoaded}
+				class:error={isError}
+				on:load={handleLoad}
+				on:error={handleError}
+				on:click={toggleZoom}
+				loading="lazy"
+			/>
+		{:else}
+			<img
+				{src}
+				{alt}
+				style="width: {typeof width === 'number' ? width + 'px' : width}; height: {typeof height ===
+				'number'
+					? height + 'px'
+					: height};"
+				class:loaded={isLoaded}
+				class:error={isError}
+				on:load={handleLoad}
+				on:error={handleError}
+				on:click={toggleZoom}
+			/>
+		{/if}
+
+		<!-- Loading placeholder -->
+		{#if !isLoaded && !isError}
+			<div class="image-placeholder">
+				<div class="loading-spinner"></div>
 			</div>
 		{/if}
 
-		<!-- Error State -->
-		{#if hasError}
-			<div class="error-state {radiusClass}">
-				<div class="error-icon">
-					<svg
-						width="32"
-						height="32"
-						viewBox="0 0 24 24"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<path
-							d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-				</div>
-				<p class="error-text">Failed to load image</p>
-				{#if placeholder}
-					<button
-						class="retry-btn"
-						on:click={() => {
-							hasError = false;
-							isLoaded = false;
-						}}
-					>
-						Retry
+		<!-- Error state -->
+		{#if isError}
+			<div class="image-error">
+				<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+					<rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+					<circle cx="8.5" cy="8.5" r="1.5" />
+					<polyline points="21,15 16,10 5,21" />
+				</svg>
+				<p>Failed to load image</p>
+			</div>
+		{/if}
+
+		<!-- Image actions overlay -->
+		{#if isLoaded && !isError}
+			<div class="image-actions">
+				<button
+					class="action-btn copy-btn"
+					on:click|stopPropagation={copyImageUrl}
+					title="Copy image URL"
+				>
+					{#if copied}
+						<Check size={16} />
+					{:else}
+						<Copy size={16} />
+					{/if}
+				</button>
+				{#if zoomable}
+					<button class="action-btn zoom-btn" on:click={toggleZoom} title="Click to zoom">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+							<circle cx="11" cy="11" r="8" />
+							<path d="m21 21-4.35-4.35" />
+							<path d="M11 8v6" />
+							<path d="M8 11h6" />
+						</svg>
 					</button>
 				{/if}
 			</div>
-		{:else}
-			<!-- Actual Image -->
-			{#if clickToExpand}
-				<button
-					class="image-button"
-					on:click={handleImageClick}
-					on:keydown={(e) => e.key === 'Enter' && handleImageClick()}
-					aria-label="Click to expand image: {alt}"
-					type="button"
-				>
-					<img
-						bind:this={imageElement}
-						{src}
-						{alt}
-						{loading}
-						class="image"
-						class:loaded={isLoaded}
-						class:fade-in={fadeIn}
-						style:object-fit={fit}
-						style:width="100%"
-						style:height="100%"
-						on:load={handleLoad}
-						on:error={handleError}
-					/>
-				</button>
-			{:else}
-				<img
-					bind:this={imageElement}
-					{src}
-					{alt}
-					{loading}
-					class="image"
-					class:loaded={isLoaded}
-					class:fade-in={fadeIn}
-					style:object-fit={fit}
-					style:width="100%"
-					style:height="100%"
-					on:load={handleLoad}
-					on:error={handleError}
-				/>
-			{/if}
 		{/if}
 	</div>
 
-	<!-- Caption -->
 	{#if caption}
-		<figcaption class="caption">
-			{caption}
-		</figcaption>
+		<figcaption class="image-caption">{caption}</figcaption>
 	{/if}
 </figure>
 
-<!-- Expanded View Modal -->
-{#if isExpanded}
-	<div
-		class="expanded-modal"
-		on:click={closeExpanded}
-		on:keydown={(e) =>
-			(e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') && closeExpanded()}
-		role="button"
-		aria-label="Close expanded image view (click anywhere to close)"
-		tabindex="0"
-	>
-		<div class="expanded-content" role="img" aria-label={alt}>
-			<button class="close-btn" on:click={closeExpanded} aria-label="Close expanded view">
-				<svg
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<path
-						d="M18 6L6 18M6 6L18 18"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
+<!-- Zoom modal -->
+{#if isZoomed}
+	<div class="zoom-modal" on:click={toggleZoom}>
+		<div class="zoom-container">
+			<img {src} {alt} class="zoomed-image" />
+			<button class="close-btn" on:click={toggleZoom} title="Close (Esc)">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+					<line x1="18" y1="6" x2="6" y2="18" />
+					<line x1="6" y1="6" x2="18" y2="18" />
 				</svg>
 			</button>
-			<img {src} {alt} class="expanded-image" />
-			{#if caption}
-				<p class="expanded-caption">{caption}</p>
-			{/if}
 		</div>
 	</div>
 {/if}
 
 <style>
-	.image-container {
-		margin: 0;
-		width: 100%;
+	.enhanced-image {
+		margin: 2em 0;
 		max-width: 100%;
 	}
 
-	.image-wrapper {
+	.image-container {
 		position: relative;
-		width: 100%;
-		height: auto;
-		display: block;
+		display: inline-block;
+		max-width: 100%;
+		border-radius: var(--radius-lg);
 		overflow: hidden;
-		background: var(--color-glass-bg);
-		backdrop-filter: blur(10px);
+		background: var(--color-surface-secondary);
+		border: 1px solid var(--color-border-primary);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 		transition: all 0.3s ease;
 	}
 
-	.image-wrapper.shadow {
-		box-shadow: var(--shadow-glass);
-	}
-	.image-wrapper.border {
-		border: 1px solid var(--color-glass-border);
+	.image-container:hover {
+		box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.15);
+		transform: translateY(-2px);
 	}
 
-	/* Border Radius Variants */
-	.radius-none {
-		border-radius: 0;
-	}
-	.radius-sm {
-		border-radius: var(--radius-sm);
-	}
-	.radius-md {
-		border-radius: var(--radius-md);
-	}
-	.radius-lg {
-		border-radius: var(--radius-lg);
-	}
-	.radius-xl {
-		border-radius: var(--radius-xl);
-	}
-	.radius-full {
-		border-radius: 50%;
+	.zoomable .image-container {
+		cursor: zoom-in;
 	}
 
-	/* Image Button for click-to-expand */
-	.image-button {
-		width: 100%;
-		height: 100%;
-		background: none;
-		border: none;
-		padding: 0;
-		cursor: pointer;
+	img {
 		display: block;
-	}
-
-	/* Image Styles */
-	.image {
 		width: 100%;
-		height: 100%;
-		display: block;
-		transition: opacity 0.3s ease;
+		height: auto;
 		opacity: 0;
+		transition: opacity 0.3s ease;
 	}
 
-	.image.loaded {
+	img.loaded {
 		opacity: 1;
 	}
-	.image.fade-in.loaded {
-		animation: fadeIn 0.5s ease-out forwards;
+
+	img.error {
+		display: none;
 	}
 
-	/* Loading Skeleton */
-	.skeleton {
+	.image-placeholder {
 		position: absolute;
-		inset: 0;
-		background: var(--color-glass-bg);
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		overflow: hidden;
+		background: var(--color-surface-secondary);
+		min-height: 200px;
 	}
 
-	.skeleton-shimmer {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(
-			90deg,
-			transparent 0%,
-			rgba(255, 255, 255, 0.1) 50%,
-			transparent 100%
-		);
-		animation: shimmer 2s infinite;
+	.loading-spinner {
+		width: 32px;
+		height: 32px;
+		border: 3px solid var(--color-border-primary);
+		border-top: 3px solid var(--primary-500);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
 	}
 
-	.skeleton-content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: var(--space-2);
-		z-index: 1;
-	}
-
-	.skeleton-icon {
-		color: var(--color-text-tertiary);
-		opacity: 0.5;
-	}
-
-	@keyframes shimmer {
+	@keyframes spin {
 		0% {
-			transform: translateX(-100%);
+			transform: rotate(0deg);
 		}
 		100% {
-			transform: translateX(100%);
+			transform: rotate(360deg);
 		}
 	}
 
-	/* Error State */
-	.error-state {
+	.image-error {
 		position: absolute;
-		inset: 0;
-		background: var(--color-glass-bg);
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: var(--space-2);
+		background: var(--color-surface-secondary);
 		color: var(--color-text-tertiary);
+		min-height: 200px;
+		gap: var(--space-3);
 	}
 
-	.error-icon {
-		color: var(--color-error);
-		opacity: 0.7;
-	}
-
-	.error-text {
-		font-size: var(--text-sm);
+	.image-error p {
 		margin: 0;
+		font-size: var(--font-size-sm);
 	}
 
-	.retry-btn {
-		background: var(--color-glass-bg);
-		border: 1px solid var(--color-glass-border);
-		border-radius: var(--radius-sm);
-		padding: var(--space-2) var(--space-3);
-		color: var(--color-text-secondary);
-		font-size: var(--text-sm);
+	.image-actions {
+		position: absolute;
+		top: var(--space-3);
+		right: var(--space-3);
+		display: flex;
+		gap: var(--space-2);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.image-container:hover .image-actions {
+		opacity: 1;
+	}
+
+	.action-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		background: var(--glass-bg);
+		backdrop-filter: var(--glass-backdrop);
+		border: 1px solid var(--glass-border);
+		border-radius: var(--radius-md);
+		color: var(--color-text-primary);
 		cursor: pointer;
 		transition: all 0.2s ease;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	}
 
-	.retry-btn:hover {
-		background: var(--color-glass-hover);
-		color: var(--color-text-primary);
+	.action-btn:hover {
+		background: var(--color-surface-tertiary);
+		border-color: var(--color-border-secondary);
+		transform: translateY(-1px);
 	}
 
-	/* Caption */
-	.caption {
+	.copy-btn {
+		color: var(--blue-600);
+	}
+
+	.zoom-btn {
+		color: var(--purple-600);
+	}
+
+	[data-theme='dark'] .copy-btn {
+		color: var(--blue-400);
+	}
+
+	[data-theme='dark'] .zoom-btn {
+		color: var(--purple-400);
+	}
+
+	.image-caption {
 		margin-top: var(--space-3);
 		text-align: center;
-		color: var(--color-text-secondary);
+		font-size: var(--font-size-sm);
+		color: var(--color-text-tertiary);
 		font-style: italic;
-		font-size: var(--text-sm);
-		line-height: 1.5;
-	} /* Expanded Modal */
-	.expanded-modal {
+		line-height: var(--line-height-normal);
+	}
+
+	/* Zoom modal */
+	.zoom-modal {
 		position: fixed;
-		inset: 0;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
 		background: rgba(0, 0, 0, 0.9);
 		backdrop-filter: blur(10px);
 		z-index: 1000;
@@ -403,111 +338,64 @@
 		align-items: center;
 		justify-content: center;
 		padding: var(--space-4);
-		opacity: 0;
-		animation: fadeIn 0.3s ease forwards;
-		cursor: pointer;
+		cursor: zoom-out;
 	}
 
-	.expanded-content {
+	.zoom-container {
 		position: relative;
-		max-width: 95vw;
-		max-height: 95vh;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
+		max-width: 90vw;
+		max-height: 90vh;
+	}
+
+	.zoomed-image {
+		max-width: 100%;
+		max-height: 100%;
+		border-radius: var(--radius-lg);
+		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 	}
 
 	.close-btn {
 		position: absolute;
-		top: var(--space-4);
-		right: var(--space-4);
-		background: var(--color-glass-bg);
-		backdrop-filter: blur(20px);
-		border: 1px solid var(--color-glass-border);
-		border-radius: var(--radius-md);
-		color: var(--color-text-primary);
-		padding: var(--space-3);
+		top: -var(--space-12);
+		right: 0;
+		background: var(--glass-bg);
+		backdrop-filter: var(--glass-backdrop);
+		border: 1px solid var(--glass-border);
+		border-radius: var(--radius-full);
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
 		cursor: pointer;
-		z-index: 1001;
 		transition: all 0.2s ease;
 	}
 
 	.close-btn:hover {
-		background: var(--color-glass-hover);
-		transform: translateY(-2px);
+		background: rgba(255, 255, 255, 0.2);
+		transform: scale(1.1);
 	}
 
-	.expanded-image {
-		max-width: 100%;
-		max-height: 80vh;
-		object-fit: contain;
-		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-glass);
-	}
-
-	.expanded-caption {
-		margin-top: var(--space-4);
-		text-align: center;
-		color: white;
-		font-style: italic;
-		max-width: 80%;
-		background: var(--color-glass-bg);
-		backdrop-filter: blur(20px);
-		border: 1px solid var(--color-glass-border);
-		border-radius: var(--radius-md);
-		padding: var(--space-3) var(--space-4);
-	}
-
-	@keyframes fadeIn {
-		to {
+	/* Mobile responsive */
+	@media (max-width: 768px) {
+		.image-actions {
 			opacity: 1;
 		}
-	}
 
-	/* Responsive Design */
-	@media (max-width: 768px) {
-		.expanded-content {
+		.action-btn {
+			width: 28px;
+			height: 28px;
+		}
+
+		.zoom-modal {
 			padding: var(--space-2);
 		}
 
 		.close-btn {
-			top: var(--space-2);
-			right: var(--space-2);
-			padding: var(--space-2);
-		}
-
-		.expanded-image {
-			max-height: 70vh;
-		}
-		.expanded-caption {
-			max-width: 95%;
-			font-size: var(--text-sm);
-		}
-	}
-
-	/* High contrast mode support */
-	@media (prefers-contrast: high) {
-		.skeleton {
-			border: 2px solid currentColor;
-		}
-
-		.error-state {
-			border: 2px solid var(--color-error);
-		}
-	}
-
-	/* Reduced motion support */
-	@media (prefers-reduced-motion: reduce) {
-		.image,
-		.image-wrapper,
-		.skeleton-shimmer,
-		.expanded-modal {
-			animation: none;
-			transition: none;
-		}
-
-		.image.fade-in.loaded {
-			opacity: 1;
+			top: -var(--space-8);
+			width: 36px;
+			height: 36px;
 		}
 	}
 </style>
