@@ -11,12 +11,15 @@
 
 	export let isOpen = false;
 	export let onclose: (() => void) | undefined = undefined;
+
 	let searchQuery = '';
 	let searchInput: HTMLInputElement;
 	let blogPosts: BlogPost[] = [];
 	let projects: Project[] = [];
 	let searchResults: SearchResult[] = [];
 	let selectedIndex = 0;
+	let dataLoaded = false;
+
 	// Search result interface for better type safety
 	interface SearchResult {
 		type: 'blog' | 'project';
@@ -24,13 +27,17 @@
 		score: number;
 	}
 
-	onMount(() => {
+	// Lazy load data only when dialog is first opened
+	$: if (isOpen && !dataLoaded) {
 		loadData();
-	});
+	}
 
 	async function loadData() {
+		if (dataLoaded) return;
+
 		try {
 			[blogPosts, projects] = await Promise.all([getBlogPosts(), getProjects()]);
+			dataLoaded = true;
 		} catch (error) {
 			console.error('Error loading search data:', error);
 		}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Home, FileText, Search, FolderOpen } from '$lib/utils/icons.js';
 	import ThemeToggle from './ThemeToggle.svelte';
-	import LazySearchDialog from './LazySearchDialog.svelte';
+	import SearchDialog from './SearchDialog.svelte';
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
@@ -145,7 +145,7 @@
 {/if}
 
 <!-- Search Dialog -->
-<LazySearchDialog bind:isOpen={isSearchOpen} onclose={handleSearchClose} />
+<SearchDialog bind:isOpen={isSearchOpen} onclose={handleSearchClose} />
 
 <style>
 	.floating-dock {
