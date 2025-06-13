@@ -557,9 +557,13 @@
 		font-weight: var(--font-weight-semibold);
 		color: var(--color-text-primary);
 	}
-
 	.toc-close {
 		display: none;
+		flex-shrink: 0;
+	}
+
+	.toc-close :global(svg) {
+		flex-shrink: 0;
 	}
 
 	/* Navigation */
@@ -771,7 +775,9 @@
 		}
 
 		.toc-close {
-			display: block;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 	}
 
@@ -793,9 +799,10 @@
 			border: 1px solid var(--glass-border);
 			border-radius: var(--radius-xl);
 		}
-
 		.toc-close {
-			display: block;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 
 		.toc-toggle-text {
