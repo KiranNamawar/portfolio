@@ -1,14 +1,26 @@
 import type { BlogPost } from '$lib/types/blog.js';
 import { calculateReadingTime } from './readingTime.js';
+import { extractHeadings } from './markdown.js';
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
-	const modules = import.meta.glob('../../content/blogs/*.md', { eager: true });
+	const modules = import.meta.glob('../../content/blogs/*.md', {
+		eager: true,
+		query: '?raw',
+		import: 'default'
+	});
+	const metadataModules = import.meta.glob('../../content/blogs/*.md', { eager: true });
 	const posts: BlogPost[] = [];
 
 	for (const path in modules) {
-		const mod = modules[path] as { metadata?: BlogPost; default?: unknown };
+		const rawContent = modules[path] as string;
+		const metadataPath = path;
+		const mod = metadataModules[metadataPath] as { metadata?: BlogPost; default?: unknown };
+
 		if (mod?.metadata) {
 			const slug = path.split('/').pop()?.replace('.md', '') || '';
+
+			// Extract headings from raw markdown content
+			const headings = extractHeadings(rawContent);
 
 			// For reading time calculation, use description or fallback
 			let content = '';
@@ -21,6 +33,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 			posts.push({
 				...mod.metadata,
 				slug,
+				headings,
 				readingTime: readingTimeResult.minutes || 3, // Default to 3 minutes if no content
 				wordCount: readingTimeResult.words || 300 // Default word count
 			});

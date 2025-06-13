@@ -1,10 +1,19 @@
 <script lang="ts">
-	import { Search, X, FileText, FolderOpen, Hash, Calendar, Clock } from '$lib/utils/icons.js';
+	import {
+		Search,
+		X,
+		FileText,
+		FolderOpen,
+		Hash,
+		Calendar,
+		Clock,
+		BookOpen
+	} from '$lib/utils/icons.js';
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 	import { getBlogPosts } from '$lib/utils/blog.js';
 	import { getProjects } from '$lib/utils/project.js';
-	import { searchContent } from '$lib/utils/search';
+	import { searchContent, type AllSearchResults } from '$lib/utils/search';
 	import { goto } from '$app/navigation';
 	import type { BlogPost } from '$lib/types/blog.js';
 	import type { Project } from '$lib/types/project.js';
@@ -16,16 +25,9 @@
 	let searchInput: HTMLInputElement;
 	let blogPosts: BlogPost[] = [];
 	let projects: Project[] = [];
-	let searchResults: SearchResult[] = [];
+	let searchResults: AllSearchResults[] = [];
 	let selectedIndex = 0;
 	let dataLoaded = false;
-
-	// Search result interface for better type safety
-	interface SearchResult {
-		type: 'blog' | 'project';
-		item: BlogPost | Project;
-		score: number;
-	}
 
 	// Lazy load data only when dialog is first opened
 	$: if (isOpen && !dataLoaded) {
@@ -68,7 +70,7 @@
 			case 'Enter':
 				event.preventDefault();
 				if (searchResults[selectedIndex]) {
-					navigateToResult(searchResults[selectedIndex].item);
+					navigateToResult(searchResults[selectedIndex]);
 				}
 				break;
 		}
@@ -90,9 +92,19 @@
 	}
 
 	// Navigate to selected result
-	function navigateToResult(item: BlogPost | Project) {
+	function navigateToResult(result: AllSearchResults) {
+		const { item } = result;
 		const type = 'tags' in item ? 'blog' : 'project';
-		const path = `/${type === 'blog' ? 'blog' : 'projects'}/${item.slug}`;
+		let path = `/${type === 'blog' ? 'blog' : 'projects'}/${item.slug}`;
+
+		// If it's a heading result, add the heading anchor
+		if (result.type === 'blog-heading' || result.type === 'project-heading') {
+			const heading = 'heading' in result ? result.heading : null;
+			if (heading) {
+				path += `#${heading.id}`;
+			}
+		}
+
 		goto(path);
 		closeDialog();
 	}
@@ -122,20 +134,46 @@
 		setTimeout(() => searchInput.focus(), 100);
 	}
 	// Get result type info
-	function getResultTypeInfo(item: BlogPost | Project) {
-		if ('tags' in item) {
+	function getResultTypeInfo(result: AllSearchResults) {
+		const { item, type } = result;
+
+		if (type === 'blog-heading') {
+			const heading = 'heading' in result ? result.heading : null;
+			return {
+				type: 'Blog Section',
+				icon: BookOpen,
+				href: `/blog/${item.slug}${heading ? `#${heading.id}` : ''}`,
+				badge: (item as BlogPost).tags?.slice(0, 2) || [],
+				heading: heading ? heading.text : null,
+				headingLevel: heading ? heading.level : null
+			};
+		} else if (type === 'project-heading') {
+			const heading = 'heading' in result ? result.heading : null;
+			return {
+				type: 'Project Section',
+				icon: BookOpen,
+				href: `/projects/${item.slug}${heading ? `#${heading.id}` : ''}`,
+				badge: (item as Project).technologies?.slice(0, 2) || [],
+				heading: heading ? heading.text : null,
+				headingLevel: heading ? heading.level : null
+			};
+		} else if ('tags' in item) {
 			return {
 				type: 'Blog Post',
 				icon: FileText,
 				href: `/blog/${item.slug}`,
-				badge: item.tags?.slice(0, 2) || []
+				badge: (item as BlogPost).tags?.slice(0, 2) || [],
+				heading: null,
+				headingLevel: null
 			};
 		} else {
 			return {
 				type: 'Project',
 				icon: FolderOpen,
 				href: `/projects/${item.slug}`,
-				badge: (item as Project).technologies?.slice(0, 2) || []
+				badge: (item as Project).technologies?.slice(0, 2) || [],
+				heading: null,
+				headingLevel: null
 			};
 		}
 	}
@@ -174,7 +212,7 @@
 						bind:this={searchInput}
 						bind:value={searchQuery}
 						type="text"
-						placeholder="Search projects and blog posts..."
+						placeholder="Search posts, projects, and sections..."
 						class="search-input"
 						id="search-input"
 						autocomplete="off"
@@ -192,7 +230,7 @@
 					<div class="search-empty-state">
 						<Search size={48} class="empty-icon" />
 						<h3 id="search-title">Search Everything</h3>
-						<p>Start typing to search through projects and blog posts</p>
+						<p>Start typing to search through posts, projects, and sections</p>
 						<div class="search-tips">
 							<span class="tip">
 								<kbd>↑</kbd><kbd>↓</kbd> Navigate
@@ -215,11 +253,11 @@
 					<div class="results-list" role="listbox" aria-label="Search results">
 						{#each searchResults as result, index}
 							{@const item = result.item}
-							{@const typeInfo = getResultTypeInfo(item)}
+							{@const typeInfo = getResultTypeInfo(result)}
 							<button
 								class="result-item"
 								class:selected={index === selectedIndex}
-								on:click={() => navigateToResult(item)}
+								on:click={() => navigateToResult(result)}
 								role="option"
 								aria-selected={index === selectedIndex}
 							>
@@ -229,11 +267,25 @@
 
 								<div class="result-content">
 									<div class="result-header">
-										<h4 class="result-title">{item.title}</h4>
+										<h4 class="result-title">
+											{#if typeInfo.heading}
+												<span class="result-parent-title">{item.title}</span>
+												<span class="result-heading-separator">›</span>
+												<span class="result-heading-text">{typeInfo.heading}</span>
+											{:else}
+												{item.title}
+											{/if}
+										</h4>
 										<span class="result-type">{typeInfo.type}</span>
 									</div>
 
-									<p class="result-description">{item.description}</p>
+									<p class="result-description">
+										{#if typeInfo.heading}
+											Section in {item.title}
+										{:else}
+											{item.description}
+										{/if}
+									</p>
 
 									<div class="result-meta">
 										<div class="result-meta-item">
@@ -485,6 +537,36 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		display: flex;
+		align-items: center;
+		gap: var(--space-1);
+	}
+
+	.result-parent-title {
+		color: var(--color-text-secondary);
+		font-weight: 400;
+		flex-shrink: 0;
+	}
+
+	.result-heading-separator {
+		color: var(--color-text-tertiary);
+		font-weight: 400;
+		flex-shrink: 0;
+	}
+
+	.result-heading-text {
+		color: var(--color-text-primary);
+		font-weight: 600;
+		flex-shrink: 1;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.result-item.selected .result-parent-title,
+	.result-item.selected .result-heading-separator,
+	.result-item.selected .result-heading-text {
+		color: inherit;
 	}
 
 	.result-type {

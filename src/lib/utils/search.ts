@@ -1,5 +1,5 @@
-import type { BlogPost } from '$lib/types/blog.js';
-import type { Project } from '$lib/types/project.js';
+import type { BlogPost, BlogHeading } from '$lib/types/blog.js';
+import type { Project, ProjectHeading } from '$lib/types/project.js';
 
 export interface SearchResult {
 	type: 'blog' | 'project';
@@ -7,6 +7,16 @@ export interface SearchResult {
 	score: number;
 	matchedFields: string[];
 }
+
+export interface HeadingSearchResult {
+	type: 'blog-heading' | 'project-heading';
+	item: BlogPost | Project;
+	heading: BlogHeading | ProjectHeading;
+	score: number;
+	matchedFields: string[];
+}
+
+export type AllSearchResults = SearchResult | HeadingSearchResult;
 
 /**
  * Advanced search function with scoring and field matching
@@ -21,12 +31,12 @@ export function searchContent(
 	blogPosts: BlogPost[],
 	projects: Project[],
 	maxResults: number = 10
-): SearchResult[] {
+): AllSearchResults[] {
 	if (!query.trim()) return [];
 
 	const searchTerm = query.toLowerCase().trim();
 	const searchWords = searchTerm.split(/\s+/);
-	const results: SearchResult[] = [];
+	const results: AllSearchResults[] = [];
 
 	// Search blog posts
 	blogPosts.forEach((post) => {
@@ -37,6 +47,22 @@ export function searchContent(
 				item: post,
 				score,
 				matchedFields
+			});
+		}
+
+		// Search blog headings
+		if (post.headings) {
+			post.headings.forEach((heading) => {
+				const headingScore = getHeadingMatch(heading, searchTerm, searchWords);
+				if (headingScore > 0) {
+					results.push({
+						type: 'blog-heading',
+						item: post,
+						heading,
+						score: headingScore * 2, // Boost heading matches
+						matchedFields: ['heading']
+					});
+				}
 			});
 		}
 	});
@@ -50,6 +76,22 @@ export function searchContent(
 				item: project,
 				score,
 				matchedFields
+			});
+		}
+
+		// Search project headings
+		if (project.headings) {
+			project.headings.forEach((heading) => {
+				const headingScore = getHeadingMatch(heading, searchTerm, searchWords);
+				if (headingScore > 0) {
+					results.push({
+						type: 'project-heading',
+						item: project,
+						heading,
+						score: headingScore * 2, // Boost heading matches
+						matchedFields: ['heading']
+					});
+				}
 			});
 		}
 	});
@@ -152,6 +194,44 @@ function calculateProjectScore(
 	score *= 1 + recencyBoost;
 
 	return { score, matchedFields };
+}
+
+/**
+ * Calculate search score for headings
+ */
+function getHeadingMatch(
+	heading: BlogHeading | ProjectHeading,
+	searchTerm: string,
+	searchWords: string[]
+): number {
+	const headingText = heading.text.toLowerCase();
+	let score = 0;
+
+	// Exact phrase match (highest score for headings)
+	if (headingText.includes(searchTerm)) {
+		if (headingText.startsWith(searchTerm)) {
+			score += 15; // Heading starts with query
+		} else {
+			score += 10; // Heading contains query
+		}
+	}
+
+	// Individual word matches
+	searchWords.forEach((word) => {
+		if (word.length > 1 && headingText.includes(word)) {
+			if (headingText.startsWith(word)) {
+				score += 5; // Word at start of heading
+			} else {
+				score += 2; // Word anywhere in heading
+			}
+		}
+	});
+
+	// Level-based scoring (h2 gets higher priority than h6)
+	const levelMultiplier = Math.max(0.5, (7 - heading.level) / 6);
+	score *= levelMultiplier;
+
+	return score;
 }
 
 /**

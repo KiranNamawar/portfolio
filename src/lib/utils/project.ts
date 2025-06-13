@@ -1,18 +1,29 @@
 import type { Project } from '$lib/types/project.js';
 import { calculateReadingTime } from './readingTime.js';
+import { extractHeadings } from './markdown.js';
 
 export async function getProjects(): Promise<Project[]> {
-	const modules = import.meta.glob('../../content/projects/*.md', { eager: true });
+	const modules = import.meta.glob('../../content/projects/*.md', {
+		eager: true,
+		query: '?raw',
+		import: 'default'
+	});
+	const metadataModules = import.meta.glob('../../content/projects/*.md', { eager: true });
 	const projects: Project[] = [];
 
 	for (const path in modules) {
-		const mod = modules[path] as {
+		const rawContent = modules[path] as string;
+		const metadataPath = path;
+		const mod = metadataModules[metadataPath] as {
 			metadata?: Project;
 			default?: unknown;
 		};
 
 		if (mod?.metadata) {
 			const slug = path.split('/').pop()?.replace('.md', '') || '';
+
+			// Extract headings from raw markdown content
+			const headings = extractHeadings(rawContent);
 
 			// For reading time calculation, we'll use a placeholder or extract from metadata
 			// Since we can't use .render() in Svelte 5, we'll estimate based on content length
@@ -26,6 +37,7 @@ export async function getProjects(): Promise<Project[]> {
 			projects.push({
 				...mod.metadata,
 				slug,
+				headings,
 				readingTime: readingTimeResult.minutes || 5, // Default to 5 minutes if no content
 				wordCount: readingTimeResult.words || 500 // Default word count
 			});
