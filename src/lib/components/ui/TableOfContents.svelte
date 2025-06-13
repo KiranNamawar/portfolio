@@ -305,7 +305,6 @@
 			isOpen = window.innerWidth >= 1024;
 		}
 	}
-
 	function handleResize(): void {
 		if (typeof window !== 'undefined') {
 			if (window.innerWidth >= 1024) {
@@ -314,6 +313,22 @@
 				isOpen = false;
 			}
 		}
+	}
+
+	function getActiveHeadingText(): string {
+		if (!activeId || !tocTree.length) return 'Table of Contents';
+
+		const findActiveNode = (nodes: TocNode[]): TocNode | null => {
+			for (const node of nodes) {
+				if (node.heading.id === activeId) return node;
+				const found = findActiveNode(node.children);
+				if (found) return found;
+			}
+			return null;
+		};
+
+		const activeNode = findActiveNode(tocTree);
+		return activeNode ? activeNode.heading.text : 'Table of Contents';
 	} // Enhanced initialization with better content loading detection
 	function initializeTOC(attempt = 0): void {
 		const headings = extractHeadings();
@@ -459,15 +474,22 @@
 		</div>
 	</aside>
 
-	<!-- Mobile Toggle Button -->
+	<!-- Tablet Toggle Button -->
 	{#if showToggle && !isOpen}
 		<button
-			class="toc-mobile-toggle glass-button"
+			class="toc-tablet-toggle glass-button"
 			on:click={toggleToc}
 			aria-label="Toggle Table of Contents"
 		>
 			<List size={18} />
 			<span class="toc-toggle-text">Contents</span>
+		</button>
+	{/if}
+	<!-- Mobile Header -->
+	{#if showToggle && !isOpen}
+		<button class="toc-mobile-header" on:click={toggleToc} aria-label="Toggle Table of Contents">
+			<ChevronDown size={18} />
+			<span class="toc-mobile-header-text">{getActiveHeadingText()}</span>
 		</button>
 	{/if}
 {/if}
@@ -720,9 +742,8 @@
 	.toc-children.expanded {
 		max-height: 1000px; /* Large enough for any content */
 		opacity: 1;
-	}
-	/* Mobile Toggle Button */
-	.toc-mobile-toggle {
+	} /* Mobile/Tablet Toggle Button */
+	.toc-tablet-toggle {
 		display: none;
 		position: fixed;
 		top: var(--space-4);
@@ -744,10 +765,39 @@
 		white-space: nowrap;
 	}
 
-	.toc-mobile-toggle:hover {
+	.toc-tablet-toggle:hover {
 		background: var(--glass-overlay-hover-bg);
 		transform: translateY(-1px);
 		box-shadow: 0 6px 20px var(--glass-shadow);
+	} /* Mobile Header */
+	.toc-mobile-header {
+		display: none;
+		position: fixed;
+		top: 0; /* Account for reading progress bar */
+		left: 0;
+		right: 0;
+		z-index: 60;
+		align-items: center;
+		justify-content: flex-start;
+		gap: var(--space-2);
+		padding: var(--space-3) var(--space-4);
+		background: var(--glass-bg);
+		border: none;
+		border-bottom: 1px solid var(--glass-border);
+		color: var(--color-text-primary);
+		font-size: var(--font-size-sm);
+		font-weight: var(--font-weight-medium);
+		backdrop-filter: var(--glass-backdrop);
+		cursor: pointer;
+		transition: all 0.2s ease;
+		width: 100%;
+		text-align: left;
+	}
+	.toc-mobile-header-text {
+		flex: 1;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	/* Desktop Styles */
@@ -756,10 +806,9 @@
 			transform: translateX(0);
 		}
 	}
-
 	/* Tablet Styles */
 	@media (max-width: 1023px) and (min-width: 769px) {
-		.toc-mobile-toggle {
+		.toc-tablet-toggle {
 			display: flex;
 		}
 
@@ -779,13 +828,15 @@
 			align-items: center;
 			justify-content: center;
 		}
-	}
-	/* Mobile Styles */
+	} /* Mobile Styles */
 	@media (max-width: 768px) {
-		.toc-mobile-toggle {
+		.toc-mobile-header {
 			display: flex;
-			left: auto;
-			right: var(--space-4);
+		}
+
+		/* Add top margin to body content to account for fixed header */
+		:global(body) {
+			margin-top: calc(var(--space-2) + var(--space-2));
 		}
 
 		.toc-sidebar {
@@ -833,12 +884,12 @@
 	:global([data-theme='dark']) .toc-expand-btn:hover {
 		background: var(--glass-overlay-hover-bg);
 	}
-
 	/* Reduced Motion */
 	@media (prefers-reduced-motion: reduce) {
 		.toc-sidebar,
 		.toc-content,
-		.toc-mobile-toggle,
+		.toc-tablet-toggle,
+		.toc-mobile-header,
 		.toc-link,
 		.toc-expand-btn,
 		.toc-children,
@@ -847,11 +898,11 @@
 			transition: none;
 		}
 	}
-
 	/* Print Styles */
 	@media print {
 		.toc-sidebar,
-		.toc-mobile-toggle {
+		.toc-tablet-toggle,
+		.toc-mobile-header {
 			display: none;
 		}
 	}
