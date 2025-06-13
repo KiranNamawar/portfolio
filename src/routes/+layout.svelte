@@ -6,6 +6,13 @@
 	import { initializeCodeBlocks } from '$lib/utils/codeBlocks';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
+	import type { Snippet } from 'svelte';
+
+	interface Props {
+		children: Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	let isDetailPage = $state(false);
 	let backgroundVariant: 'default' | 'subtle' | 'vibrant' = 'default';
@@ -34,7 +41,7 @@
 {/if}
 
 <main>
-	<slot />
+	{@render children()}
 </main>
 
 <FloatingDock />

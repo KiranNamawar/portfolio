@@ -196,12 +196,13 @@
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 		position: relative;
+		padding-bottom: var(--space-4);
 	}
 
 	.content-title::after {
 		content: '';
 		position: absolute;
-		bottom: -var(--space-2);
+		bottom: 0;
 		left: 50%;
 		transform: translateX(-50%);
 		width: 60px;

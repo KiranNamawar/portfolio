@@ -71,34 +71,48 @@
 <figure class="enhanced-image" class:zoomable>
 	<div class="image-container">
 		{#if lazy}
-			<img
-				bind:this={imageElement}
-				{alt}
-				style="width: {typeof width === 'number' ? width + 'px' : width}; height: {typeof height ===
-				'number'
-					? height + 'px'
-					: height};"
-				class:loaded={isLoaded}
-				class:error={isError}
-				on:load={handleLoad}
-				on:error={handleError}
+			<button
+				class="image-button"
+				type="button"
+				disabled={!zoomable}
 				on:click={toggleZoom}
-				loading="lazy"
-			/>
+				on:keydown={(e) => (e.key === 'Enter' || e.key === ' ' ? toggleZoom() : null)}
+				aria-label={zoomable ? `Zoom image: ${alt}` : alt}
+			>
+				<img
+					bind:this={imageElement}
+					{alt}
+					style="width: {typeof width === 'number'
+						? width + 'px'
+						: width}; height: {typeof height === 'number' ? height + 'px' : height};"
+					class:loaded={isLoaded}
+					class:error={isError}
+					on:load={handleLoad}
+					on:error={handleError}
+					loading="lazy"
+				/>
+			</button>
 		{:else}
-			<img
-				{src}
-				{alt}
-				style="width: {typeof width === 'number' ? width + 'px' : width}; height: {typeof height ===
-				'number'
-					? height + 'px'
-					: height};"
-				class:loaded={isLoaded}
-				class:error={isError}
-				on:load={handleLoad}
-				on:error={handleError}
+			<button
+				class="image-button"
+				type="button"
+				disabled={!zoomable}
 				on:click={toggleZoom}
-			/>
+				on:keydown={(e) => (e.key === 'Enter' || e.key === ' ' ? toggleZoom() : null)}
+				aria-label={zoomable ? `Zoom image: ${alt}` : alt}
+			>
+				<img
+					{src}
+					{alt}
+					style="width: {typeof width === 'number'
+						? width + 'px'
+						: width}; height: {typeof height === 'number' ? height + 'px' : height};"
+					class:loaded={isLoaded}
+					class:error={isError}
+					on:load={handleLoad}
+					on:error={handleError}
+				/>
+			</button>
 		{/if}
 
 		<!-- Loading placeholder -->
@@ -119,13 +133,16 @@
 				<p>Failed to load image</p>
 			</div>
 		{/if}
-
 		<!-- Image actions overlay -->
 		{#if isLoaded && !isError}
 			<div class="image-actions">
 				<button
 					class="action-btn copy-btn"
+					type="button"
 					on:click|stopPropagation={copyImageUrl}
+					on:keydown={(e) =>
+						(e.key === 'Enter' || e.key === ' ') && e.stopPropagation() && copyImageUrl()}
+					aria-label="Copy image URL"
 					title="Copy image URL"
 				>
 					{#if copied}
@@ -135,7 +152,14 @@
 					{/if}
 				</button>
 				{#if zoomable}
-					<button class="action-btn zoom-btn" on:click={toggleZoom} title="Click to zoom">
+					<button
+						class="action-btn zoom-btn"
+						type="button"
+						on:click={toggleZoom}
+						on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleZoom()}
+						aria-label="Zoom image"
+						title="Click to zoom"
+					>
 						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
 							<circle cx="11" cy="11" r="8" />
 							<path d="m21 21-4.35-4.35" />
@@ -155,10 +179,25 @@
 
 <!-- Zoom modal -->
 {#if isZoomed}
-	<div class="zoom-modal" on:click={toggleZoom}>
+	<div
+		class="zoom-modal"
+		on:click={toggleZoom}
+		on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleZoom()}
+		role="dialog"
+		aria-modal="true"
+		aria-label="Zoomed image view"
+		tabindex="0"
+	>
 		<div class="zoom-container">
 			<img {src} {alt} class="zoomed-image" />
-			<button class="close-btn" on:click={toggleZoom} title="Close (Esc)">
+			<button
+				class="close-btn"
+				type="button"
+				on:click={toggleZoom}
+				on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleZoom()}
+				aria-label="Close zoomed view"
+				title="Close (Esc)"
+			>
 				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
 					<line x1="18" y1="6" x2="6" y2="18" />
 					<line x1="6" y1="6" x2="18" y2="18" />
@@ -190,9 +229,21 @@
 		box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.15);
 		transform: translateY(-2px);
 	}
-
 	.zoomable .image-container {
 		cursor: zoom-in;
+	}
+
+	.image-button {
+		display: block;
+		width: 100%;
+		border: none;
+		background: none;
+		padding: 0;
+		cursor: inherit;
+	}
+
+	.image-button:disabled {
+		cursor: default;
 	}
 
 	img {
@@ -298,21 +349,12 @@
 		border-color: var(--color-border-secondary);
 		transform: translateY(-1px);
 	}
-
 	.copy-btn {
 		color: var(--blue-600);
 	}
 
 	.zoom-btn {
 		color: var(--purple-600);
-	}
-
-	[data-theme='dark'] .copy-btn {
-		color: var(--blue-400);
-	}
-
-	[data-theme='dark'] .zoom-btn {
-		color: var(--purple-400);
 	}
 
 	.image-caption {
