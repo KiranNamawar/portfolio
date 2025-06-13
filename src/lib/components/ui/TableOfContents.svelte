@@ -196,7 +196,7 @@
 						on:click={toggleToc}
 						aria-label="Close Table of Contents"
 					>
-						<X size={16} />
+						<X size={20} />
 					</button>
 				{/if}
 			</div>
@@ -250,7 +250,6 @@
 	.toc-sidebar.open {
 		transform: translateX(0);
 	}
-
 	.toc-content {
 		height: 100%;
 		background: var(--glass-bg);
@@ -259,13 +258,13 @@
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
+		border-radius: 0; /* Remove rounded corners for sidebar */
 	}
-
 	.toc-header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: var(--space-6) var(--space-6) var(--space-4);
+		padding: var(--space-2) var(--space-2) var(--space-1);
 		border-bottom: 1px solid var(--color-border);
 		flex-shrink: 0;
 	}
@@ -276,15 +275,20 @@
 		font-weight: var(--font-weight-semibold);
 		color: var(--color-text-primary);
 	}
-
 	.toc-close {
-		padding: var(--space-2);
+		padding: 0;
 		background: transparent;
 		border: 1px solid var(--glass-border);
 		border-radius: var(--radius-md);
 		color: var(--color-text-secondary);
 		cursor: pointer;
 		transition: all 0.2s ease;
+		line-height: 1;
+	}
+
+	.toc-close :global(svg) {
+		display: block;
+		margin: auto;
 	}
 	.toc-close:hover {
 		background: var(--glass-overlay-hover-bg);
@@ -302,11 +306,10 @@
 		display: flex;
 		flex-direction: column;
 	}
-
 	.toc-list {
 		list-style: none;
 		margin: 0;
-		padding: var(--space-4) 0;
+		padding: var(--space-3) 0;
 		flex: 1;
 		overflow-y: auto;
 		overflow-x: hidden;
@@ -333,29 +336,27 @@
 		margin: 0;
 		position: relative;
 	}
-
 	/* Indentation for different heading levels */
 	.toc-level-2 {
-		--indent: 0;
+		--indent: var(--space-2);
 	}
 	.toc-level-3 {
 		--indent: var(--space-4);
 	}
 	.toc-level-4 {
-		--indent: var(--space-8);
+		--indent: var(--space-6);
 	}
 	.toc-level-5 {
-		--indent: var(--space-12);
+		--indent: var(--space-8);
 	}
 	.toc-level-6 {
-		--indent: var(--space-16);
+		--indent: var(--space-10);
 	}
-
 	.toc-link {
 		display: flex;
 		align-items: center;
-		padding: var(--space-3) var(--space-6);
-		padding-left: calc(var(--space-6) + var(--indent, 0px));
+		padding: var(--space-2) var(--space-4);
+		padding-left: calc(var(--space-4) + var(--indent, 0px));
 		color: var(--color-text-secondary);
 		text-decoration: none;
 		font-size: var(--font-size-sm);
@@ -363,20 +364,19 @@
 		position: relative;
 		transition: all 0.15s ease;
 		border-radius: var(--radius-md);
-		margin: var(--space-1) var(--space-4);
+		margin: var(--space-1) var(--space-3);
 	}
 
 	.toc-link:hover {
 		color: var(--color-text-primary);
 		background: var(--glass-overlay-bg);
 	}
-
 	.toc-link.active {
 		color: var(--primary-600);
 		background: var(--primary-50);
 		font-weight: var(--font-weight-medium);
 		border-left: 3px solid var(--primary-600);
-		padding-left: calc(var(--space-6) + var(--indent, 0px) - 3px);
+		padding-left: calc(var(--space-4) + var(--indent, 0px) - 3px);
 	}
 
 	.toc-text {
@@ -428,8 +428,7 @@
 		.toc-sidebar {
 			transform: translateX(0);
 		}
-	}
-	/* Tablet Styles */
+	} /* Tablet Styles */
 	@media (max-width: 1023px) and (min-width: 769px) {
 		.toc-mobile-toggle {
 			display: flex;
@@ -441,11 +440,15 @@
 				0 20px 60px rgba(0, 0, 0, 0.2);
 		}
 
+		.toc-content {
+			border: 1px solid var(--glass-border);
+			border-radius: var(--radius-xl);
+		}
+
 		.mobile-only {
 			display: block;
 		}
-	}
-	/* Mobile Styles */
+	} /* Mobile Styles */
 	@media (max-width: 768px) {
 		.toc-mobile-toggle {
 			display: flex;
@@ -456,6 +459,11 @@
 			box-shadow:
 				0 0 0 1px var(--glass-border),
 				0 20px 60px rgba(0, 0, 0, 0.2);
+		}
+
+		.toc-content {
+			border: 1px solid var(--glass-border);
+			border-radius: var(--radius-xl);
 		}
 
 		.toc-toggle-text {
