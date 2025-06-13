@@ -15,10 +15,23 @@
 
 	let mounted = false;
 	let isSearchOpen = false;
-
 	onMount(() => {
 		mounted = true;
-	}); // Handle navigation item click
+		
+		// Global keyboard shortcut handler for Ctrl+K
+		function handleGlobalKeydown(event: KeyboardEvent) {
+			if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+				event.preventDefault();
+				isSearchOpen = true;
+			}
+		}
+
+		document.addEventListener('keydown', handleGlobalKeydown);
+		
+		return () => {
+			document.removeEventListener('keydown', handleGlobalKeydown);
+		};
+	});// Handle navigation item click
 	function handleNavClick(item: (typeof navItems)[0]) {
 		if (item.action === 'navigate') {
 			goto(item.href);

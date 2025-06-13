@@ -142,20 +142,6 @@
 		});
 	}
 
-	// Global keyboard shortcut handler
-	function handleGlobalKeydown(event: KeyboardEvent) {
-		if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
-			event.preventDefault();
-			isOpen = true;
-		}
-	}
-
-	onMount(() => {
-		document.addEventListener('keydown', handleGlobalKeydown);
-		return () => {
-			document.removeEventListener('keydown', handleGlobalKeydown);
-		};
-	});
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
