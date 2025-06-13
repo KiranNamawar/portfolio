@@ -72,11 +72,12 @@
 
 		<!-- Slot for content between header and main content (like gallery) -->
 		<slot name="pre-content" />
-
 		<!-- Main Content -->
 		<main class="content-main">
 			<div class="container">
-				<div class="markdown-content">
+				<div
+					class="markdown-content {pageType === 'Blog' ? 'blog-post-content' : 'project-content'}"
+				>
 					<slot />
 				</div>
 			</div>
@@ -116,7 +117,7 @@
 	.container {
 		max-width: 1100px;
 		margin: 0 auto;
-		padding: 0 var(--space-4);
+		padding: 0 var(--space-1);
 	}
 
 	/* ===== CONTENT HEADER ===== */
@@ -176,6 +177,7 @@
 		font-size: var(--font-size-4xl);
 		font-weight: 800;
 		line-height: 1.2;
+		text-align: center;
 		color: var(--color-text-primary);
 		margin: 0 0 var(--space-4) 0;
 		letter-spacing: -0.02em;
@@ -185,6 +187,7 @@
 		font-size: var(--font-size-lg);
 		color: var(--color-text-secondary);
 		line-height: 1.6;
+		text-align: center;
 		margin: 0 0 var(--space-6) 0;
 		max-width: 80ch;
 	}
@@ -195,7 +198,7 @@
 	}
 
 	.markdown-content {
-		max-width: 80ch;
+		max-width: 100ch;
 		margin: 0 auto;
 	} /* ===== RESPONSIVE DESIGN ===== */
 	@media (max-width: 768px) {

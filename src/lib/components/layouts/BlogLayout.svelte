@@ -7,12 +7,78 @@
 
 <script lang="ts">
 	import BaseContentLayout from './BaseContentLayout.svelte';
+	import { onMount } from 'svelte';
 
 	// All frontmatter values are available as props
 	export let title: string;
 	export let description: string;
 	export let date: string;
 	export let tags: string[] | undefined = undefined;
+
+	// Handle heading link clicks for copy-to-clipboard
+	onMount(() => {
+		const handleHeadingLinkClick = (event: Event) => {
+			event.preventDefault();
+			const target = event.currentTarget as HTMLAnchorElement;
+			const href = target.getAttribute('href');
+
+			if (href) {
+				const fullUrl = `${window.location.origin}${window.location.pathname}${href}`;
+
+				// Copy to clipboard
+				navigator.clipboard
+					.writeText(fullUrl)
+					.then(() => {
+						// Show toast notification
+						showCopyToast();
+					})
+					.catch(() => {
+						// Fallback for older browsers
+						const textArea = document.createElement('textarea');
+						textArea.value = fullUrl;
+						document.body.appendChild(textArea);
+						textArea.select();
+						document.execCommand('copy');
+						document.body.removeChild(textArea);
+						showCopyToast();
+					});
+			}
+		};
+
+		const showCopyToast = () => {
+			// Remove any existing toast
+			const existingToast = document.querySelector('.heading-link-toast');
+			if (existingToast) {
+				existingToast.remove();
+			}
+
+			// Create and show new toast
+			const toast = document.createElement('div');
+			toast.className = 'heading-link-toast';
+			toast.textContent = 'Link copied to clipboard!';
+			document.body.appendChild(toast);
+
+			// Remove toast after animation
+			setTimeout(() => {
+				if (toast.parentNode) {
+					toast.parentNode.removeChild(toast);
+				}
+			}, 2000);
+		};
+
+		// Add event listeners to all heading links
+		const headingLinks = document.querySelectorAll('.heading-link');
+		headingLinks.forEach((link) => {
+			link.addEventListener('click', handleHeadingLinkClick);
+		});
+
+		// Cleanup
+		return () => {
+			headingLinks.forEach((link) => {
+				link.removeEventListener('click', handleHeadingLinkClick);
+			});
+		};
+	});
 </script>
 
 <BaseContentLayout {title} {description} {date} pageType="Blog">
@@ -34,6 +100,7 @@
 		flex-wrap: wrap;
 		gap: var(--space-2);
 		margin-top: var(--space-4);
+		justify-content: center;
 	}
 
 	.tag {

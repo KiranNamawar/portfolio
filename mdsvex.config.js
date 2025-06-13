@@ -64,7 +64,65 @@ const config = defineConfig({
 	smartypants: {
 		dashes: 'oldschool'
 	},
-	rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
+	rehypePlugins: [
+		rehypeSlug,
+		[
+			rehypeAutolinkHeadings,
+			{
+				behavior: 'append',
+				properties: {
+					className: ['heading-link'],
+					title: 'Copy link to this section',
+					ariaLabel: 'Copy link to this section'
+				},
+				content: {
+					type: 'element',
+					tagName: 'svg',
+					properties: {
+						className: ['heading-link-icon'],
+						width: 16,
+						height: 16,
+						viewBox: '0 0 24 24',
+						fill: 'none',
+						stroke: 'currentColor',
+						strokeWidth: 2,
+						strokeLinecap: 'round',
+						strokeLinejoin: 'round'
+					},
+					children: [
+						{
+							type: 'element',
+							tagName: 'path',
+							properties: {
+								d: 'm9 15 6-6'
+							}
+						},
+						{
+							type: 'element',
+							tagName: 'path',
+							properties: {
+								d: 'm21 2-6 6'
+							}
+						},
+						{
+							type: 'element',
+							tagName: 'path',
+							properties: {
+								d: 'm15 2 6 6'
+							}
+						},
+						{
+							type: 'element',
+							tagName: 'path',
+							properties: {
+								d: 'm13 8 6 6'
+							}
+						}
+					]
+				}
+			}
+		]
+	],
 	layout: {
 		blog: join(__dirname, './src/lib/components/layouts/BlogLayout.svelte'),
 		project: join(__dirname, './src/lib/components/layouts/ProjectLayout.svelte'),

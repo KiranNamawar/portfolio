@@ -124,6 +124,156 @@ select {
 	border-radius: var(--radius-sm);
 }
 
+/* ===== HEADING LINK STYLES ===== */
+/* Styles for the heading link icons that appear on hover */
+.heading-link {
+	display: inline-flex;
+	align-items: center;
+	margin-left: var(--space-2);
+	opacity: 0;
+	transition: opacity var(--transition-fast);
+	text-decoration: none;
+	color: var(--color-text-tertiary);
+	border-radius: var(--radius-sm);
+	padding: var(--space-1);
+	position: relative;
+}
+
+.heading-link:hover {
+	color: var(--primary-500);
+	background: var(--glass-bg);
+	text-decoration: none;
+	opacity: 1 !important;
+}
+
+.heading-link:focus-visible {
+	opacity: 1;
+	outline: 2px solid var(--primary-500);
+	outline-offset: 2px;
+}
+
+.heading-link-icon {
+	width: 16px;
+	height: 16px;
+	stroke-width: 2;
+	transition: transform var(--transition-fast);
+}
+
+.heading-link:hover .heading-link-icon {
+	transform: rotate(-45deg);
+}
+
+/* Show link icon on heading hover */
+h2:hover .heading-link,
+h3:hover .heading-link,
+h4:hover .heading-link,
+h5:hover .heading-link,
+h6:hover .heading-link {
+	opacity: 0.6;
+}
+
+/* Mobile: Always show heading links since there's no hover */
+@media (max-width: 768px) {
+	.heading-link {
+		opacity: 0.5;
+	}
+
+	.heading-link:hover,
+	.heading-link:focus-visible {
+		opacity: 1;
+	}
+
+	/* Remove hover-specific padding on mobile */
+	.blog-post-content h2,
+	.blog-post-content h3,
+	.blog-post-content h4,
+	.blog-post-content h5,
+	.blog-post-content h6,
+	.project-content h2,
+	.project-content h3,
+	.project-content h4,
+	.project-content h5,
+	.project-content h6 {
+		padding-right: var(--space-8);
+	}
+}
+
+/* Style headings in content to make them work with the link system */
+.blog-post-content h1,
+.blog-post-content h2,
+.blog-post-content h3,
+.blog-post-content h4,
+.blog-post-content h5,
+.blog-post-content h6,
+.project-content h1,
+.project-content h2,
+.project-content h3,
+.project-content h4,
+.project-content h5,
+.project-content h6 {
+	position: relative;
+	display: flex;
+	align-items: center;
+	scroll-margin-top: var(--space-20);
+}
+
+/* Hide H1 headings in content since they're already shown in metadata */
+.blog-post-content h1,
+.project-content h1 {
+	display: none;
+}
+
+/* Add some extra spacing for headings with links */
+.blog-post-content h2:hover,
+.blog-post-content h3:hover,
+.blog-post-content h4:hover,
+.blog-post-content h5:hover,
+.blog-post-content h6:hover,
+.project-content h2:hover,
+.project-content h3:hover,
+.project-content h4:hover,
+.project-content h5:hover,
+.project-content h6:hover {
+	padding-right: var(--space-8);
+}
+
+/* Toast notification for copy feedback */
+.heading-link-toast {
+	position: fixed;
+	bottom: var(--space-20);
+	left: 50%;
+	transform: translateX(-50%);
+	background: var(--glass-bg);
+	backdrop-filter: var(--glass-backdrop);
+	border: 1px solid var(--glass-border);
+	border-radius: var(--radius-lg);
+	padding: var(--space-3) var(--space-4);
+	color: var(--color-text-primary);
+	font-size: var(--font-size-sm);
+	font-weight: 500;
+	z-index: 1000;
+	opacity: 0;
+	animation: slideUpFade 2s ease-in-out;
+	pointer-events: none;
+	box-shadow: 0 4px 12px var(--glass-shadow);
+}
+
+@keyframes slideUpFade {
+	0% {
+		opacity: 0;
+		transform: translateX(-50%) translateY(10px);
+	}
+	15%,
+	85% {
+		opacity: 1;
+		transform: translateX(-50%) translateY(0);
+	}
+	100% {
+		opacity: 0;
+		transform: translateX(-50%) translateY(-10px);
+	}
+}
+
 /* Scrollbar Styles */
 ::-webkit-scrollbar {
 	width: 8px;

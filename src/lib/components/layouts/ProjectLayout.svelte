@@ -10,7 +10,7 @@
 	import BaseContentLayout from './BaseContentLayout.svelte';
 	import ProjectGallery from '$lib/components/ui/ProjectGallery.svelte';
 	import { getTechIcon } from '$lib/utils/techIcons';
-
+	import { onMount } from 'svelte';
 	// All frontmatter values are available as props
 	export let title: string;
 	export let description: string;
@@ -18,17 +18,76 @@
 	export let technologies: string[] | undefined = undefined;
 	export let github: string | undefined = undefined;
 	export let demo: string | undefined = undefined;
-	export let featured: boolean | undefined = undefined;
+	export const featured: boolean | undefined = undefined; // For external reference only
 	export let gallery: Array<{ src: string; alt: string; caption?: string }> | undefined = undefined;
+
+	// Handle heading link clicks for copy-to-clipboard
+	onMount(() => {
+		const handleHeadingLinkClick = (event: Event) => {
+			event.preventDefault();
+			const target = event.currentTarget as HTMLAnchorElement;
+			const href = target.getAttribute('href');
+
+			if (href) {
+				const fullUrl = `${window.location.origin}${window.location.pathname}${href}`;
+
+				// Copy to clipboard
+				navigator.clipboard
+					.writeText(fullUrl)
+					.then(() => {
+						// Show toast notification
+						showCopyToast();
+					})
+					.catch(() => {
+						// Fallback for older browsers
+						const textArea = document.createElement('textarea');
+						textArea.value = fullUrl;
+						document.body.appendChild(textArea);
+						textArea.select();
+						document.execCommand('copy');
+						document.body.removeChild(textArea);
+						showCopyToast();
+					});
+			}
+		};
+
+		const showCopyToast = () => {
+			// Remove any existing toast
+			const existingToast = document.querySelector('.heading-link-toast');
+			if (existingToast) {
+				existingToast.remove();
+			}
+
+			// Create and show new toast
+			const toast = document.createElement('div');
+			toast.className = 'heading-link-toast';
+			toast.textContent = 'Link copied to clipboard!';
+			document.body.appendChild(toast);
+
+			// Remove toast after animation
+			setTimeout(() => {
+				if (toast.parentNode) {
+					toast.parentNode.removeChild(toast);
+				}
+			}, 2000);
+		};
+
+		// Add event listeners to all heading links
+		const headingLinks = document.querySelectorAll('.heading-link');
+		headingLinks.forEach((link) => {
+			link.addEventListener('click', handleHeadingLinkClick);
+		});
+
+		// Cleanup
+		return () => {
+			headingLinks.forEach((link) => {
+				link.removeEventListener('click', handleHeadingLinkClick);
+			});
+		};
+	});
 </script>
 
 <BaseContentLayout {title} {description} {date} pageType="Projects">
-	<div slot="header-actions">
-		{#if featured}
-			<span class="featured-badge">Featured</span>
-		{/if}
-	</div>
-
 	<div class="tech-stack" slot="metadata">
 		{#if technologies && technologies.length > 0}
 			{#each technologies as tech}
@@ -73,23 +132,13 @@
 
 <style>
 	/* ===== PROJECT-SPECIFIC STYLES ===== */
-	.featured-badge {
-		background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
-		color: white;
-		padding: var(--space-1) var(--space-3);
-		border-radius: var(--radius-full);
-		font-size: var(--font-size-xs);
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		box-shadow: 0 2px 8px rgba(var(--primary-500-rgb), 0.3);
-	}
-
 	.tech-stack {
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--space-2);
+		align-items: center;
 		margin-top: var(--space-4);
+		justify-content: center;
 	}
 
 	.tech-tag {
@@ -116,12 +165,12 @@
 	:global(.tech-tag .tech-icon) {
 		flex-shrink: 0;
 	}
-
 	.project-actions {
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--space-3);
 		margin-top: var(--space-6);
+		justify-content: center;
 	}
 
 	.btn {

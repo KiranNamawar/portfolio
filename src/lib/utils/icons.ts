@@ -19,6 +19,9 @@ export { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter } from '@lucide/sv
 // Project actions
 export { ExternalLink, ArrowLeft } from '@lucide/svelte';
 
+// Heading links
+export { Link } from '@lucide/svelte';
+
 // Callout types
 export { AlertTriangle, Info, CheckCircle, XCircle } from '@lucide/svelte';
 
