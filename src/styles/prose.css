@@ -201,6 +201,71 @@
 	height: 4px;
 }
 
+/* ===== TASK LISTS (CHECKBOXES) ===== */
+.prose input[type='checkbox'] {
+	appearance: none;
+	width: 18px;
+	height: 18px;
+	border: 2px solid var(--color-border-secondary);
+	border-radius: var(--radius-sm);
+	background: var(--color-surface-primary);
+	margin-right: var(--space-3);
+	margin-left: calc(-1 * var(--space-4));
+	position: relative;
+	flex-shrink: 0;
+	pointer-events: none;
+}
+
+.prose input[type='checkbox']:checked {
+	background: var(--primary-500);
+	border-color: var(--primary-500);
+}
+
+.prose input[type='checkbox']:checked::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) rotate(45deg);
+	width: 4px;
+	height: 8px;
+	border: solid white;
+	border-width: 0 2px 2px 0;
+}
+
+/* Task list items styling */
+.prose li:has(input[type='checkbox']) {
+	list-style: none;
+	display: flex;
+	align-items: flex-start;
+	gap: var(--space-2);
+	margin: var(--space-2) 0;
+}
+
+.prose li:has(input[type='checkbox'])::before {
+	display: none;
+}
+
+.prose li:has(input[type='checkbox']:checked) {
+	opacity: 0.7;
+}
+
+.prose li:has(input[type='checkbox']:checked) > * {
+	text-decoration: line-through;
+	color: var(--color-text-tertiary);
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] .prose input[type='checkbox'] {
+	border-color: var(--color-border-primary);
+	background: var(--color-surface-secondary);
+}
+
+[data-theme='dark'] .prose input[type='checkbox']:checked {
+	background: var(--primary-400);
+	border-color: var(--primary-400);
+}
+
 /* ===== BLOCKQUOTES ===== */
 .prose blockquote {
 	margin: 2em 0;
@@ -213,18 +278,6 @@
 	position: relative;
 	font-style: italic;
 	box-shadow: 0 4px 6px -1px var(--glass-shadow);
-}
-
-.prose blockquote::before {
-	content: '"';
-	position: absolute;
-	top: -10px;
-	left: var(--space-6);
-	font-size: 4rem;
-	color: var(--primary-500);
-	opacity: 0.3;
-	font-family: var(--font-serif);
-	line-height: 1;
 }
 
 .prose blockquote p {
