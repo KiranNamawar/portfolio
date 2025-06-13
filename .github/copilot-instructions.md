@@ -34,6 +34,8 @@
   write documentation for the components and utility functions.
   I will write blogs in content/blogs directory.
 
+- export icons from icons.ts file in the utils directory from @lucide/svelte and use them anywhere in the application.
+
 ### Data Flow Architecture Rules
 
 **NEVER violate these core principles:**

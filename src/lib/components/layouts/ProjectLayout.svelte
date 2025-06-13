@@ -9,6 +9,7 @@
 	import { formatDate } from '$lib/utils/date.js';
 	import { ExternalLink, Github, ArrowLeft, Calendar } from '$lib/utils/icons.js';
 	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
+	import TableOfContents from '$lib/components/ui/TableOfContents.svelte';
 	import ProjectGallery from '$lib/components/ui/ProjectGallery.svelte';
 	import { getTechIcon } from '$lib/utils/techIcons';
 
@@ -31,84 +32,109 @@
 <!-- Reading Progress Indicator -->
 <ReadingProgress />
 
-<article class="project-detail">
-	<!-- Project Header -->
-	<header class="project-header">
-		<div class="container">
-			<div class="project-meta-row">
-				<a href="/projects" class="back-link">
-					<ArrowLeft size={18} />
-					Projects
-				</a>
+<!-- Table of Contents -->
+<TableOfContents />
 
-				<div class="project-badges">
-					<time class="project-date">
-						<Calendar size={16} />
-						{formatDate(date)}
-					</time>
-					{#if featured}
-						<span class="featured-badge">Featured</span>
+<div class="project-layout">
+	<article class="project-detail">
+		<!-- Project Header -->
+		<header class="project-header">
+			<div class="container">
+				<div class="project-meta-row">
+					<a href="/projects" class="back-link">
+						<ArrowLeft size={18} />
+						Projects
+					</a>
+
+					<div class="project-badges">
+						<time class="project-date">
+							<Calendar size={16} />
+							{formatDate(date)}
+						</time>
+						{#if featured}
+							<span class="featured-badge">Featured</span>
+						{/if}
+					</div>
+				</div>
+
+				<h1 class="project-title">{title}</h1>
+
+				{#if description}
+					<p class="project-description">{description}</p>
+				{/if}
+
+				{#if technologies && technologies.length > 0}
+					<div class="tech-stack">
+						{#each technologies as tech}
+							{@const techIcon = getTechIcon(tech)}
+							<span class="tech-tag">
+								{#if techIcon.type === 'devicon'}
+									<i
+										class="devicon-{techIcon.icon}-{techIcon.variant ||
+											'original'} colored tech-icon"
+									></i>
+								{:else if techIcon.type === 'lucide' && techIcon.component}
+									<svelte:component this={techIcon.component} size={14} class="tech-icon" />
+								{/if}
+								{tech}
+							</span>
+						{/each}
+					</div>
+				{/if}
+
+				<div class="project-actions">
+					{#if demo}
+						<a href={demo} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+							<ExternalLink size={16} />
+							Live Demo
+						</a>
+					{/if}
+					{#if github}
+						<a href={github} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+							<Github size={16} />
+							Source Code
+						</a>
 					{/if}
 				</div>
 			</div>
+		</header>
 
-			<h1 class="project-title">{title}</h1>
+		<!-- Project Gallery -->
+		{#if gallery && gallery.length > 0}
+			<ProjectGallery {gallery} layout="auto" enableLightbox={true} />
+		{/if}
 
-			{#if description}
-				<p class="project-description">{description}</p>
-			{/if}
-
-			{#if technologies && technologies.length > 0}
-				<div class="tech-stack">
-					{#each technologies as tech}
-						{@const techIcon = getTechIcon(tech)}
-						<span class="tech-tag">
-							{#if techIcon.type === 'devicon'}
-								<i
-									class="devicon-{techIcon.icon}-{techIcon.variant || 'original'} colored tech-icon"
-								></i>
-							{:else if techIcon.type === 'lucide' && techIcon.component}
-								<svelte:component this={techIcon.component} size={14} class="tech-icon" />
-							{/if}
-							{tech}
-						</span>
-					{/each}
+		<!-- Main Content -->
+		<main class="project-content">
+			<div class="container">
+				<div class="markdown-content">
+					<slot />
 				</div>
-			{/if}
-
-			<div class="project-actions">
-				{#if demo}
-					<a href={demo} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-						<ExternalLink size={16} />
-						Live Demo
-					</a>
-				{/if}
-				{#if github}
-					<a href={github} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-						<Github size={16} />
-						Source Code
-					</a>
-				{/if}
 			</div>
-		</div>
-	</header>
-
-	<!-- Project Gallery -->
-	{#if gallery && gallery.length > 0}
-		<ProjectGallery {gallery} layout="auto" enableLightbox={true} />
-	{/if}
-
-	<!-- Main Content -->
-	<main class="project-content">
-		<div class="container">
-			<div class="markdown-content">
-				<slot />
-			</div>
-		</div>
-	</main>
-</article>
+		</main>
+	</article>
+</div>
 
 <style>
+	.project-layout {
+		margin-left: 0;
+		transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* Desktop: Account for sidebar */
+	@media (min-width: 1024px) {
+		.project-layout {
+			margin-left: 320px;
+		}
+	}
+
+	/* Tablet and Mobile: Full width */
+	@media (max-width: 1023px) {
+		.project-layout {
+			margin-left: 0;
+		}
+	}
+
 	/* ===== CORE LAYOUT ===== */
 	.project-detail {
 		min-height: 100vh;
