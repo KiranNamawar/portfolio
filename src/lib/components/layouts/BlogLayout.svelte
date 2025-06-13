@@ -99,16 +99,16 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--space-2);
-		margin-top: var(--space-4);
+		margin-top: var(--space-6);
 		justify-content: center;
 	}
 
 	.tag {
 		display: inline-flex;
 		align-items: center;
-		padding: var(--space-1) var(--space-3);
+		padding: var(--space-2) var(--space-3);
 		background: var(--color-surface-secondary);
-		color: var(--color-text-secondary);
+		color: var(--color-text-primary);
 		border: 1px solid var(--color-border-primary);
 		border-radius: var(--radius-full);
 		font-size: var(--font-size-sm);
@@ -119,8 +119,8 @@
 
 	.tag:hover {
 		background: var(--color-surface-tertiary);
-		color: var(--color-text-primary);
-		border-color: var(--color-border-secondary);
+		color: var(--primary-600);
+		border-color: var(--primary-400);
 	}
 	/* ===== RESPONSIVE DESIGN ===== */
 	@media (max-width: 480px) {

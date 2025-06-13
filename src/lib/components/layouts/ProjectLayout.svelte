@@ -137,7 +137,7 @@
 		flex-wrap: wrap;
 		gap: var(--space-2);
 		align-items: center;
-		margin-top: var(--space-4);
+		margin-top: var(--space-6);
 		justify-content: center;
 	}
 
@@ -147,7 +147,7 @@
 		gap: var(--space-2);
 		padding: var(--space-2) var(--space-3);
 		background: var(--color-surface-secondary);
-		color: var(--color-text-secondary);
+		color: var(--color-text-primary);
 		border: 1px solid var(--color-border-primary);
 		border-radius: var(--radius-md);
 		font-size: var(--font-size-sm);
@@ -157,9 +157,8 @@
 
 	.tech-tag:hover {
 		background: var(--color-surface-tertiary);
-		color: var(--color-text-primary);
-		border-color: var(--color-border-secondary);
-		transform: translateY(-1px);
+		color: var(--primary-600);
+		border-color: var(--primary-400);
 	}
 
 	:global(.tech-tag .tech-icon) {
@@ -168,8 +167,8 @@
 	.project-actions {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--space-3);
-		margin-top: var(--space-6);
+		gap: var(--space-4);
+		margin-top: var(--space-8);
 		justify-content: center;
 	}
 
@@ -177,27 +176,26 @@
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-2);
-		padding: var(--space-3) var(--space-4);
+		padding: var(--space-3) var(--space-5);
 		border-radius: var(--radius-md);
 		font-size: var(--font-size-sm);
 		font-weight: 600;
 		text-decoration: none;
-		transition: all var(--transition-fast);
+		transition: all 0.2s ease;
 		border: 1px solid transparent;
 		cursor: pointer;
 	}
 
 	.btn-primary {
-		background: var(--primary-500);
+		background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
 		color: white;
-		border-color: var(--primary-500);
+		border-color: var(--primary-400);
 	}
-
 	.btn-primary:hover {
-		background: var(--primary-600);
-		border-color: var(--primary-600);
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(var(--primary-500-rgb), 0.4);
+		background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+		border-color: var(--primary-500);
+		transform: translateY(-1px);
+		box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
 	}
 
 	.btn-secondary {
@@ -208,8 +206,9 @@
 
 	.btn-secondary:hover {
 		background: var(--color-surface-tertiary);
-		border-color: var(--color-border-secondary);
-		transform: translateY(-2px);
+		border-color: var(--primary-400);
+		color: var(--primary-600);
+		transform: translateY(-1px);
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	}
 

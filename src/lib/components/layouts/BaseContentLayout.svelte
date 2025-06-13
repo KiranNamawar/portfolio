@@ -75,9 +75,7 @@
 		<!-- Main Content -->
 		<main class="content-main">
 			<div class="container">
-				<div
-					class="markdown-content {pageType === 'Blog' ? 'blog-post-content' : 'project-content'}"
-				>
+				<div class="prose {pageType === 'Blog' ? 'blog-post-content' : 'project-content'}">
 					<slot />
 				</div>
 			</div>
@@ -118,12 +116,26 @@
 		max-width: 1100px;
 		margin: 0 auto;
 		padding: 0 var(--space-1);
-	}
-
-	/* ===== CONTENT HEADER ===== */
+	} /* ===== CONTENT HEADER ===== */
 	.content-header {
 		padding: var(--space-8) 0 var(--space-6);
-		border-bottom: 1px solid var(--color-border-primary);
+		position: relative;
+	}
+
+	.content-header::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: linear-gradient(
+			135deg,
+			var(--primary-400),
+			var(--primary-500),
+			var(--primary-600),
+			var(--primary-700)
+		);
 	}
 
 	.content-meta-row {
@@ -172,32 +184,48 @@
 		border: 1px solid var(--color-border-primary);
 		border-radius: var(--radius-md);
 	}
-
 	.content-title {
 		font-size: var(--font-size-4xl);
 		font-weight: 800;
 		line-height: 1.2;
 		text-align: center;
-		color: var(--color-text-primary);
 		margin: 0 0 var(--space-4) 0;
 		letter-spacing: -0.02em;
+		background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		position: relative;
+	}
+
+	.content-title::after {
+		content: '';
+		position: absolute;
+		bottom: -var(--space-2);
+		left: 50%;
+		transform: translateX(-50%);
+		width: 60px;
+		height: 3px;
+		background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+		border-radius: var(--radius-full);
 	}
 
 	.content-description {
 		font-size: var(--font-size-lg);
-		color: var(--color-text-secondary);
+		color: var(--color-text-primary);
 		line-height: 1.6;
 		text-align: center;
 		margin: 0 0 var(--space-6) 0;
 		max-width: 80ch;
+		font-weight: 500;
+		opacity: 0.9;
 	}
 
 	/* ===== MAIN CONTENT ===== */
 	.content-main {
 		padding: var(--space-8) 0;
 	}
-
-	.markdown-content {
+	.prose {
 		max-width: 100ch;
 		margin: 0 auto;
 	} /* ===== RESPONSIVE DESIGN ===== */
