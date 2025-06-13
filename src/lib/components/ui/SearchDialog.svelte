@@ -141,7 +141,6 @@
 			year: 'numeric'
 		});
 	}
-
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />

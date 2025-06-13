@@ -17,7 +17,7 @@
 	let isSearchOpen = false;
 	onMount(() => {
 		mounted = true;
-		
+
 		// Global keyboard shortcut handler for Ctrl+K
 		function handleGlobalKeydown(event: KeyboardEvent) {
 			if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
@@ -27,11 +27,11 @@
 		}
 
 		document.addEventListener('keydown', handleGlobalKeydown);
-		
+
 		return () => {
 			document.removeEventListener('keydown', handleGlobalKeydown);
 		};
-	});// Handle navigation item click
+	}); // Handle navigation item click
 	function handleNavClick(item: (typeof navItems)[0]) {
 		if (item.action === 'navigate') {
 			goto(item.href);

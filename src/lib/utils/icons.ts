@@ -11,7 +11,17 @@ export { Sun, Moon } from '@lucide/svelte';
 export { X, Hash, Calendar, Clock } from '@lucide/svelte';
 
 // Project gallery
-export { ChevronLeft, ChevronRight, Maximize2, X as CloseIcon, Download } from '@lucide/svelte';
+export {
+	ChevronLeft,
+	ChevronRight,
+	Maximize2,
+	X as CloseIcon,
+	Download,
+	ZoomIn,
+	ZoomOut,
+	RotateCcw,
+	Play
+} from '@lucide/svelte';
 
 // Contact & social
 export { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter } from '@lucide/svelte';
