@@ -23,14 +23,14 @@
 </script>
 
 <BaseContentLayout {title} {description} {date} pageType="Projects">
-	<div slot="header-actions">
-		{#if featured}
-			<span class="featured-badge">Featured</span>
-		{/if}
-	</div>
+	<!-- Featured badge in header actions -->
+	{#if featured}
+		<span slot="header-actions" class="featured-badge">Featured</span>
+	{/if}
 
-	<div class="tech-stack" slot="metadata">
-		{#if technologies && technologies.length > 0}
+	<!-- Tech stack metadata -->
+	{#if technologies && technologies.length > 0}
+		<div slot="metadata" class="tech-stack">
 			{#each technologies as tech}
 				{@const techIcon = getTechIcon(tech)}
 				<span class="tech-tag">
@@ -43,10 +43,11 @@
 					{tech}
 				</span>
 			{/each}
-		{/if}
-	</div>
+		</div>
+	{/if}
 
-	<div class="project-actions" slot="actions">
+	<!-- Project actions -->
+	<div slot="actions" class="project-actions">
 		{#if demo}
 			<a href={demo} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
 				<ExternalLink size={16} />
@@ -61,11 +62,10 @@
 		{/if}
 	</div>
 
-	<div slot="pre-content">
-		{#if gallery && gallery.length > 0}
-			<ProjectGallery {gallery} layout="auto" enableLightbox={true} />
-		{/if}
-	</div>
+	<!-- Project Gallery before main content -->
+	{#if gallery && gallery.length > 0}
+		<ProjectGallery slot="pre-content" {gallery} layout="auto" enableLightbox={true} />
+	{/if}
 
 	<!-- Main project content -->
 	<slot />
