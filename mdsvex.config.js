@@ -3,6 +3,8 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { escapeSvelte } from 'mdsvex';
 import { createHighlighter } from 'shiki';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -62,6 +64,7 @@ const config = defineConfig({
 	smartypants: {
 		dashes: 'oldschool'
 	},
+	rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
 	layout: {
 		blog: join(__dirname, './src/lib/components/layouts/BlogLayout.svelte'),
 		project: join(__dirname, './src/lib/components/layouts/ProjectLayout.svelte'),

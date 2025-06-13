@@ -41,6 +41,8 @@
 	"dependencies": {
 		"@lucide/svelte": "^0.513.0",
 		"date-fns": "^4.1.0",
-		"glob": "^11.0.2"
+		"glob": "^11.0.2",
+		"rehype-autolink-headings": "^7.1.0",
+		"rehype-slug": "^6.0.0"
 	}
 }

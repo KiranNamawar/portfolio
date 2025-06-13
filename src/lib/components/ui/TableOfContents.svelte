@@ -1,144 +1,304 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { List, X } from '@lucide/svelte';
+	import { List, X, ChevronRight, ChevronDown } from '@lucide/svelte';
 
-	interface TocItem {
+	// Type definitions based on the robust plan
+	interface TocHeading {
 		id: string;
 		text: string;
 		level: number;
 		element: HTMLElement;
+		depth: number;
 	}
+
+	interface TocNode {
+		heading: TocHeading;
+		children: TocNode[];
+		parent: TocNode | null;
+		isExpanded: boolean;
+		isActive: boolean;
+		hasActiveDescendant: boolean;
+		manuallyToggled: boolean;
+	}
+
+	// Props
 	export let isOpen = false;
 	export let showToggle = true;
-	export let minHeadings = 3; // Minimum number of headings to show TOC
-
-	let tocItems: TocItem[] = [];
+	export let minHeadings = 3;
+	// State
+	let tocTree: TocNode[] = [];
 	let activeId = '';
 	let observer: IntersectionObserver;
-	let tocContainer: HTMLElement;
-	let tocList: HTMLElement;
 	let isVisible = false;
+	let manualOverrides = new Map<string, boolean>();
+	let userHasScrolled = false;
+	let lastScrollTime = 0;
+	let hashScrollTime = 0;
 
-	// Set initial state based on screen size
-	function setInitialState() {
-		if (typeof window !== 'undefined') {
-			isOpen = window.innerWidth >= 1024;
-		}
+	// Utility functions
+	function extractHeadings(): TocHeading[] {
+		const headings = document.querySelectorAll('h2, h3, h4, h5, h6');
+		return Array.from(headings)
+			.filter((el) => el.textContent?.trim())
+			.map((el, index) => {
+				// Generate ID if missing
+				if (!el.id) {
+					const text = el.textContent?.trim() || '';
+					const id = text
+						.toLowerCase()
+						.replace(/[^\w\s-]/g, '')
+						.replace(/\s+/g, '-')
+						.replace(/-+/g, '-')
+						.trim();
+					el.id = id || `heading-${index}`;
+				}
+
+				return {
+					id: el.id,
+					text: el.textContent?.trim() || '',
+					level: parseInt(el.tagName.charAt(1)),
+					element: el as HTMLElement,
+					depth: 0
+				};
+			});
 	}
 
-	// Generate slug from heading text
-	function generateSlug(text: string): string {
-		return text
-			.toLowerCase()
-			.replace(/[^\w\s-]/g, '')
-			.replace(/\s+/g, '-')
-			.replace(/--+/g, '-')
-			.trim();
-	}
-	// Extract headings from the document
-	function extractHeadings() {
-		if (typeof document === 'undefined') return;
-
-		const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-		const items: TocItem[] = [];
+	function buildTree(headings: TocHeading[]): TocNode[] {
+		const root: TocNode[] = [];
+		const stack: TocNode[] = [];
 
 		headings.forEach((heading) => {
-			const level = parseInt(heading.tagName.charAt(1));
-			const text = heading.textContent?.trim() || '';
+			const node: TocNode = {
+				heading: { ...heading, depth: 0 },
+				children: [],
+				parent: null,
+				isExpanded: false,
+				isActive: false,
+				hasActiveDescendant: false,
+				manuallyToggled: false
+			};
 
-			// Skip if heading is empty or is the main title (h1)
-			if (!text || level === 1) return;
-
-			let id = heading.id;
-			if (!id) {
-				id = generateSlug(text);
-				heading.id = id;
+			// Find correct parent level
+			while (stack.length > 0 && stack[stack.length - 1].heading.level >= heading.level) {
+				stack.pop();
 			}
 
-			items.push({
-				id,
-				text,
-				level,
-				element: heading as HTMLElement
-			});
+			if (stack.length === 0) {
+				// Top-level heading
+				node.heading.depth = 0;
+				root.push(node);
+			} else {
+				// Child heading
+				const parent = stack[stack.length - 1];
+				node.parent = parent;
+				node.heading.depth = parent.heading.depth + 1;
+				parent.children.push(node);
+			}
+
+			stack.push(node);
 		});
 
-		tocItems = items;
-		isVisible = items.length >= minHeadings;
+		return root;
 	}
-	// Scroll active item into view in TOC
-	function scrollActiveTocItemIntoView() {
-		if (typeof document === 'undefined' || !tocList || !activeId) return;
 
-		const activeLink = tocList.querySelector(`a[href="#${activeId}"]`);
-		if (activeLink) {
-			activeLink.scrollIntoView({
-				behavior: 'smooth',
-				block: 'center'
-			});
+	function findNode(tree: TocNode[], id: string): TocNode | null {
+		for (const node of tree) {
+			if (node.heading.id === id) return node;
+			const found = findNode(node.children, id);
+			if (found) return found;
+		}
+		return null;
+	}
+
+	function walkTree(tree: TocNode[], callback: (node: TocNode) => void): void {
+		tree.forEach((node) => {
+			callback(node);
+			walkTree(node.children, callback);
+		});
+	}
+
+	function updateActiveStates(tree: TocNode[], activeId: string): void {
+		// Reset all states
+		walkTree(tree, (node) => {
+			node.isActive = false;
+			node.hasActiveDescendant = false;
+		});
+
+		// Set active states
+		const activeNode = findNode(tree, activeId);
+		if (activeNode) {
+			activeNode.isActive = true;
+
+			// Mark ancestors as having active descendants
+			let parent = activeNode.parent;
+			while (parent) {
+				parent.hasActiveDescendant = true;
+				parent = parent.parent;
+			}
 		}
 	}
 
-	// Setup intersection observer for active section tracking
-	function setupObserver() {
-		if (typeof window === 'undefined') return;
+	function updateExpansion(tree: TocNode[], activeId: string): void {
+		const activeNode = findNode(tree, activeId);
+		if (!activeNode) return;
 
-		const options = {
-			rootMargin: '-20% 0px -60% 0px',
-			threshold: 0
+		// Collapse non-essential sections
+		walkTree(tree, (node) => {
+			if (!node.manuallyToggled && !node.hasActiveDescendant && !node.isActive) {
+				node.isExpanded = false;
+			}
+		});
+
+		// Expand path to active heading
+		let current = activeNode.parent;
+		while (current) {
+			const manualState = manualOverrides.get(current.heading.id);
+			if (manualState === undefined || manualState === true) {
+				current.isExpanded = true;
+			}
+			current = current.parent;
+		}
+
+		// Expand active section if it has children
+		if (activeNode.children.length > 0) {
+			const manualState = manualOverrides.get(activeNode.heading.id);
+			if (manualState === undefined || manualState === true) {
+				activeNode.isExpanded = true;
+			}
+		}
+	}
+
+	function setupObserver(): void {
+		if (observer) observer.disconnect();
+
+		const headings = tocTree
+			.flatMap((node) => [node, ...getAllDescendants(node)])
+			.map((node) => node.heading.element);
+
+		observer = new IntersectionObserver(
+			(entries) => {
+				const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+
+				if (visibleEntries.length > 0) {
+					// Find the topmost visible heading
+					let topEntry = visibleEntries[0];
+					for (const entry of visibleEntries) {
+						if (entry.boundingClientRect.top < topEntry.boundingClientRect.top) {
+							topEntry = entry;
+						}
+					}
+
+					const targetId = topEntry.target.id;
+
+					if (targetId && targetId !== activeId) {
+						activeId = targetId;
+						updateActiveStates(tocTree, activeId);
+						updateExpansion(tocTree, activeId);
+						tocTree = [...tocTree]; // Trigger reactivity
+					}
+				}
+			},
+			{
+				rootMargin: '-20% 0px -70% 0px',
+				threshold: [0, 0.1, 0.5]
+			}
+		);
+
+		headings.forEach((heading) => {
+			if (heading.id) {
+				observer.observe(heading);
+			}
+		});
+	}
+	function getAllDescendants(node: TocNode): TocNode[] {
+		const descendants: TocNode[] = [];
+		node.children.forEach((child) => {
+			descendants.push(child);
+			descendants.push(...getAllDescendants(child));
+		});
+		return descendants;
+	}
+	// Enhanced scroll-to-hash function that waits for content
+	function scrollToHashWhenReady(id: string, maxAttempts = 20): void {
+		let attempts = 0;
+
+		const attemptScroll = () => {
+			const element = document.getElementById(id);
+
+			if (element && element.offsetHeight > 0) {
+				// Element is rendered and has dimensions
+				hashScrollTime = Date.now(); // Mark this as a programmatic scroll
+				element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				return;
+			}
+
+			attempts++;
+			if (attempts < maxAttempts) {
+				// Try again in 100ms
+				setTimeout(attemptScroll, 100);
+			}
 		};
 
-		observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					activeId = entry.target.id;
-					// Scroll the active TOC item into view
-					setTimeout(() => scrollActiveTocItemIntoView(), 100);
-				}
-			});
-		}, options);
-
-		tocItems.forEach((item) => {
-			observer.observe(item.element);
-		});
+		attemptScroll();
 	}
-	// Smooth scroll to section
-	function scrollToSection(id: string, event: Event) {
-		event.preventDefault();
-		if (typeof document === 'undefined') return;
 
-		const element = document.getElementById(id);
-		if (!element) return;
-
-		element.scrollIntoView({
-			behavior: 'smooth',
-			block: 'start'
-		});
-
-		// Update URL without triggering navigation
-		if (typeof window !== 'undefined') {
-			window.history.replaceState({}, '', `#${id}`);
+	// Track user scroll behavior
+	function handleScroll(): void {
+		const now = Date.now();
+		// Only consider it user scrolling if it's not immediately after a hash scroll
+		if (now - hashScrollTime > 1000) {
+			userHasScrolled = true;
+			lastScrollTime = now;
 		}
+	}
+	function handleNavigate(id: string): void {
+		// Update active state immediately
+		activeId = id;
+		updateActiveStates(tocTree, activeId);
+		updateExpansion(tocTree, activeId);
+		tocTree = [...tocTree];
+
+		// Use history.replaceState for smooth back button behavior
+		const currentUrl = new URL(window.location.href);
+		currentUrl.hash = id;
+		history.replaceState(null, '', currentUrl.toString());
+
+		// Reset user scroll tracking since this is intentional navigation
+		userHasScrolled = false;
+
+		// Use robust scroll function
+		scrollToHashWhenReady(id);
 
 		// Close TOC on mobile after clicking
-		if (window.innerWidth < 768) {
+		if (typeof window !== 'undefined' && window.innerWidth < 768) {
 			isOpen = false;
 		}
 	}
 
-	// Toggle TOC visibility
-	function toggleToc() {
+	function handleToggle(node: TocNode): void {
+		node.manuallyToggled = true;
+		node.isExpanded = !node.isExpanded;
+		manualOverrides.set(node.heading.id, node.isExpanded);
+		tocTree = [...tocTree]; // Trigger reactivity
+	}
+
+	function toggleToc(): void {
 		isOpen = !isOpen;
 	}
-	// Handle escape key to close TOC
-	function handleKeydown(event: KeyboardEvent) {
+
+	function handleKeydown(event: KeyboardEvent): void {
 		if (event.key === 'Escape' && isOpen) {
 			isOpen = false;
 		}
 	}
 
-	// Handle window resize
-	function handleResize() {
+	function setInitialState(): void {
+		if (typeof window !== 'undefined') {
+			isOpen = window.innerWidth >= 1024;
+		}
+	}
+
+	function handleResize(): void {
 		if (typeof window !== 'undefined') {
 			if (window.innerWidth >= 1024) {
 				isOpen = true;
@@ -146,36 +306,116 @@
 				isOpen = false;
 			}
 		}
+	} // Enhanced initialization with better content loading detection
+	function initializeTOC(attempt = 0): void {
+		const headings = extractHeadings();
+
+		if (headings.length >= minHeadings) {
+			tocTree = buildTree(headings);
+			isVisible = true;
+
+			// Handle initial hash navigation
+			if (window.location.hash) {
+				const hashId = window.location.hash.slice(1);
+
+				// Set up TOC state
+				activeId = hashId;
+				updateActiveStates(tocTree, activeId);
+				updateExpansion(tocTree, activeId);
+				tocTree = [...tocTree];
+				// Use robust scroll function that waits for content
+				scrollToHashWhenReady(hashId);
+			}
+
+			// Setup observer after tree is built
+			setTimeout(() => setupObserver(), 150);
+		} else if (attempt < 10) {
+			// Retry if content isn't loaded yet (max 10 attempts over 3 seconds)
+			setTimeout(() => initializeTOC(attempt + 1), 300);
+		}
 	}
+
+	// Lifecycle
 	onMount(() => {
-		// Set initial state based on screen size
 		setInitialState();
 
-		// Wait for content to render before extracting headings
-		setTimeout(() => {
-			extractHeadings();
-			if (tocItems.length > 0) {
-				setupObserver();
-			}
-		}, 100);
+		// Use multiple strategies to ensure content is loaded
+		// 1. Initial attempt after DOM
+		setTimeout(() => initializeTOC(), 100);
 
-		// Add event listeners only in browser
+		// 2. Listen for content changes (images, dynamic content)
+		const observer = new MutationObserver(() => {
+			if (!isVisible) {
+				initializeTOC();
+			}
+		});
+
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true
+		});
+
+		// 3. Listen for load events
+		const handleLoad = () => {
+			if (!isVisible) {
+				setTimeout(() => initializeTOC(), 100);
+			}
+		};
+
+		window.addEventListener('load', handleLoad); // 4. Listen for hashchange events (browser navigation)
+		const handleHashChange = () => {
+			if (window.location.hash && tocTree.length > 0) {
+				const hashId = window.location.hash.slice(1);
+				userHasScrolled = false; // Reset scroll tracking for browser navigation
+				handleNavigate(hashId);
+			}
+		};
+
+		window.addEventListener('hashchange', handleHashChange);
+
+		// 5. Handle page visibility changes (tab switching)
+		const handleVisibilityChange = () => {
+			if (!document.hidden && window.location.hash && tocTree.length > 0) {
+				const hashId = window.location.hash.slice(1);
+				const now = Date.now();
+
+				// Only auto-scroll if:
+				// 1. User hasn't manually scrolled, OR
+				// 2. It's been less than 5 seconds since page load (initial navigation), OR
+				// 3. User scrolled more than 30 seconds ago (probably forgot their position)
+				const timeSinceScroll = now - lastScrollTime;
+				const shouldAutoScroll =
+					!userHasScrolled || timeSinceScroll > 30000 || lastScrollTime === 0;
+
+				if (shouldAutoScroll) {
+					setTimeout(() => scrollToHashWhenReady(hashId), 100);
+				}
+			}
+		};
+
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+
+		// 6. Track user scrolling behavior
+		window.addEventListener('scroll', handleScroll, { passive: true });
+
+		// Event listeners
 		if (typeof document !== 'undefined') {
 			document.addEventListener('keydown', handleKeydown);
 		}
 		if (typeof window !== 'undefined') {
 			window.addEventListener('resize', handleResize);
-		}
-		// Set initial active section from URL hash
-		if (typeof window !== 'undefined' && window.location.hash) {
-			activeId = window.location.hash.slice(1);
-		}
+		} // Cleanup
+		return () => {
+			observer.disconnect();
+			window.removeEventListener('load', handleLoad);
+			window.removeEventListener('hashchange', handleHashChange);
+			window.removeEventListener('scroll', handleScroll);
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
+		};
 	});
 
 	onDestroy(() => {
-		if (observer) {
-			observer.disconnect();
-		}
+		if (observer) observer.disconnect();
 		if (typeof document !== 'undefined') {
 			document.removeEventListener('keydown', handleKeydown);
 		}
@@ -186,48 +426,37 @@
 </script>
 
 {#if isVisible}
-	<aside class="toc-sidebar {isOpen ? 'open' : 'closed'}" bind:this={tocContainer}>
+	<aside class="toc-sidebar" class:open={isOpen}>
 		<div class="toc-content glass-card">
-			<div class="toc-header">
+			<header class="toc-header">
 				<h3 class="toc-title">Table of Contents</h3>
 				{#if showToggle}
 					<button
-						class="toc-close glass-control-btn mobile-only"
+						class="toc-close glass-control-btn"
 						on:click={toggleToc}
 						aria-label="Close Table of Contents"
 					>
 						<X size={20} />
 					</button>
 				{/if}
-			</div>
+			</header>
 
 			<nav class="toc-nav">
-				<ul class="toc-list" bind:this={tocList}>
-					{#each tocItems as item (item.id)}
-						<li class="toc-item toc-level-{item.level}">
-							<a
-								href="#{item.id}"
-								class="toc-link {activeId === item.id ? 'active' : ''}"
-								on:click={(e) => scrollToSection(item.id, e)}
-							>
-								<span class="toc-text">{item.text}</span>
-								{#if activeId === item.id}
-									<div class="toc-active-indicator"></div>
-								{/if}
-							</a>
-						</li>
+				<div class="toc-tree">
+					{#each tocTree as node (node.heading.id)}
+						{@render nodeTemplate(node)}
 					{/each}
-				</ul>
+				</div>
 			</nav>
 		</div>
 	</aside>
+
 	<!-- Mobile Toggle Button -->
 	{#if showToggle && !isOpen}
 		<button
 			class="toc-mobile-toggle glass-button"
 			on:click={toggleToc}
 			aria-label="Toggle Table of Contents"
-			aria-expanded={isOpen}
 		>
 			<List size={18} />
 			<span class="toc-toggle-text">Contents</span>
@@ -235,7 +464,49 @@
 	{/if}
 {/if}
 
+{#snippet nodeTemplate(node: TocNode)}
+	<div class="toc-node" data-depth={node.heading.depth}>
+		<div class="toc-node-content toc-item" data-depth={node.heading.depth}>
+			{#if node.children.length > 0}
+				<button
+					class="toc-expand-btn"
+					on:click={() => handleToggle(node)}
+					aria-label="{node.isExpanded ? 'Collapse' : 'Expand'} {node.heading.text}"
+					aria-expanded={node.isExpanded}
+				>
+					{#if node.isExpanded}
+						<ChevronDown size={16} />
+					{:else}
+						<ChevronRight size={16} />
+					{/if}
+				</button>
+			{:else}
+				<div class="toc-expand-spacer"></div>
+			{/if}
+
+			<a
+				href="#{node.heading.id}"
+				class="toc-link"
+				class:active={node.isActive}
+				class:has-active-descendant={node.hasActiveDescendant}
+				on:click|preventDefault={() => handleNavigate(node.heading.id)}
+			>
+				{node.heading.text}
+			</a>
+		</div>
+
+		{#if node.children.length > 0}
+			<div class="toc-children" class:expanded={node.isExpanded}>
+				{#each node.children as child (child.heading.id)}
+					{@render nodeTemplate(child)}
+				{/each}
+			</div>
+		{/if}
+	</div>
+{/snippet}
+
 <style>
+	/* Base TOC Sidebar */
 	.toc-sidebar {
 		position: fixed;
 		top: 0;
@@ -250,6 +521,7 @@
 	.toc-sidebar.open {
 		transform: translateX(0);
 	}
+
 	.toc-content {
 		height: 100%;
 		background: var(--glass-bg);
@@ -258,13 +530,15 @@
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
-		border-radius: 0; /* Remove rounded corners for sidebar */
+		border-radius: 0;
 	}
+
+	/* Header */
 	.toc-header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: var(--space-2) var(--space-2) var(--space-1);
+		padding: var(--space-4) var(--space-4) var(--space-3);
 		border-bottom: 1px solid var(--color-border);
 		flex-shrink: 0;
 	}
@@ -275,124 +549,164 @@
 		font-weight: var(--font-weight-semibold);
 		color: var(--color-text-primary);
 	}
+
 	.toc-close {
-		padding: 0;
-		background: transparent;
-		border: 1px solid var(--glass-border);
-		border-radius: var(--radius-md);
-		color: var(--color-text-secondary);
-		cursor: pointer;
-		transition: all 0.2s ease;
-		line-height: 1;
-	}
-
-	.toc-close :global(svg) {
-		display: block;
-		margin: auto;
-	}
-	.toc-close:hover {
-		background: var(--glass-overlay-hover-bg);
-		color: var(--color-text-primary);
-	}
-
-	/* Hide close button on desktop */
-	.mobile-only {
 		display: none;
 	}
 
+	/* Navigation */
 	.toc-nav {
 		flex: 1;
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
 	}
-	.toc-list {
-		list-style: none;
-		margin: 0;
-		padding: var(--space-3) 0;
+
+	.toc-tree {
 		flex: 1;
 		overflow-y: auto;
 		overflow-x: hidden;
+		padding: var(--space-2) 0;
 	}
 
-	.toc-list::-webkit-scrollbar {
+	.toc-tree::-webkit-scrollbar {
 		width: 6px;
 	}
 
-	.toc-list::-webkit-scrollbar-track {
+	.toc-tree::-webkit-scrollbar-track {
 		background: transparent;
 	}
 
-	.toc-list::-webkit-scrollbar-thumb {
+	.toc-tree::-webkit-scrollbar-thumb {
 		background: var(--color-border);
 		border-radius: var(--radius-full);
 	}
 
-	.toc-list::-webkit-scrollbar-thumb:hover {
+	.toc-tree::-webkit-scrollbar-thumb:hover {
 		background: var(--color-text-tertiary);
 	}
 
-	.toc-item {
-		margin: 0;
-		position: relative;
+	/* Node Structure - Absolute Indentation System */
+	.toc-node {
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	}
-	/* Indentation for different heading levels */
-	.toc-level-2 {
-		--indent: var(--space-2);
-	}
-	.toc-level-3 {
-		--indent: var(--space-4);
-	}
-	.toc-level-4 {
-		--indent: var(--space-6);
-	}
-	.toc-level-5 {
-		--indent: var(--space-8);
-	}
-	.toc-level-6 {
-		--indent: var(--space-10);
-	}
-	.toc-link {
+
+	.toc-node-content {
 		display: flex;
 		align-items: center;
-		padding: var(--space-2) var(--space-4);
-		padding-left: calc(var(--space-4) + var(--indent, 0px));
+		min-height: 2.5rem;
+		position: relative;
+		margin: var(--space-1) 0;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* Absolute Indentation - No Cumulative Padding */
+	.toc-item[data-depth='0'] {
+		--indent: var(--space-4);
+	}
+	.toc-item[data-depth='1'] {
+		--indent: calc(var(--space-4) + var(--space-6));
+	}
+	.toc-item[data-depth='2'] {
+		--indent: calc(var(--space-4) + var(--space-8));
+	}
+	.toc-item[data-depth='3'] {
+		--indent: calc(var(--space-4) + var(--space-10));
+	}
+	.toc-item[data-depth='4'] {
+		--indent: calc(var(--space-4) + var(--space-12));
+	}
+
+	.toc-node-content {
+		padding-left: var(--indent, var(--space-4));
+	}
+
+	/* Expand Button */
+	.toc-expand-btn {
+		flex-shrink: 0;
+		width: 20px;
+		height: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: none;
+		border-radius: var(--radius-sm);
+		color: var(--color-text-tertiary);
+		cursor: pointer;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		margin-right: var(--space-2);
+	}
+
+	.toc-expand-btn:hover {
+		background: var(--glass-overlay-bg);
+		color: var(--color-text-secondary);
+	}
+
+	.toc-expand-btn:focus {
+		outline: 2px solid var(--primary-500);
+		outline-offset: 1px;
+	}
+
+	.toc-expand-spacer {
+		width: 20px;
+		height: 20px;
+		margin-right: var(--space-2);
+		flex-shrink: 0;
+	}
+
+	/* TOC Links */
+	.toc-link {
+		flex: 1;
+		display: block;
+		padding: var(--space-2) var(--space-3);
 		color: var(--color-text-secondary);
 		text-decoration: none;
 		font-size: var(--font-size-sm);
 		line-height: var(--line-height-normal);
-		position: relative;
-		transition: all 0.15s ease;
 		border-radius: var(--radius-md);
-		margin: var(--space-1) var(--space-3);
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	.toc-link:hover {
 		color: var(--color-text-primary);
 		background: var(--glass-overlay-bg);
 	}
+
 	.toc-link.active {
 		color: var(--primary-600);
 		background: var(--primary-50);
 		font-weight: var(--font-weight-medium);
 		border-left: 3px solid var(--primary-600);
-		padding-left: calc(var(--space-4) + var(--indent, 0px) - 3px);
+		padding-left: calc(var(--space-3) - 3px);
 	}
 
-	.toc-text {
-		flex: 1;
+	.toc-link.has-active-descendant {
+		color: var(--color-text-primary);
+		font-weight: var(--font-weight-medium);
+	}
+
+	.toc-link:focus {
+		outline: 2px solid var(--primary-500);
+		outline-offset: 1px;
+	}
+
+	/* Children Container - Smooth Animations */
+	.toc-children {
 		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		transition:
+			max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		max-height: 0;
+		opacity: 0;
 	}
 
-	.toc-active-indicator {
-		width: 8px;
-		height: 8px;
-		background: var(--primary-600);
-		border-radius: var(--radius-full);
-		margin-left: var(--space-2);
-		flex-shrink: 0;
+	.toc-children.expanded {
+		max-height: 1000px; /* Large enough for any content */
+		opacity: 1;
 	}
 
 	/* Mobile Toggle Button */
@@ -423,12 +737,15 @@
 		transform: translateY(-1px);
 		box-shadow: 0 6px 20px var(--glass-shadow);
 	}
+
 	/* Desktop Styles */
 	@media (min-width: 1024px) {
 		.toc-sidebar {
 			transform: translateX(0);
 		}
-	} /* Tablet Styles */
+	}
+
+	/* Tablet Styles */
 	@media (max-width: 1023px) and (min-width: 769px) {
 		.toc-mobile-toggle {
 			display: flex;
@@ -445,14 +762,17 @@
 			border-radius: var(--radius-xl);
 		}
 
-		.mobile-only {
+		.toc-close {
 			display: block;
 		}
-	} /* Mobile Styles */
+	}
+
+	/* Mobile Styles */
 	@media (max-width: 768px) {
 		.toc-mobile-toggle {
 			display: flex;
 		}
+
 		.toc-sidebar {
 			width: 100%;
 			max-width: 360px;
@@ -466,12 +786,12 @@
 			border-radius: var(--radius-xl);
 		}
 
-		.toc-toggle-text {
-			display: none;
+		.toc-close {
+			display: block;
 		}
 
-		.mobile-only {
-			display: block;
+		.toc-toggle-text {
+			display: none;
 		}
 	}
 
@@ -482,7 +802,7 @@
 		}
 	}
 
-	/* Dark mode adjustments */
+	/* Dark Mode */
 	:global([data-theme='dark']) .toc-content {
 		background: var(--glass-bg);
 		border-color: var(--glass-border);
@@ -494,19 +814,24 @@
 		border-left-color: var(--primary-400);
 	}
 
-	:global([data-theme='dark']) .toc-active-indicator {
-		background: var(--primary-400);
+	:global([data-theme='dark']) .toc-expand-btn:hover {
+		background: var(--glass-overlay-hover-bg);
 	}
 
-	/* Reduced motion preferences */
+	/* Reduced Motion */
 	@media (prefers-reduced-motion: reduce) {
 		.toc-sidebar,
-		.toc-content-wrapper,
+		.toc-content,
 		.toc-mobile-toggle,
-		.toc-link {
+		.toc-link,
+		.toc-expand-btn,
+		.toc-children,
+		.toc-node,
+		.toc-node-content {
 			transition: none;
 		}
 	}
+
 	/* Print Styles */
 	@media print {
 		.toc-sidebar,
