@@ -127,15 +127,6 @@
 		transition: all 0.3s ease;
 	}
 
-	.animated .chevron {
-		animation: float 2s ease-in-out infinite;
-	}
-
-	.animated .chevron-container:hover .chevron {
-		color: var(--primary-600);
-		transform: scale(1.1);
-	}
-
 	@keyframes float {
 		0%,
 		100% {
@@ -217,9 +208,6 @@
 		color: var(--primary-400);
 	}
 
-	:global(.dark) .animated .chevron-container:hover .chevron {
-		color: var(--primary-300);
-	}
 	/* Responsive design */
 	@media (max-width: 768px) {
 		.content-divider.start {

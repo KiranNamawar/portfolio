@@ -19,8 +19,6 @@
 
 	// Props
 	export let contentType: 'blog' | 'project' = 'blog';
-	export let github: string | undefined = undefined;
-	export let demo: string | undefined = undefined;
 	export let relatedContent: (BlogPost | Project)[] = [];
 	export let currentSlug: string;
 

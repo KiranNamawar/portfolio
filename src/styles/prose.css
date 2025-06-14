@@ -89,24 +89,12 @@
 	position: absolute;
 	left: 0;
 	top: 50%;
-	transform: translateY(-50%);
-	width: var(--space-1);
-	height: 1.4em;
-	background: linear-gradient(180deg, var(--primary-500), var(--primary-600));
-	border-radius: var(--radius-full);
-}
-
-.prose h3::after {
-	content: '';
-	position: absolute;
-	left: var(--space-2);
-	top: 50%;
-	transform: translateY(-50%);
-	width: var(--space-05);
-	height: 1.2em;
-	background: linear-gradient(180deg, var(--primary-400), var(--primary-500));
-	border-radius: var(--radius-full);
-	opacity: 0.7;
+	transform: translateY(-50%) rotate(45deg);
+	width: var(--space-4);
+	height: var(--space-4);
+	background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+	border-radius: var(--radius-sm);
+	opacity: 0.9;
 }
 
 .prose h4 {
@@ -124,30 +112,19 @@
 	left: 0;
 	top: 50%;
 	transform: translateY(-50%);
-	width: var(--space-3);
-	height: var(--space-3);
-	background: var(--primary-500);
-	border-radius: var(--radius-sm);
-	opacity: 0.8;
-}
-
-.prose h4::after {
-	content: '';
-	position: absolute;
-	left: var(--space-1);
-	top: 50%;
-	transform: translateY(-50%);
-	width: var(--space-1);
-	height: var(--space-1);
-	background: rgba(255, 255, 255, 0.9);
-	border-radius: var(--radius-full);
+	width: 0;
+	height: 0;
+	border-left: var(--space-3) solid var(--primary-500);
+	border-top: var(--space-2) solid transparent;
+	border-bottom: var(--space-2) solid transparent;
+	opacity: 0.9;
 }
 
 .prose h5 {
 	font-size: var(--font-size-lg);
 	position: relative;
 	margin: 1.75em 0 1em 0;
-	padding-left: var(--space-6);
+	padding-left: var(--space-4);
 	color: var(--color-text-primary);
 	font-weight: 600;
 	text-transform: capitalize;
@@ -158,29 +135,20 @@
 	content: '';
 	position: absolute;
 	left: 0;
-	top: 0.4em;
-	width: var(--space-4);
-	height: 2px;
-	background: linear-gradient(90deg, var(--primary-500), var(--primary-400));
-	border-radius: var(--radius-full);
-}
-
-.prose h5::after {
-	content: '';
-	position: absolute;
-	left: 0;
-	top: 0.8em;
+	top: 50%;
+	transform: translateY(-50%);
 	width: var(--space-2);
-	height: 1px;
-	background: var(--primary-300);
-	border-radius: var(--radius-full);
+	height: var(--space-1);
+	background: var(--primary-500);
+	clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%);
+	opacity: 0.9;
 }
 
 .prose h6 {
 	font-size: var(--font-size-base);
 	position: relative;
 	margin: 1.5em 0 0.75em 0;
-	padding-left: var(--space-6);
+	padding-left: var(--space-3);
 	color: var(--color-text-secondary);
 	font-weight: 500;
 	text-transform: uppercase;
@@ -194,11 +162,11 @@
 	left: 0;
 	top: 50%;
 	transform: translateY(-50%);
-	width: var(--space-2);
-	height: var(--space-2);
+	width: 3px;
+	height: 3px;
 	background: var(--primary-400);
 	border-radius: var(--radius-full);
-	box-shadow: 0 0 6px rgba(var(--primary-400-rgb), 0.5);
+	opacity: 0.8;
 }
 
 /* ===== PARAGRAPHS ===== */
@@ -577,41 +545,37 @@
 	}
 
 	.prose h3::before {
-		width: 3px;
-		height: 1.2em;
+		width: var(--space-3);
+		height: var(--space-3);
 	}
-
-	.prose h3::after {
-		left: 5px;
-		width: 2px;
-		height: 1em;
-	}
-
 	.prose h4 {
 		font-size: var(--font-size-lg);
 		margin: 1.5em 0 1em 0;
 		padding-left: var(--space-5);
 	}
+
 	.prose h4::before {
-		width: 10px;
-		height: 10px;
+		border-left-width: 8px;
+		border-top-width: 4px;
+		border-bottom-width: 4px;
 	}
-
-	.prose h4::after {
-		left: 5px;
-		top: 0.55em;
-		width: 4px;
-		height: 4px;
-	}
-
 	.prose h5 {
 		font-size: var(--font-size-base);
-		padding-left: var(--space-5);
+		padding-left: var(--space-3);
 	}
 
+	.prose h5::before {
+		width: 6px;
+		height: 3px;
+	}
 	.prose h6 {
 		font-size: var(--font-size-xs);
-		padding-left: var(--space-5);
+		padding-left: var(--space-2);
+	}
+
+	.prose h6::before {
+		width: 2px;
+		height: 2px;
 	}
 
 	.prose blockquote {
@@ -652,32 +616,19 @@
 }
 
 [data-theme='dark'] .prose h3::before {
-	background: linear-gradient(180deg, var(--primary-400), var(--primary-500));
-}
-
-[data-theme='dark'] .prose h3::after {
-	background: linear-gradient(180deg, var(--primary-300), var(--primary-400));
+	background: linear-gradient(135deg, var(--primary-400), var(--primary-500));
 }
 
 [data-theme='dark'] .prose h4::before {
-	background: var(--primary-400);
-}
-
-[data-theme='dark'] .prose h4::after {
-	background: rgba(255, 255, 255, 0.8);
+	border-left-color: var(--primary-400);
 }
 
 [data-theme='dark'] .prose h5::before {
-	background: linear-gradient(90deg, var(--primary-400), var(--primary-300));
-}
-
-[data-theme='dark'] .prose h5::after {
 	background: var(--primary-400);
 }
 
 [data-theme='dark'] .prose h6::before {
 	background: var(--primary-300);
-	box-shadow: 0 0 6px rgba(var(--primary-300-rgb), 0.6);
 }
 
 [data-theme='dark'] .prose ol > li::marker {
