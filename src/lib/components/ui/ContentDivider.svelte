@@ -6,20 +6,15 @@
 
 <div class="content-divider {type}" class:animated>
 	<div class="divider-line">
-		<!-- Left side of the line -->
-		<div class="line-segment left"></div>
-
-		<!-- Center chevron -->
-		<div class="chevron-container">
+		<div class="line-segment"></div>
+		<div class="divider-icon">
 			{#if type === 'start'}
-				<ChevronDown size={20} class="chevron" />
+				<ChevronDown size={16} class="chevron" />
 			{:else}
-				<ChevronUp size={20} class="chevron" />
+				<ChevronUp size={16} class="chevron" />
 			{/if}
 		</div>
-
-		<!-- Right side of the line -->
-		<div class="line-segment right"></div>
+		<div class="line-segment"></div>
 	</div>
 </div>
 
@@ -33,47 +28,34 @@
 	}
 
 	.content-divider.start {
-		padding: var(--space-4) 0 var(--space-8) 0;
+		padding: var(--space-6) 0 var(--space-8) 0;
 	}
 
 	.content-divider.end {
-		padding: var(--space-8) 0 var(--space-4) 0;
+		padding: var(--space-8) 0 var(--space-6) 0;
 	}
 
 	.divider-line {
 		display: flex;
 		align-items: center;
 		width: 100%;
-		max-width: 600px;
-		position: relative;
+		max-width: 500px;
+		gap: var(--space-4);
 	}
-
 	.line-segment {
 		flex: 1;
 		height: 2px;
-		border-radius: var(--radius-full);
-		position: relative;
-		overflow: hidden;
-	}
-
-	.line-segment.left {
 		background: linear-gradient(
 			90deg,
 			transparent 0%,
-			var(--primary-200) 30%,
-			var(--primary-400) 70%,
-			var(--primary-500) 100%
-		);
-	}
-
-	.line-segment.right {
-		background: linear-gradient(
-			90deg,
-			var(--primary-500) 0%,
-			var(--primary-400) 30%,
-			var(--primary-200) 70%,
+			var(--primary-300) 15%,
+			var(--primary-500) 50%,
+			var(--primary-300) 85%,
 			transparent 100%
 		);
+		position: relative;
+		overflow: hidden;
+		border-radius: var(--radius-full);
 	}
 
 	.line-segment::before {
@@ -86,39 +68,42 @@
 		background: linear-gradient(
 			90deg,
 			transparent 0%,
-			rgba(255, 255, 255, 0.6) 50%,
+			rgba(255, 255, 255, 0.5) 50%,
 			transparent 100%
 		);
-		border-radius: var(--radius-full);
+		opacity: 0;
+		transition: opacity 0.3s ease;
 	}
 
 	.animated .line-segment::before {
-		animation: shimmer 3s ease-in-out infinite;
+		animation: shimmer 2.5s ease-in-out infinite;
 	}
 
 	@keyframes shimmer {
 		0% {
 			left: -100%;
+			opacity: 0;
+		}
+		50% {
+			opacity: 1;
 		}
 		100% {
 			left: 100%;
+			opacity: 0;
 		}
 	}
-
-	.chevron-container {
+	.divider-icon {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 40px;
-		height: 40px;
+		width: 36px;
+		height: 36px;
 		background: var(--color-bg-primary);
 		border: 2px solid var(--primary-500);
 		border-radius: var(--radius-full);
-		position: relative;
-		z-index: 2;
 		box-shadow:
-			0 0 0 4px var(--color-bg-primary),
-			0 2px 8px rgba(var(--primary-500-rgb), 0.3);
+			0 0 0 3px var(--color-bg-primary),
+			0 3px 12px rgba(var(--primary-500-rgb, 249, 115, 22), 0.25);
 		transition: all 0.3s ease;
 	}
 
@@ -127,128 +112,83 @@
 		transition: all 0.3s ease;
 	}
 
-	@keyframes float {
+	.animated .divider-icon {
+		animation: gentle-pulse 3s ease-in-out infinite;
+	}
+	@keyframes gentle-pulse {
 		0%,
 		100% {
-			transform: translateY(0);
+			transform: scale(1);
+			box-shadow:
+				0 0 0 3px var(--color-bg-primary),
+				0 3px 12px rgba(var(--primary-500-rgb, 249, 115, 22), 0.25);
 		}
 		50% {
-			transform: translateY(-2px);
-		}
-	}
-
-	/* Pulsing glow effect */
-	.animated .chevron-container {
-		animation: pulse-glow 3s ease-in-out infinite;
-	}
-
-	@keyframes pulse-glow {
-		0%,
-		100% {
+			transform: scale(1.08);
 			box-shadow:
-				0 0 0 4px var(--color-bg-primary),
-				0 2px 8px rgba(var(--primary-500-rgb), 0.3);
-		}
-		50% {
-			box-shadow:
-				0 0 0 4px var(--color-bg-primary),
-				0 4px 20px rgba(var(--primary-500-rgb), 0.5),
-				0 0 30px rgba(var(--primary-500-rgb), 0.2);
+				0 0 0 3px var(--color-bg-primary),
+				0 6px 20px rgba(var(--primary-500-rgb, 249, 115, 22), 0.4);
 		}
 	}
-
 	/* Dark mode adjustments */
-	:global(.dark) .line-segment.left {
+	[data-theme='dark'] .line-segment {
 		background: linear-gradient(
 			90deg,
 			transparent 0%,
-			var(--primary-800) 30%,
-			var(--primary-600) 70%,
-			var(--primary-500) 100%
-		);
-	}
-
-	:global(.dark) .line-segment.right {
-		background: linear-gradient(
-			90deg,
-			var(--primary-500) 0%,
-			var(--primary-600) 30%,
-			var(--primary-800) 70%,
+			var(--primary-500) 15%,
+			var(--primary-400) 50%,
+			var(--primary-500) 85%,
 			transparent 100%
 		);
 	}
 
-	:global(.dark) .chevron-container {
+	[data-theme='dark'] .divider-icon {
 		border-color: var(--primary-400);
 		box-shadow:
-			0 0 0 4px var(--color-bg-primary),
-			0 2px 8px rgba(var(--primary-400-rgb), 0.4);
+			0 0 0 3px var(--color-bg-primary),
+			0 3px 12px rgba(var(--primary-400-rgb, 251, 191, 36), 0.3);
 	}
 
-	:global(.dark) .animated .chevron-container {
-		animation: pulse-glow-dark 3s ease-in-out infinite;
+	[data-theme='dark'] .animated .divider-icon {
+		animation: gentle-pulse-dark 3s ease-in-out infinite;
 	}
 
-	@keyframes pulse-glow-dark {
+	@keyframes gentle-pulse-dark {
 		0%,
 		100% {
+			transform: scale(1);
 			box-shadow:
-				0 0 0 4px var(--color-bg-primary),
-				0 2px 8px rgba(var(--primary-400-rgb), 0.4);
+				0 0 0 3px var(--color-bg-primary),
+				0 3px 12px rgba(var(--primary-400-rgb, 251, 191, 36), 0.3);
 		}
 		50% {
+			transform: scale(1.08);
 			box-shadow:
-				0 0 0 4px var(--color-bg-primary),
-				0 4px 20px rgba(var(--primary-400-rgb), 0.6),
-				0 0 30px rgba(var(--primary-500-rgb), 0.3);
+				0 0 0 3px var(--color-bg-primary),
+				0 6px 20px rgba(var(--primary-400-rgb, 251, 191, 36), 0.5);
 		}
 	}
 
-	:global(.dark) .chevron {
+	[data-theme='dark'] .chevron {
 		color: var(--primary-400);
 	}
 
 	/* Responsive design */
 	@media (max-width: 768px) {
 		.content-divider.start {
-			padding: var(--space-3) 0 var(--space-6) 0;
+			padding: var(--space-4) 0 var(--space-6) 0;
 		}
 
 		.content-divider.end {
-			padding: var(--space-6) 0 var(--space-3) 0;
+			padding: var(--space-6) 0 var(--space-4) 0;
 		}
 
 		.divider-line {
 			max-width: 400px;
 		}
-
-		.chevron-container {
+		.divider-icon {
 			width: 32px;
 			height: 32px;
-		}
-
-		.chevron {
-			width: 16px;
-			height: 16px;
-		}
-	}
-
-	@media (max-width: 480px) {
-		.content-divider.start {
-			padding: var(--space-2) 0 var(--space-4) 0;
-		}
-
-		.content-divider.end {
-			padding: var(--space-4) 0 var(--space-2) 0;
-		}
-
-		.divider-line {
-			max-width: 300px;
-		}
-
-		.chevron-container {
-			width: 28px;
-			height: 28px;
 		}
 
 		.chevron {
