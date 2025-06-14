@@ -2,6 +2,7 @@
 	import type { PageData } from './$types';
 	import SEOHead from '$lib/components/ui/SEOHead.svelte';
 	import ContentFooter from '$lib/components/ui/ContentFooter.svelte';
+	import ContentDivider from '$lib/components/ui/ContentDivider.svelte';
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -30,9 +31,13 @@
 <!-- The BlogLayout component is automatically applied by mdsvex -->
 {#if data.ContentComponent}
 	<data.ContentComponent />
-
 	<!-- Blog Footer - Added after the mdsvex content -->
 	{#if data.post}
+		<!-- Content End Divider with proper layout -->
+		<div class="content-layout">
+			<ContentDivider type="end" />
+		</div>
+
 		<ContentFooter
 			contentType="blog"
 			currentSlug={data.post.slug}
@@ -79,9 +84,28 @@
 		transition: all var(--transition-fast);
 		font-weight: var(--font-weight-medium);
 	}
-
 	.back-link:hover {
 		transform: translateY(-2px);
 		box-shadow: 0 4px 12px var(--glass-shadow);
+	}
+
+	/* Layout matching BaseContentLayout for divider */
+	.content-layout {
+		margin-left: 0;
+		transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* Desktop: Account for sidebar */
+	@media (min-width: 1024px) {
+		.content-layout {
+			margin-left: 320px;
+		}
+	}
+
+	/* Tablet and Mobile: Full width */
+	@media (max-width: 1023px) {
+		.content-layout {
+			margin-left: 0;
+		}
 	}
 </style>

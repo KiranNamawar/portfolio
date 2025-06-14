@@ -10,6 +10,7 @@
 	import { ArrowLeft, Calendar } from '$lib/utils/icons.js';
 	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
 	import TableOfContents from '$lib/components/ui/TableOfContents.svelte';
+	import ContentDivider from '$lib/components/ui/ContentDivider.svelte';
 	// Base props that all content layouts need
 	export let title: string;
 	export let description: string;
@@ -71,9 +72,11 @@
 				<slot name="actions" />
 			</div>
 		</header>
-
 		<!-- Slot for content between header and main content (like gallery) -->
 		<slot name="pre-content" />
+		<!-- Content Start Divider -->
+		<ContentDivider type="start" />
+
 		<!-- Main Content -->
 		<main class="content-main">
 			<div class="container">
@@ -122,22 +125,6 @@
 	.content-header {
 		padding: var(--space-8) 0 var(--space-6);
 		position: relative;
-	}
-
-	.content-header::before {
-		content: '';
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		height: 3px;
-		background: linear-gradient(
-			135deg,
-			var(--primary-400),
-			var(--primary-500),
-			var(--primary-600),
-			var(--primary-700)
-		);
 	}
 
 	.content-meta-row {
@@ -223,10 +210,9 @@
 		font-weight: 500;
 		opacity: 0.9;
 	}
-
 	/* ===== MAIN CONTENT ===== */
 	.content-main {
-		padding: var(--space-8) 0;
+		padding: 0;
 	}
 	.prose {
 		max-width: 100ch;
@@ -248,9 +234,8 @@
 		.content-header {
 			padding: var(--space-6) 0 var(--space-4);
 		}
-
 		.content-main {
-			padding: var(--space-6) 0;
+			padding: 0;
 		}
 	}
 	@media (max-width: 480px) {

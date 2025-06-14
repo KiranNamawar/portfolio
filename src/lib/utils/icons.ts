@@ -8,12 +8,14 @@ export { Home, FileText, Search, FolderOpen } from '@lucide/svelte';
 export { Sun, Moon } from '@lucide/svelte';
 
 // Search dialog
-export { X, Hash, Calendar, Clock, BookOpen } from '@lucide/svelte';
+export { X, Hash, Calendar, Clock, BookOpen, Scroll } from '@lucide/svelte';
 
 // Project gallery
 export {
 	ChevronLeft,
 	ChevronRight,
+	ChevronDown,
+	ChevronUp,
 	Maximize2,
 	X as CloseIcon,
 	Download,
