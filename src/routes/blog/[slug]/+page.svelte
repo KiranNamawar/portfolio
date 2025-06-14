@@ -35,8 +35,6 @@
 	{#if data.post}
 		<ContentFooter
 			contentType="blog"
-			date={data.post.date}
-			tags={data.post.tags}
 			currentSlug={data.post.slug}
 			relatedContent={data.relatedPosts}
 		/>

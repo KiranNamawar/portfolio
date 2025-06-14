@@ -34,10 +34,6 @@
 	{#if data.project}
 		<ContentFooter
 			contentType="project"
-			date={data.project.date}
-			technologies={data.project.technologies}
-			github={data.project.github}
-			demo={data.project.demo}
 			currentSlug={data.project.slug}
 			relatedContent={data.relatedProjects}
 		/>
