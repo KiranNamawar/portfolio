@@ -1,4 +1,4 @@
-import { getBlogPost } from '$lib/utils/blog.js';
+import { getBlogPost, getRelatedBlogPosts } from '$lib/utils/blog.js';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
@@ -23,11 +23,15 @@ export const load: PageLoad = async ({ params }) => {
 		throw error(404, 'Post not found');
 	}
 
+	// Get related posts based on tags
+	const relatedPosts = await getRelatedBlogPosts(params.slug, post.metadata.tags);
+
 	return {
 		post: {
 			...post.metadata,
 			slug: params.slug
 		},
+		relatedPosts,
 		ContentComponent: post.content
 	};
 };

@@ -125,7 +125,6 @@
 			<ProjectGallery {gallery} layout="auto" enableLightbox={true} />
 		{/if}
 	</div>
-
 	<!-- Main project content -->
 	<slot />
 </BaseContentLayout>

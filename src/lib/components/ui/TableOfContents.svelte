@@ -46,6 +46,13 @@
 				const tocContainer = el.closest('.toc-sidebar, .toc-content');
 				if (tocContainer) return false;
 
+				// Filter out headings with data-toc-exclude attribute
+				if (el.hasAttribute('data-toc-exclude')) return false;
+
+				// Filter out headings inside footer or other excluded sections
+				const footerContainer = el.closest('footer, .content-footer');
+				if (footerContainer) return false;
+
 				return true;
 			})
 			.map((el, index) => {

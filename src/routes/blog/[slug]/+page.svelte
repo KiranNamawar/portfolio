@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import SEOHead from '$lib/components/ui/SEOHead.svelte';
+	import ContentFooter from '$lib/components/ui/ContentFooter.svelte';
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -29,6 +30,17 @@
 <!-- The BlogLayout component is automatically applied by mdsvex -->
 {#if data.ContentComponent}
 	<data.ContentComponent />
+
+	<!-- Blog Footer - Added after the mdsvex content -->
+	{#if data.post}
+		<ContentFooter
+			contentType="blog"
+			date={data.post.date}
+			tags={data.post.tags}
+			currentSlug={data.post.slug}
+			relatedContent={data.relatedPosts}
+		/>
+	{/if}
 {:else}
 	<div class="error-message">
 		<h1>Content not available</h1>

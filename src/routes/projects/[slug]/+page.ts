@@ -1,4 +1,4 @@
-import { getProject } from '$lib/utils/project.js';
+import { getProject, getRelatedProjects } from '$lib/utils/project.js';
 import { error, redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
@@ -16,18 +16,21 @@ export const load: PageLoad = async ({ params }) => {
 	if (staticFiles.includes(params.slug)) {
 		throw redirect(301, `/${params.slug}`);
 	}
-
 	const project = await getProject(params.slug);
 
 	if (!project) {
 		throw error(404, 'Project not found');
 	}
 
+	// Get related projects based on technologies
+	const relatedProjects = await getRelatedProjects(params.slug, project.metadata.technologies);
+
 	return {
 		project: {
 			...project.metadata,
 			slug: params.slug
 		},
+		relatedProjects,
 		ContentComponent: project.content
 	};
 };

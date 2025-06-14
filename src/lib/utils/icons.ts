@@ -27,7 +27,10 @@ export {
 export { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter } from '@lucide/svelte';
 
 // Project actions
-export { ExternalLink, ArrowLeft } from '@lucide/svelte';
+export { ExternalLink, ArrowLeft, ArrowRight } from '@lucide/svelte';
+
+// Content footer icons
+export { Tag, User, Share2, Heart } from '@lucide/svelte';
 
 // Heading links
 export { Link } from '@lucide/svelte';
@@ -43,3 +46,5 @@ export { Code, Zap, Database, Globe, Smartphone, Monitor } from '@lucide/svelte'
 
 // Re-export the icon type for TypeScript
 export type { Icon } from '@lucide/svelte';
+
+export { Facebook } from '@lucide/svelte';

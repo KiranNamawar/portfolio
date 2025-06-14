@@ -7,13 +7,24 @@
 
 <script lang="ts">
 	import BaseContentLayout from './BaseContentLayout.svelte';
+	import ContentFooter from '../ui/ContentFooter.svelte';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 
 	// All frontmatter values are available as props
 	export let title: string;
 	export let description: string;
 	export let date: string;
 	export let tags: string[] | undefined = undefined;
+
+	// Extract slug from page store
+	let slug = '';
+	let relatedPosts: any[] = [];
+
+	$: if ($page.data) {
+		slug = $page.params.slug || '';
+		relatedPosts = $page.data.relatedPosts || [];
+	}
 
 	// Handle heading link clicks for copy-to-clipboard
 	onMount(() => {
@@ -89,8 +100,19 @@
 			{/each}
 		{/if}
 	</div>
+
 	<!-- Main blog content -->
 	<slot />
+
+	<!-- Blog Footer -->
+	<ContentFooter
+		slot="footer"
+		contentType="blog"
+		{date}
+		{tags}
+		currentSlug={slug}
+		relatedContent={relatedPosts}
+	/>
 </BaseContentLayout>
 
 <style>
@@ -122,6 +144,33 @@
 		font-weight: 600;
 		opacity: 0.8;
 	}
+
+	/* ===== TOAST NOTIFICATION ===== */
+	:global(.heading-link-toast) {
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		background: var(--color-surface-primary);
+		color: var(--color-text-primary);
+		padding: var(--space-3) var(--space-4);
+		border-radius: var(--radius-md);
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+		font-size: var(--font-size-sm);
+		z-index: 1000;
+		animation: toast-slide-in 0.3s ease-out;
+	}
+
+	@keyframes toast-slide-in {
+		from {
+			opacity: 0;
+			transform: translateX(100%);
+		}
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
 	/* ===== RESPONSIVE DESIGN ===== */
 	@media (max-width: 480px) {
 		.blog-tags {
