@@ -46,6 +46,9 @@ export { Copy, Check } from '@lucide/svelte';
 // Tech icons fallbacks (used in techIcons.ts)
 export { Code, Zap, Database, Globe, Smartphone, Monitor } from '@lucide/svelte';
 
+// Additional home page icons
+export { ArrowDown, Coffee, Sparkles, Palette, Folder, MessageCircle } from '@lucide/svelte';
+
 // Re-export the icon type for TypeScript
 export type { Icon } from '@lucide/svelte';
 

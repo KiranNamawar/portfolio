@@ -92,8 +92,8 @@ export const contactInfo = [
 
 /**
  * @typedef {Object} SocialLink
- * @property {string} label - Social platform name
- * @property {string} href - Profile URL
+ * @property {string} platform - Social platform name
+ * @property {string} url - Profile URL
  * @property {string} color - Brand color for the platform
  * @property {string} username - Username on the platform
  */
@@ -103,14 +103,14 @@ export const contactInfo = [
  */
 export const socialLinks = [
 	{
-		label: 'GitHub',
-		href: 'https://github.com/kirannamawar',
+		platform: 'GitHub',
+		url: 'https://github.com/kirannamawar',
 		color: '#333',
 		username: 'kirannamawar'
 	},
 	{
-		label: 'LinkedIn',
-		href: 'https://linkedin.com/in/kirannamawardev',
+		platform: 'LinkedIn',
+		url: 'https://linkedin.com/in/kirannamawardev',
 		color: '#0077b5',
 		username: 'kirannamawardev'
 	}

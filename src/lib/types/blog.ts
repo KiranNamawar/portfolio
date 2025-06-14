@@ -10,6 +10,7 @@ export interface BlogPost {
 	description: string;
 	date: string;
 	tags?: string[];
+	category?: string;
 	published: boolean;
 	featured?: boolean;
 	readingTime?: number;

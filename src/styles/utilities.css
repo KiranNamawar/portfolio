@@ -95,17 +95,18 @@
 	justify-content: center;
 	width: 40px;
 	height: 40px;
-	background: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.2);
+	background: var(--glass-control-bg);
+	border: 1px solid var(--glass-control-border);
 	border-radius: 0.5rem;
-	color: white;
+	color: var(--color-text-primary);
 	cursor: pointer;
 	transition: all 0.3s ease;
 	backdrop-filter: blur(10px);
+	box-shadow: var(--glass-control-shadow);
 }
 
 .glass-control-btn:hover {
-	background: rgba(255, 255, 255, 0.2);
+	background: var(--glass-control-hover-bg);
 	transform: scale(1.05);
 }
 
