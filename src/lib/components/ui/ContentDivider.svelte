@@ -130,28 +130,6 @@
 				0 6px 20px rgba(var(--primary-500-rgb, 249, 115, 22), 0.4);
 		}
 	}
-	/* Dark mode adjustments */
-	[data-theme='dark'] .line-segment {
-		background: linear-gradient(
-			90deg,
-			transparent 0%,
-			var(--primary-500) 15%,
-			var(--primary-400) 50%,
-			var(--primary-500) 85%,
-			transparent 100%
-		);
-	}
-
-	[data-theme='dark'] .divider-icon {
-		border-color: var(--primary-400);
-		box-shadow:
-			0 0 0 3px var(--color-bg-primary),
-			0 3px 12px rgba(var(--primary-400-rgb, 251, 191, 36), 0.3);
-	}
-
-	[data-theme='dark'] .animated .divider-icon {
-		animation: gentle-pulse-dark 3s ease-in-out infinite;
-	}
 
 	@keyframes gentle-pulse-dark {
 		0%,
@@ -167,10 +145,6 @@
 				0 0 0 3px var(--color-bg-primary),
 				0 6px 20px rgba(var(--primary-400-rgb, 251, 191, 36), 0.5);
 		}
-	}
-
-	[data-theme='dark'] .chevron {
-		color: var(--primary-400);
 	}
 
 	/* Responsive design */
