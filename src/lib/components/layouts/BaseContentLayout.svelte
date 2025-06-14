@@ -10,18 +10,20 @@
 	import { ArrowLeft, Calendar } from '$lib/utils/icons.js';
 	import ReadingProgress from '$lib/components/ui/ReadingProgress.svelte';
 	import TableOfContents from '$lib/components/ui/TableOfContents.svelte';
-
 	// Base props that all content layouts need
 	export let title: string;
 	export let description: string;
 	export let date: string;
 	export let pageType: 'Blog' | 'Projects' = 'Blog';
-	export let backUrl: string = '/';
-	export let backLabel: string = 'Back';
+	export let backUrl: string | null = null;
+	export let backLabel: string | null = null;
+
 	// Computed values
 	$: pageTitle = `${title} | ${pageType}`;
 	$: backLinkUrl = pageType === 'Blog' ? '/blog' : '/projects';
-	$: backLinkLabel = pageType === 'Blog' ? 'Blog' : 'Projects';
+	$: backLinkLabel = pageType === 'Blog' ? 'Back to Blog' : 'Back to Projects';
+	$: finalBackUrl = backUrl || backLinkUrl;
+	$: finalBackLabel = backLabel || backLinkLabel;
 </script>
 
 <svelte:head>
@@ -41,9 +43,9 @@
 		<header class="content-header">
 			<div class="container">
 				<div class="content-meta-row">
-					<a href={backUrl || backLinkUrl} class="back-link">
+					<a href={finalBackUrl} class="back-link">
 						<ArrowLeft size={18} />
-						{backLabel || backLinkLabel}
+						{finalBackLabel}
 					</a>
 
 					<div class="header-actions">

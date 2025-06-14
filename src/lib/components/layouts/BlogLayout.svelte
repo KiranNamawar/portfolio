@@ -102,25 +102,26 @@
 		margin-top: var(--space-6);
 		justify-content: center;
 	}
-
 	.tag {
 		display: inline-flex;
 		align-items: center;
-		padding: var(--space-2) var(--space-3);
-		background: var(--color-surface-secondary);
-		color: var(--color-text-primary);
-		border: 1px solid var(--color-border-primary);
-		border-radius: var(--radius-full);
+		padding: var(--space-1) var(--space-3);
+		background: rgba(var(--primary-500-rgb, 99, 102, 241), 0.1);
+		color: var(--color-text-secondary);
+		border-left: 3px solid var(--primary-500);
+		border-radius: 0 var(--radius-md) var(--radius-md) 0;
 		font-size: var(--font-size-sm);
 		font-weight: 500;
 		text-decoration: none;
-		transition: all 0.2s ease;
+		position: relative;
 	}
 
-	.tag:hover {
-		background: var(--color-surface-tertiary);
-		color: var(--primary-600);
-		border-color: var(--primary-400);
+	.tag::before {
+		content: '#';
+		margin-right: var(--space-1);
+		color: var(--primary-500);
+		font-weight: 600;
+		opacity: 0.8;
 	}
 	/* ===== RESPONSIVE DESIGN ===== */
 	@media (max-width: 480px) {

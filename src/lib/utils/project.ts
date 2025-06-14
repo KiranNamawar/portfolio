@@ -51,6 +51,12 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function getProject(slug: string) {
 	try {
+		// Validate slug format (only allow alphanumeric, hyphens, underscores)
+		if (!/^[a-zA-Z0-9_-]+$/.test(slug)) {
+			console.error(`Invalid project slug format: ${slug}`);
+			return null;
+		}
+
 		// Get the module normally for content
 		const module = await import(`../../content/projects/${slug}.md`);
 
@@ -68,6 +74,21 @@ export async function getProject(slug: string) {
 		};
 	} catch (error) {
 		console.error(`Error loading project ${slug}:`, error);
+
+		// Check if this is a common static file being requested as a project
+		const staticFiles = [
+			'manifest.json',
+			'robots.txt',
+			'sitemap.xml',
+			'favicon.ico',
+			'favicon.png'
+		];
+		if (staticFiles.includes(slug)) {
+			console.warn(
+				`Static file ${slug} was requested as a project. This should be handled by static file serving.`
+			);
+		}
+
 		return null;
 	}
 }

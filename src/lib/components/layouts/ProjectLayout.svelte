@@ -140,25 +140,35 @@
 		margin-top: var(--space-6);
 		justify-content: center;
 	}
-
 	.tech-tag {
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-2);
-		padding: var(--space-2) var(--space-3);
-		background: var(--color-surface-secondary);
-		color: var(--color-text-primary);
-		border: 1px solid var(--color-border-primary);
+		padding: var(--space-1) var(--space-3);
+		background: rgba(var(--primary-500-rgb, 99, 102, 241), 0.08);
+		color: var(--color-text-secondary);
 		border-radius: var(--radius-md);
 		font-size: var(--font-size-sm);
 		font-weight: 500;
-		transition: all 0.2s ease;
+		position: relative;
+		border: 1px solid rgba(var(--primary-500-rgb, 99, 102, 241), 0.2);
 	}
 
-	.tech-tag:hover {
-		background: var(--color-surface-tertiary);
-		color: var(--primary-600);
-		border-color: var(--primary-400);
+	.tech-tag::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(
+			45deg,
+			transparent 0%,
+			rgba(var(--primary-500-rgb, 99, 102, 241), 0.05) 50%,
+			transparent 100%
+		);
+		border-radius: var(--radius-md);
+		pointer-events: none;
 	}
 
 	:global(.tech-tag .tech-icon) {
