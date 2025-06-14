@@ -199,13 +199,11 @@ h6:hover .heading-link {
 }
 
 /* Style headings in content to make them work with the link system */
-.blog-post-content h1,
 .blog-post-content h2,
 .blog-post-content h3,
 .blog-post-content h4,
 .blog-post-content h5,
 .blog-post-content h6,
-.project-content h1,
 .project-content h2,
 .project-content h3,
 .project-content h4,
@@ -215,12 +213,6 @@ h6:hover .heading-link {
 	display: flex;
 	align-items: center;
 	scroll-margin-top: var(--space-20);
-}
-
-/* Hide H1 headings in content since they're already shown in metadata */
-.blog-post-content h1,
-.project-content h1 {
-	display: none;
 }
 
 /* Add some extra spacing for headings with links */

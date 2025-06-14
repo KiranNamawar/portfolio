@@ -7,10 +7,10 @@
 	max-width: 75ch;
 	font-size: var(--font-size-base);
 	line-height: var(--line-height-relaxed);
+	counter-reset: heading-counter;
 }
 
 /* ===== HEADINGS ===== */
-.prose h1,
 .prose h2,
 .prose h3,
 .prose h4,
@@ -26,25 +26,62 @@
 }
 
 .prose h1 {
-	font-size: var(--font-size-4xl);
-	margin-top: 0;
-	background: linear-gradient(135deg, var(--color-text-primary), var(--primary-600));
-	background-clip: text;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+	/* Hide H1 from markdown content as title comes from metadata header */
+	display: none;
+	/* Alternative: Use visually hidden if you want to keep it for screen readers
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0; */
 }
 
 .prose h2 {
 	font-size: var(--font-size-3xl);
-	border-bottom: 2px solid var(--color-border-primary);
-	padding-bottom: var(--space-3);
-	margin-top: 2.5em;
+	margin: 2.5em 0 1em 0;
+	color: var(--color-text-primary);
+	font-weight: 600;
+	position: relative;
+	padding-bottom: var(--space-2);
+}
+
+.prose h2::before {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	background: linear-gradient(
+		90deg,
+		var(--primary-500) 0%,
+		var(--primary-400) 30%,
+		transparent 70%
+	);
+}
+
+.prose h2::after {
+	content: '';
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	width: var(--space-8);
+	height: 3px;
+	background: var(--primary-500);
+	border-radius: var(--radius-full);
 }
 
 .prose h3 {
 	font-size: var(--font-size-2xl);
 	position: relative;
-	padding-left: var(--space-4);
+	margin: 2em 0 1em 0;
+	padding-left: var(--space-6);
+	color: var(--color-text-primary);
+	font-weight: 600;
 }
 
 .prose h3::before {
@@ -53,29 +90,115 @@
 	left: 0;
 	top: 50%;
 	transform: translateY(-50%);
-	width: 3px;
-	height: 1.2em;
-	background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+	width: var(--space-1);
+	height: 1.4em;
+	background: linear-gradient(180deg, var(--primary-500), var(--primary-600));
 	border-radius: var(--radius-full);
+}
+
+.prose h3::after {
+	content: '';
+	position: absolute;
+	left: var(--space-2);
+	top: 50%;
+	transform: translateY(-50%);
+	width: var(--space-05);
+	height: 1.2em;
+	background: linear-gradient(180deg, var(--primary-400), var(--primary-500));
+	border-radius: var(--radius-full);
+	opacity: 0.7;
 }
 
 .prose h4 {
 	font-size: var(--font-size-xl);
-	color: var(--primary-600);
+	margin: 1.75em 0 1em 0;
+	color: var(--color-text-primary);
+	font-weight: 600;
+	position: relative;
+	padding-left: var(--space-6);
+}
+
+.prose h4::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: var(--space-3);
+	height: var(--space-3);
+	background: var(--primary-500);
+	border-radius: var(--radius-sm);
+	opacity: 0.8;
+}
+
+.prose h4::after {
+	content: '';
+	position: absolute;
+	left: var(--space-1);
+	top: 50%;
+	transform: translateY(-50%);
+	width: var(--space-1);
+	height: var(--space-1);
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: var(--radius-full);
 }
 
 .prose h5 {
 	font-size: var(--font-size-lg);
+	position: relative;
+	margin: 1.75em 0 1em 0;
+	padding-left: var(--space-6);
+	color: var(--color-text-primary);
 	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	font-size: var(--font-size-sm);
+	text-transform: capitalize;
+	letter-spacing: 0.02em;
+}
+
+.prose h5::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0.4em;
+	width: var(--space-4);
+	height: 2px;
+	background: linear-gradient(90deg, var(--primary-500), var(--primary-400));
+	border-radius: var(--radius-full);
+}
+
+.prose h5::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0.8em;
+	width: var(--space-2);
+	height: 1px;
+	background: var(--primary-300);
+	border-radius: var(--radius-full);
 }
 
 .prose h6 {
 	font-size: var(--font-size-base);
-	font-weight: 600;
-	color: var(--color-text-tertiary);
+	position: relative;
+	margin: 1.5em 0 0.75em 0;
+	padding-left: var(--space-6);
+	color: var(--color-text-secondary);
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-size: var(--font-size-sm);
+}
+
+.prose h6::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: var(--space-2);
+	height: var(--space-2);
+	background: var(--primary-400);
+	border-radius: var(--radius-full);
+	box-shadow: 0 0 6px rgba(var(--primary-400-rgb), 0.5);
 }
 
 /* ===== PARAGRAPHS ===== */
@@ -436,15 +559,59 @@
 	}
 
 	.prose h1 {
-		font-size: var(--font-size-3xl);
+		/* Keep H1 hidden in responsive view as well */
+		display: none;
 	}
-
 	.prose h2 {
 		font-size: var(--font-size-2xl);
+		margin: 2em 0 1em 0;
 	}
 
+	.prose h2::after {
+		width: var(--space-6);
+	}
 	.prose h3 {
 		font-size: var(--font-size-xl);
+		margin: 1.75em 0 1em 0;
+		padding-left: var(--space-5);
+	}
+
+	.prose h3::before {
+		width: 3px;
+		height: 1.2em;
+	}
+
+	.prose h3::after {
+		left: 5px;
+		width: 2px;
+		height: 1em;
+	}
+
+	.prose h4 {
+		font-size: var(--font-size-lg);
+		margin: 1.5em 0 1em 0;
+		padding-left: var(--space-5);
+	}
+	.prose h4::before {
+		width: 10px;
+		height: 10px;
+	}
+
+	.prose h4::after {
+		left: 5px;
+		top: 0.55em;
+		width: 4px;
+		height: 4px;
+	}
+
+	.prose h5 {
+		font-size: var(--font-size-base);
+		padding-left: var(--space-5);
+	}
+
+	.prose h6 {
+		font-size: var(--font-size-xs);
+		padding-left: var(--space-5);
 	}
 
 	.prose blockquote {
@@ -471,12 +638,46 @@
 }
 
 /* ===== DARK MODE ENHANCEMENTS ===== */
-[data-theme='dark'] .prose h3::before {
-	background: linear-gradient(135deg, var(--primary-400), var(--primary-500));
+[data-theme='dark'] .prose h2::before {
+	background: linear-gradient(
+		90deg,
+		var(--primary-400) 0%,
+		var(--primary-300) 30%,
+		transparent 70%
+	);
 }
 
-[data-theme='dark'] .prose h4 {
-	color: var(--primary-400);
+[data-theme='dark'] .prose h2::after {
+	background: var(--primary-400);
+}
+
+[data-theme='dark'] .prose h3::before {
+	background: linear-gradient(180deg, var(--primary-400), var(--primary-500));
+}
+
+[data-theme='dark'] .prose h3::after {
+	background: linear-gradient(180deg, var(--primary-300), var(--primary-400));
+}
+
+[data-theme='dark'] .prose h4::before {
+	background: var(--primary-400);
+}
+
+[data-theme='dark'] .prose h4::after {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='dark'] .prose h5::before {
+	background: linear-gradient(90deg, var(--primary-400), var(--primary-300));
+}
+
+[data-theme='dark'] .prose h5::after {
+	background: var(--primary-400);
+}
+
+[data-theme='dark'] .prose h6::before {
+	background: var(--primary-300);
+	box-shadow: 0 0 6px rgba(var(--primary-300-rgb), 0.6);
 }
 
 [data-theme='dark'] .prose ol > li::marker {
