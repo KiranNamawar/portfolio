@@ -281,25 +281,30 @@
 		text-decoration: none;
 		transition: all 0.3s ease;
 		border: 1px solid rgba(255, 255, 255, 0.2);
-	}
-
-	/* Dark mode styling */
-	[data-theme='dark'] .action-btn {
+	}	/* Dark mode styling */
+	:global([data-theme='dark']) .action-btn {
 		color: var(--color-text-primary);
 		background: rgba(0, 0, 0, 0.7);
 		border: 1px solid rgba(255, 255, 255, 0.1);
 	}
-	.action-btn:hover {
+
+	/* Button hover states - both direct hover and when card is hovered */
+	.action-btn:hover,
+	.project-card:hover .action-btn {
 		transform: scale(1.1);
 		background: rgba(255, 255, 255, 1);
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		color: #1f2937; /* Dark color for light background */
 	}
 
-	/* Dark mode hover */
-	[data-theme='dark'] .action-btn:hover {
+	/* Dark mode hover - both direct hover and when card is hovered */
+	:global([data-theme='dark']) .action-btn:hover,
+	:global([data-theme='dark']) .project-card:hover .action-btn {
 		background: rgba(0, 0, 0, 0.9);
+		color: #f9fafb; /* Light color for dark background */
 		box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 	}
+
 	.project-content {
 		padding: var(--space-4); /* Reduced from space-5 */
 		display: flex;
