@@ -138,7 +138,7 @@
 
 <SEOHead
 	data={{
-		title: `About - ${personalInfo.name}`,
+		title: `About`,
 		description: `Learn more about ${personalInfo.name}, a passionate full-stack developer dedicated to creating exceptional digital experiences through quality code and innovative solutions.`,
 		keywords: [
 			'about',
