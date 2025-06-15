@@ -25,6 +25,8 @@ export {
 	Play
 } from '@lucide/svelte';
 
+export { GitBranch } from '@lucide/svelte';
+
 // Contact & social
 export { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter } from '@lucide/svelte';
 

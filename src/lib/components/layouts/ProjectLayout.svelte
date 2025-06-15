@@ -9,6 +9,7 @@
 	import { ExternalLink, Github } from '$lib/utils/icons.js';
 	import BaseContentLayout from './BaseContentLayout.svelte';
 	import ProjectGallery from '$lib/components/ui/ProjectGallery.svelte';
+	import ProjectTimeline from '$lib/components/ui/ProjectTimeline.svelte';
 	import { getTechIcon } from '$lib/utils/techIcons';
 	import { onMount } from 'svelte';
 	// All frontmatter values are available as props
@@ -20,6 +21,20 @@
 	export let demo: string | undefined = undefined;
 	export const featured: boolean | undefined = undefined; // For external reference only
 	export let gallery: Array<{ src: string; alt: string; caption?: string }> | undefined = undefined;
+	export let timeline:
+		| Array<{
+				id: string;
+				title: string;
+				description: string;
+				date: string;
+				status: 'completed' | 'in-progress' | 'planned';
+				category?: 'development' | 'design' | 'testing' | 'deployment' | 'planning';
+				details?: string[];
+				achievements?: string[];
+		  }>
+		| undefined = undefined;
+
+	// Timeline data could come from frontmatter or be undefined
 
 	// Handle heading link clicks for copy-to-clipboard
 	onMount(() => {
@@ -88,9 +103,9 @@
 </script>
 
 <BaseContentLayout {title} {description} {date} pageType="Projects">
-	<div class="tech-stack" slot="metadata">
+	<div class="tech-stack-simple" slot="metadata">
 		{#if technologies && technologies.length > 0}
-			{#each technologies as tech}
+			{#each technologies.slice(0, 6) as tech}
 				{@const techIcon = getTechIcon(tech)}
 				<span class="tech-tag">
 					{#if techIcon.type === 'devicon'}
@@ -102,6 +117,9 @@
 					{tech}
 				</span>
 			{/each}
+			{#if technologies.length > 6}
+				<span class="tech-more">+{technologies.length - 6} more</span>
+			{/if}
 		{/if}
 	</div>
 
@@ -119,19 +137,26 @@
 			</a>
 		{/if}
 	</div>
-
 	<div slot="pre-content">
 		{#if gallery && gallery.length > 0}
 			<ProjectGallery {gallery} layout="auto" enableLightbox={true} />
 		{/if}
 	</div>
+
 	<!-- Main project content -->
 	<slot />
+
+	<!-- Post-content sections -->
+	<div slot="post-content">
+		{#if timeline && timeline.length > 0}
+			<ProjectTimeline milestones={timeline} layout="vertical" showProgress={true} />
+		{/if}
+	</div>
 </BaseContentLayout>
 
 <style>
 	/* ===== PROJECT-SPECIFIC STYLES ===== */
-	.tech-stack {
+	.tech-stack-simple {
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--space-2);
@@ -219,6 +244,16 @@
 		color: var(--primary-600);
 		transform: translateY(-1px);
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
+	.tech-more {
+		padding: var(--space-1) var(--space-3);
+		background: var(--color-surface-tertiary);
+		color: var(--color-text-tertiary);
+		border-radius: var(--radius-md);
+		font-size: var(--font-size-sm);
+		font-weight: 500;
+		font-style: italic;
 	}
 
 	/* ===== RESPONSIVE DESIGN ===== */
