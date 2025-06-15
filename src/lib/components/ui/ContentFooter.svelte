@@ -183,9 +183,9 @@
 	}
 	/* ===== FOOTER SECTION ===== */
 	.content-footer {
-			padding: var(--space-4) 0 var(--space-20);
-			position: relative;
-	}/* ===== SHARE SECTION WRAPPER ===== */
+		padding: var(--space-4) 0 var(--space-20);
+		position: relative;
+	} /* ===== SHARE SECTION WRAPPER ===== */
 	.share-section-wrapper {
 		padding: var(--space-6) 0;
 		border-top: 1px solid var(--color-border-primary);
@@ -449,7 +449,7 @@
 		.read-more {
 			align-self: center;
 		}
-	}	
+	}
 	@media (max-width: 480px) {
 		.content-footer {
 			padding: var(--space-2) 0 var(--space-16);
