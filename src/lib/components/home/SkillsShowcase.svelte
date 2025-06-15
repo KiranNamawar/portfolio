@@ -1,44 +1,71 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Code, Palette, Database, Zap, ArrowRight, Award } from '$lib/utils/icons.js';
+	import { Code, Award, Zap, Layers, Sparkles, ArrowRight } from '$lib/utils/icons.js';
 	import { skills, skillLevels } from '../../data/personal.js';
 	import { getTechIcon } from '$lib/utils/techIcons.js';
 
 	let skillsRef: HTMLElement;
 	let isVisible = false;
 
+	// Organize skills by category with better grouping
 	const skillCategories = [
 		{
 			id: 'frontend',
-			title: 'Frontend',
-			icon: Palette,
-			description: 'UI/UX Development',
-			color: 'from-blue-500 to-cyan-500',
-			skills: skills.filter((skill) => skill.category === 'frontend').slice(0, 6)
+			title: 'Frontend Development',
+			description: 'User interfaces & client-side technologies',
+			icon: Layers,
+			color: '#3b82f6',
+			gradient: 'from-blue-500 to-cyan-500',
+			skills: skills.filter((s) => s.category === 'frontend')
 		},
 		{
 			id: 'backend',
-			title: 'Backend',
-			icon: Database,
-			description: 'Server & APIs',
-			color: 'from-green-500 to-emerald-500',
-			skills: skills.filter((skill) => skill.category === 'backend').slice(0, 6)
+			title: 'Backend Development',
+			description: 'Server-side architecture & APIs',
+			icon: Code,
+			color: '#10b981',
+			gradient: 'from-green-500 to-emerald-500',
+			skills: skills.filter((s) => s.category === 'backend')
 		},
 		{
-			id: 'devops',
-			title: 'DevOps & Tools',
+			id: 'tools',
+			title: 'Tools & DevOps',
+			description: 'Development tools & deployment',
 			icon: Zap,
-			description: 'Deployment & Workflow',
-			color: 'from-purple-500 to-violet-500',
-			skills: [
-				...skills.filter((skill) => skill.category === 'devops'),
-				...skills.filter((skill) => skill.category === 'tools')
-			].slice(0, 6)
+			color: '#f59e0b',
+			gradient: 'from-orange-500 to-yellow-500',
+			skills: skills.filter((s) => ['devops', 'tools'].includes(s.category))
 		}
 	];
 
-	// Filter out empty categories
-	const filteredCategories = skillCategories.filter((category) => category.skills.length > 0);
+	// Skill level configurations
+	const levelConfig = {
+		expert: {
+			label: 'Expert',
+			color: '#8b5cf6',
+			bgColor: 'rgba(139, 92, 246, 0.1)',
+			borderColor: 'rgba(139, 92, 246, 0.3)'
+		},
+		proficient: {
+			label: 'Proficient',
+			color: '#10b981',
+			bgColor: 'rgba(16, 185, 129, 0.1)',
+			borderColor: 'rgba(16, 185, 129, 0.3)'
+		},
+		developing: {
+			label: 'Developing',
+			color: '#3b82f6',
+			bgColor: 'rgba(59, 130, 246, 0.1)',
+			borderColor: 'rgba(59, 130, 246, 0.3)'
+		},
+		foundational: {
+			label: 'Learning',
+			color: '#6b7280',
+			bgColor: 'rgba(107, 114, 128, 0.1)',
+			borderColor: 'rgba(107, 114, 128, 0.3)'
+		}
+	};
+
 	onMount(() => {
 		const observer = new IntersectionObserver(
 			([entry]) => {
@@ -54,16 +81,11 @@
 		return () => observer.disconnect();
 	});
 
-	function getSkillLevelInfo(level: string) {
-		return skillLevels[level as keyof typeof skillLevels] || skillLevels.foundational;
-	}
-
 	function renderTechIcon(techName: string, size: number = 20) {
 		const techIcon = getTechIcon(techName);
 		if (techIcon.type === 'devicon') {
 			return `<i class="devicon-${techIcon.icon}-${techIcon.variant}" style="font-size: ${size}px;"></i>`;
 		} else {
-			// Fallback to emoji for unsupported icons
 			const skill = skills.find((s) => s.name.toLowerCase() === techName.toLowerCase());
 			return skill?.icon || '⚡';
 		}
@@ -72,19 +94,25 @@
 
 <section bind:this={skillsRef} class="skills-section" class:visible={isVisible} id="skills">
 	<div class="container">
+		<!-- Header -->
 		<header class="section-header">
 			<div class="header-icon">
 				<Code size={32} />
 			</div>
 			<h2 class="section-title">Skills & Expertise</h2>
-			<p class="section-subtitle">Technologies and tools I use to bring ideas to life</p>
+			<p class="section-subtitle">Technologies I use to build amazing experiences</p>
 		</header>
-		<div class="skills-grid">
-			{#each filteredCategories as category, categoryIndex}
-				<div class="skill-category glass-card" style="animation-delay: {categoryIndex * 0.2}s">
+
+		<!-- Category Cards -->
+		<div class="category-cards">
+			{#each skillCategories as category, categoryIndex}
+				<div class="category-card glass-card" style="animation-delay: {categoryIndex * 0.2}s">
+					<!-- Category Header -->
 					<div class="category-header">
-						<div class="category-icon bg-gradient-to-br {category.color}">
-							<svelte:component this={category.icon} size={20} />
+						<div class="category-icon-wrapper">
+							<div class="category-icon" style="background: {category.color}">
+								<svelte:component this={category.icon} size={24} />
+							</div>
 						</div>
 						<div class="category-info">
 							<h3 class="category-title">{category.title}</h3>
@@ -92,21 +120,27 @@
 						</div>
 					</div>
 
-					<div class="skills-list">
+					<!-- Skills Grid -->
+					<div class="skills-grid">
 						{#each category.skills as skill, skillIndex}
+							{@const levelInfo =
+								levelConfig[skill.level as keyof typeof levelConfig] || levelConfig.foundational}
 							<div
-								class="skill-item-compact"
+								class="skill-item"
 								style="animation-delay: {categoryIndex * 0.2 + skillIndex * 0.05}s"
-								title={skill.description}
+								title="{skill.name} - {levelInfo.label}"
 							>
-								<div class="skill-tech-icon">
-									{@html renderTechIcon(skill.name, 16)}
+								<div class="skill-icon">
+									{@html renderTechIcon(skill.name, 20)}
 								</div>
-								<span class="skill-name">{skill.name}</span>
-								<div
-									class="skill-level-badge bg-gradient-to-r {getSkillLevelInfo(skill.level).color}"
-								>
-									<span class="skill-level-text">{getSkillLevelInfo(skill.level).label}</span>
+								<div class="skill-details">
+									<span class="skill-name">{skill.name}</span>
+									<span
+										class="skill-level"
+										style="background: {levelInfo.bgColor}; color: {levelInfo.color}; border-color: {levelInfo.borderColor}"
+									>
+										{levelInfo.label}
+									</span>
 								</div>
 							</div>
 						{/each}
@@ -115,50 +149,39 @@
 			{/each}
 		</div>
 
-		<!-- View All Skills Button -->
-		<div class="view-all-skills">
-			<a href="/about#skills" class="view-all-btn glass-button">
+		<!-- Action Button -->
+		<div class="section-footer">
+			<a href="/about" class="view-all-btn glass-button">
+				<Code size={20} />
 				<span>View All Skills</span>
-				<ArrowRight size={16} />
+				<ArrowRight size={18} />
 			</a>
-		</div>
-
-		<!-- Additional Skills Cloud -->
-		<div class="skills-cloud">
-			<h3 class="cloud-title">Also experienced with</h3>
-			<div class="cloud-tags">
-				{#each ['GraphQL', 'Next.js', 'SvelteKit', 'Prisma', 'Stripe', 'Socket.io', 'Jest', 'Playwright', 'Webpack', 'Vite'] as tech}
-					<span class="cloud-tag glass-button">{tech}</span>
-				{/each}
-			</div>
 		</div>
 	</div>
 </section>
 
 <style>
+	/* Skills Section - Card-Based Grouping */
 	.skills-section {
 		padding: var(--space-20) 0;
 		position: relative;
-		background: linear-gradient(
-			135deg,
-			rgba(var(--primary-500-rgb, 99, 102, 241), 0.02) 0%,
-			transparent 50%,
-			rgba(var(--primary-700-rgb, 67, 56, 202), 0.02) 100%
-		);
 	}
 
 	.container {
-		max-width: 1200px;
+		max-width: 1400px;
 		margin: 0 auto;
 		padding: 0 var(--space-6);
+		position: relative;
+		z-index: 1;
 	}
 
+	/* Section Header */
 	.section-header {
 		text-align: center;
 		margin-bottom: var(--space-16);
 		opacity: 0;
-		transform: translateY(30px);
-		transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+		transform: translateY(40px);
+		transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
 	.skills-section.visible .section-header {
@@ -172,217 +195,201 @@
 		justify-content: center;
 		width: 80px;
 		height: 80px;
-		margin: 0 auto var(--space-6);
 		background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
 		border-radius: var(--radius-2xl);
 		color: white;
-		animation: float 3s ease-in-out infinite;
+		margin: 0 auto var(--space-6);
+		box-shadow: 0 8px 32px rgba(var(--primary-500-rgb), 0.3);
+		transition: transform 0.3s ease;
 	}
 
-	@keyframes float {
-		0%,
-		100% {
-			transform: translateY(0px);
-		}
-		50% {
-			transform: translateY(-5px);
-		}
+	.skills-section.visible .header-icon {
+		transform: scale(1.05);
 	}
 
 	.section-title {
 		font-size: clamp(2.5rem, 5vw, 3.5rem);
-		font-weight: 800;
+		font-weight: 900;
 		background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 		margin-bottom: var(--space-4);
+		line-height: 1.1;
 	}
 
 	.section-subtitle {
 		font-size: var(--font-size-xl);
 		color: var(--color-text-secondary);
-		max-width: 60ch;
+		max-width: 70ch;
 		margin: 0 auto;
-		line-height: 1.6;
+		line-height: 1.7;
 	}
-	.skills-grid {
+
+	/* Category Cards */
+	.category-cards {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--space-6);
-		margin-bottom: var(--space-12);
+		grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+		gap: var(--space-8);
+		margin-bottom: var(--space-16);
 	}
 
-	@media (max-width: 1024px) {
-		.skills-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-
-	@media (max-width: 640px) {
-		.skills-grid {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	.skill-category {
-		padding: var(--space-6);
-		border-radius: var(--radius-xl);
-		position: relative;
-		overflow: hidden;
+	.category-card {
+		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 		opacity: 0;
 		transform: translateY(30px);
-		transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+		position: relative;
+		overflow: hidden;
 	}
 
-	.skills-section.visible .skill-category {
+	.skills-section.visible .category-card {
 		opacity: 1;
 		transform: translateY(0);
 	}
 
-	.skill-category:hover {
-		transform: translateY(-3px);
+	.category-card:hover {
+		transform: translateY(-8px);
 	}
 
+	/* Category Header */
 	.category-header {
 		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-		margin-bottom: var(--space-4);
+		gap: var(--space-4);
+		margin-bottom: var(--space-6);
+		align-items: flex-start;
+	}
+
+	.category-icon-wrapper {
+		flex-shrink: 0;
 	}
 
 	.category-icon {
+		width: 60px;
+		height: 60px;
+		border-radius: var(--radius-xl);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 40px;
-		height: 40px;
-		border-radius: var(--radius-lg);
-		flex-shrink: 0;
 		color: white;
+		font-weight: 600;
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+		transition: transform 0.3s ease;
+	}
+
+	.category-card:hover .category-icon {
+		transform: scale(1.1);
 	}
 
 	.category-info {
 		flex: 1;
+		min-width: 0;
 	}
 
 	.category-title {
-		font-size: var(--font-size-lg);
+		font-size: var(--font-size-xl);
 		font-weight: 700;
 		color: var(--color-text-primary);
-		margin-bottom: var(--space-1);
+		margin-bottom: var(--space-2);
+		line-height: 1.3;
 	}
 
 	.category-description {
-		font-size: var(--font-size-sm);
+		font-size: var(--font-size-base);
 		color: var(--color-text-secondary);
-		line-height: 1.4;
-		margin: 0;
+		margin-bottom: var(--space-3);
+		line-height: 1.6;
 	}
-	.skills-list {
-		display: flex;
-		flex-direction: column;
+
+	/* Skills Grid */
+	.skills-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 		gap: var(--space-3);
 	}
-	.skill-item-compact {
+
+	.skill-item {
 		display: flex;
 		align-items: center;
-		gap: var(--space-2);
-		padding: var(--space-2) var(--space-3);
-		border-radius: var(--radius-md);
-		background: rgba(var(--color-surface-secondary-rgb), 0.2);
-		border: 1px solid rgba(var(--color-border-rgb), 0.1);
+		gap: var(--space-3);
+		padding: var(--space-3);
+		border-radius: var(--radius-lg);
+		background: rgba(var(--color-surface-rgb), 0.3);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(8px);
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		opacity: 0;
-		transform: translateX(-10px);
-		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+		transform: translateY(15px);
+		cursor: default;
 	}
 
-	.skills-section.visible .skill-item-compact {
+	.skills-section.visible .skill-item {
 		opacity: 1;
-		transform: translateX(0);
+		transform: translateY(0);
 	}
 
-	.skill-item-compact:hover {
-		background: rgba(var(--color-surface-secondary-rgb), 0.3);
-		transform: translateX(2px);
-	}
-
-	.skill-tech-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 20px;
-		height: 20px;
-		flex-shrink: 0;
-	}
-
-	.skill-tech-icon :global(i) {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.skill-info {
-		display: flex;
-		align-items: center;
-		gap: var(--space-2);
+	.skill-item:hover {
+		transform: translateY(-3px);
+		border-color: rgba(255, 255, 255, 0.2);
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 	}
 
 	.skill-icon {
-		font-size: var(--font-size-base);
-		width: 20px;
-		text-align: center;
+		width: 40px;
+		height: 40px;
+		background: rgba(var(--color-surface-rgb), 0.8);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		border-radius: var(--radius-lg);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		transition: transform 0.3s ease;
 	}
+
+	.skill-item:hover .skill-icon {
+		transform: scale(1.1);
+	}
+
+	.skill-details {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-1);
+	}
+
 	.skill-name {
 		font-size: var(--font-size-sm);
-		font-weight: 500;
+		font-weight: 600;
 		color: var(--color-text-primary);
-		flex: 1;
+		line-height: 1.2;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
-	.skill-level-badge {
-		display: flex;
-		align-items: center;
-		gap: var(--space-1);
+	.skill-level {
+		display: inline-block;
 		padding: 2px var(--space-2);
-		border-radius: var(--radius-full);
-		color: white;
+		border-radius: var(--radius-sm);
 		font-size: var(--font-size-xs);
-		font-weight: 600;
+		font-weight: 500;
 		text-transform: uppercase;
-		letter-spacing: 0.3px;
+		letter-spacing: 0.025em;
+		width: fit-content;
+		border: 1px solid;
+		line-height: 1.2;
 	}
 
-	.skill-level-text {
-		line-height: 1;
-		font-size: 10px;
-	}
-
-	.view-more-skills {
-		margin-top: var(--space-2);
+	/* Section Footer */
+	.section-footer {
 		text-align: center;
-	}
-
-	.more-count {
-		font-size: var(--font-size-xs);
-		color: var(--color-text-secondary);
-		font-style: italic;
-		opacity: 0.7;
-	}
-
-	/* View All Skills Button */
-	.view-all-skills {
-		text-align: center;
-		margin: var(--space-12) 0 var(--space-8);
 		opacity: 0;
-		transform: translateY(20px);
-		transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+		transform: translateY(30px);
+		transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s;
 	}
 
-	.skills-section.visible .view-all-skills {
+	.skills-section.visible .section-footer {
 		opacity: 1;
 		transform: translateY(0);
 	}
@@ -390,233 +397,36 @@
 	.view-all-btn {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--space-2);
-		padding: var(--space-3) var(--space-6);
+		gap: var(--space-3);
+		padding: var(--space-4) var(--space-8);
 		font-size: var(--font-size-base);
 		font-weight: 600;
-		color: var(--primary-600);
+		color: var(--color-text-primary);
 		text-decoration: none;
 		border-radius: var(--radius-full);
 		transition: all 0.3s ease;
 	}
 
 	.view-all-btn:hover {
-		color: var(--primary-700);
-		transform: translateY(-2px);
-	}
-	.skill-progress-container {
-		position: relative;
-		height: 6px;
-		background: var(--color-surface-secondary);
-		border-radius: var(--radius-full);
-		overflow: hidden;
-		margin-bottom: var(--space-4);
-	}
-
-	.skill-progress {
-		height: 100%;
-		border-radius: var(--radius-full);
-		transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-		position: relative;
-	}
-
-	.skill-progress::after {
-		content: '';
-		position: absolute;
-		top: 0;
-		right: 0;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-		animation: shimmer 2s infinite;
-	}
-
-	@keyframes shimmer {
-		0% {
-			transform: translateX(-100%);
-		}
-		100% {
-			transform: translateX(100%);
-		}
-	}
-
-	.skill-achievements {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2);
-	}
-
-	.skill-description {
-		font-size: var(--font-size-sm);
-		color: var(--color-text-secondary);
-		line-height: 1.4;
-		margin: 0;
-	}
-
-	.achievement-list {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-1);
-	}
-
-	.achievement-item {
-		display: flex;
-		align-items: center;
-		gap: var(--space-2);
-	}
-
-	.achievement-dot {
-		width: 4px;
-		height: 4px;
-		border-radius: 50%;
-		background: var(--primary-500);
-		flex-shrink: 0;
-	}
-
-	/* Additional Skills Cloud */
-	.skills-cloud {
-		text-align: center;
-		opacity: 0;
-		transform: translateY(30px);
-		transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s;
-	}
-
-	.skills-section.visible .skills-cloud {
-		opacity: 1;
-		transform: translateY(0);
-	}
-
-	.cloud-title {
-		font-size: var(--font-size-xl);
-		font-weight: 600;
-		color: var(--color-text-primary);
-		margin-bottom: var(--space-6);
-	}
-
-	.cloud-tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-3);
-		justify-content: center;
-	}
-
-	.cloud-tag {
-		padding: var(--space-2) var(--space-4);
-		font-size: var(--font-size-sm);
-		font-weight: 500;
-		color: var(--color-text-secondary);
-		border-radius: var(--radius-full);
-		transition: all 0.3s ease;
-		cursor: default;
-	}
-
-	.cloud-tag:hover {
-		color: var(--primary-600);
 		transform: translateY(-2px);
 	}
 
-	/* Gradient classes for category icons and skill levels */
-	.bg-gradient-to-br,
-	.bg-gradient-to-r {
-		background-image: linear-gradient(
-			var(--tw-gradient-direction, to bottom right),
-			var(--tw-gradient-stops)
-		);
-	}
-
-	.bg-gradient-to-r {
-		--tw-gradient-direction: to right;
-	}
-
-	/* Color definitions */
-	.from-blue-500 {
-		--tw-gradient-from: #3b82f6;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-cyan-500 {
-		--tw-gradient-to: #06b6d4;
-	}
-	.from-green-500 {
-		--tw-gradient-from: #10b981;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-emerald-500 {
-		--tw-gradient-to: #10b981;
-	}
-	.from-orange-500 {
-		--tw-gradient-from: #f97316;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-red-500 {
-		--tw-gradient-to: #ef4444;
-	}
-	.from-purple-500 {
-		--tw-gradient-from: #8b5cf6;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-violet-500 {
-		--tw-gradient-to: #8b5cf6;
-	}
-	.from-gray-500 {
-		--tw-gradient-from: #6b7280;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-slate-500 {
-		--tw-gradient-to: #64748b;
-	}
-	.from-pink-500 {
-		--tw-gradient-from: #ec4899;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-rose-500 {
-		--tw-gradient-to: #f43f5e;
-	}
-
-	/* Skill level gradient colors */
-	.from-gray-400 {
-		--tw-gradient-from: #9ca3af;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-gray-500 {
-		--tw-gradient-to: #6b7280;
-	}
-	.from-blue-400 {
-		--tw-gradient-from: #60a5fa;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-blue-500 {
-		--tw-gradient-to: #3b82f6;
-	}
-	.from-green-400 {
-		--tw-gradient-from: #4ade80;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-green-500 {
-		--tw-gradient-to: #22c55e;
-	}
-	.from-purple-400 {
-		--tw-gradient-from: #a78bfa;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-purple-500 {
-		--tw-gradient-to: #8b5cf6;
-	}
-	.from-gold-400 {
-		--tw-gradient-from: #fbbf24;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-	}
-	.to-gold-500 {
-		--tw-gradient-to: #f59e0b;
-	}
-
-	/* Responsive design */
+	/* Responsive Design */
 	@media (max-width: 768px) {
-		.skills-grid {
+		.skills-section {
+			padding: var(--space-16) 0;
+		}
+
+		.section-title {
+			font-size: clamp(2rem, 8vw, 3rem);
+		}
+
+		.category-cards {
 			grid-template-columns: 1fr;
 			gap: var(--space-6);
 		}
 
-		.skill-category {
+		.category-card {
 			padding: var(--space-6);
 		}
 
@@ -629,18 +439,62 @@
 			height: 50px;
 		}
 
-		.skill-item {
-			padding: var(--space-3);
+		.category-title {
+			font-size: var(--font-size-lg);
 		}
 
-		.skill-header {
-			flex-direction: column;
-			align-items: flex-start;
+		.category-description {
+			font-size: var(--font-size-sm);
+		}
+
+		.skills-grid {
+			grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 			gap: var(--space-2);
 		}
 
-		.skill-level-badge {
-			align-self: flex-end;
+		.skill-item {
+			flex-direction: column;
+			text-align: center;
+			gap: var(--space-2);
+			padding: var(--space-3);
 		}
+
+		.skill-icon {
+			width: 36px;
+			height: 36px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.category-cards {
+			gap: var(--space-4);
+		}
+
+		.category-card {
+			padding: var(--space-4);
+		}
+
+		.category-header {
+			gap: var(--space-2-5);
+		}
+
+		.category-icon {
+			width: 44px;
+			height: 44px;
+		}
+
+		.skills-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	:global(.dark) .skill-item {
+		background: rgba(0, 0, 0, 0.3);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	:global(.dark) .skill-icon {
+		background: rgba(0, 0, 0, 0.4);
+		border: 1px solid rgba(255, 255, 255, 0.15);
 	}
 </style>

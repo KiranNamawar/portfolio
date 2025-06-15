@@ -250,7 +250,7 @@
 
 			<!-- Contact Info -->
 			<div class="contact-info">
-				<div class="info-card glass-card">
+				<div class="info-card glass-card" style="animation-delay: 0.2s">
 					<h3 class="info-title">Get In Touch</h3>
 					<p class="info-description">
 						I'm always interested in hearing about new opportunities and exciting projects.
@@ -289,7 +289,7 @@
 					</div>
 				</div>
 
-				<div class="social-card glass-card">
+				<div class="social-card glass-card" style="animation-delay: 0.4s">
 					<h3 class="social-title">Follow Along</h3>
 					<p class="social-description">
 						Connect with me on social media for updates and insights.
@@ -559,6 +559,20 @@
 	.social-card {
 		padding: var(--space-6);
 		border-radius: var(--radius-2xl);
+		opacity: 0;
+		transform: translateY(30px);
+		transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.connect-section.visible .info-card,
+	.connect-section.visible .social-card {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.info-card:hover,
+	.social-card:hover {
+		transform: translateY(-5px);
 	}
 
 	.info-title,

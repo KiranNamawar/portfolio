@@ -15,7 +15,7 @@
 	let { children }: Props = $props();
 
 	let isDetailPage = $state(false);
-	let backgroundVariant: 'default' | 'subtle' | 'vibrant' = 'default';
+
 	// Use $effect to reactively check when page changes
 	$effect(() => {
 		isDetailPage = page.route.id === '/blog/[slug]' || page.route.id === '/projects/[slug]';
@@ -37,7 +37,7 @@
 </svelte:head>
 
 {#if !isDetailPage}
-	<Background variant={backgroundVariant} />
+	<Background variant="subtle" />
 {/if}
 
 <main>
