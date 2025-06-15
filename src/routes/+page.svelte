@@ -10,7 +10,7 @@
 
 <SEOHead
 	data={{
-		title:  `Portfolio of ${personalInfo.name}`,
+		title:  `Home`,
 		description: personalInfo.bio,
 		keywords: [
 			'full stack developer',
