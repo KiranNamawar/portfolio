@@ -4,11 +4,22 @@ Welcome to the getting started section! This area contains everything you need t
 
 ## 📋 Quick Start Checklist
 
-1. **[Install the Project](installation.md)** - Set up your development environment
-2. **[Learn the Development Workflow](development.md)** - Understand daily development practices
-3. **[Deploy Your Portfolio](deployment.md)** - Get your site live on the web
+1. **[Use as Template](using-as-template.md)** - Turn this into your own portfolio in 15 minutes
+2. **[Install the Project](installation.md)** - Set up your development environment
+3. **[Learn the Development Workflow](development.md)** - Understand daily development practices
+4. **[Deploy Your Portfolio](deployment.md)** - Get your site live on the web
 
 ## 📚 Documentation in This Section
+
+### [Using as Template](using-as-template.md)
+
+Complete guide to using this project as your own portfolio template:
+
+- Quick setup in 15 minutes
+- Essential customization steps
+- Branding and personalization
+- Deployment options
+- Template maintenance
 
 ### [Installation & Setup](installation.md)
 

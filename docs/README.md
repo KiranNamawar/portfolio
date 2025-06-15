@@ -2,13 +2,20 @@
 
 Welcome to the comprehensive documentation for the SvelteKit Portfolio project. This documentation will guide you through every aspect of the project, from initial setup to advanced customization and maintenance.
 
-## 🚀 Quick Start
+## 🎯 Using This as a Template
+
+**Want to use this project for your own portfolio?** This project is designed to be easily used as a template by other developers!
+
+� **[Complete Template Guide](getting-started/using-as-template.md)** - Turn this into your own portfolio in 15 minutes
+
+## �🚀 Quick Start
 
 New to this project? Start here:
 
-1. **[Installation Guide](getting-started/installation.md)** - Set up the project locally
-2. **[Writing Your First Blog Post](content-creation/writing-blogs.md)** - Create your first blog post
-3. **[Creating Project Pages](content-creation/creating-projects.md)** - Showcase your projects
+1. **[Use as Template](getting-started/using-as-template.md)** - Get your own portfolio up and running quickly
+2. **[Installation Guide](getting-started/installation.md)** - Set up the project locally
+3. **[Writing Your First Blog Post](content-creation/writing-blogs.md)** - Create your first blog post
+4. **[Creating Project Pages](content-creation/creating-projects.md)** - Showcase your projects
 
 ## 📚 Documentation Sections
 
@@ -16,6 +23,7 @@ New to this project? Start here:
 
 Everything you need to get the project up and running:
 
+- **[Use as Template](getting-started/using-as-template.md)** - Turn this into your own portfolio quickly
 - [Installation & Setup](getting-started/installation.md)
 - [Development Workflow](getting-started/development.md)
 - [Deployment Guide](getting-started/deployment.md)
