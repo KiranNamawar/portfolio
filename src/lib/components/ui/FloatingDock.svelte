@@ -1,14 +1,16 @@
 <script lang="ts">
-	import { Home, FileText, Search, FolderOpen } from '$lib/utils/icons.js';
+	import { Home, FileText, Search, FolderOpen, User } from '$lib/utils/icons.js';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import SearchDialog from './SearchDialog.svelte';
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+
 	// Navigation items
 	const navItems = [
 		{ icon: Home, label: 'Home', href: '/', action: 'navigate' },
+		{ icon: User, label: 'About', href: '/about', action: 'navigate' },
 		{ icon: FolderOpen, label: 'Projects', href: '/projects', action: 'navigate' },
 		{ icon: FileText, label: 'Blog', href: '/blog', action: 'navigate' }
 	];

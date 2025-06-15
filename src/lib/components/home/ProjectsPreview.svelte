@@ -281,7 +281,7 @@
 		text-decoration: none;
 		transition: all 0.3s ease;
 		border: 1px solid rgba(255, 255, 255, 0.2);
-	}	/* Dark mode styling */
+	} /* Dark mode styling */
 	:global([data-theme='dark']) .action-btn {
 		color: var(--color-text-primary);
 		background: rgba(0, 0, 0, 0.7);
