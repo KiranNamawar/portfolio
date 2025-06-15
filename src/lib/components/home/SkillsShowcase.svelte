@@ -1,69 +1,22 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Code, Award, Zap, Layers, Sparkles, ArrowRight } from '$lib/utils/icons.js';
-	import { skills, skillLevels } from '../../data/personal.js';
+	import { getHomepageSkills, getSkillLevels } from '$lib/utils/skills.js';
 	import { getTechIcon } from '$lib/utils/techIcons.js';
 
 	let skillsRef: HTMLElement;
 	let isVisible = false;
 
-	// Organize skills by category with better grouping
-	const skillCategories = [
-		{
-			id: 'frontend',
-			title: 'Frontend Development',
-			description: 'User interfaces & client-side technologies',
-			icon: Layers,
-			color: '#3b82f6',
-			gradient: 'from-blue-500 to-cyan-500',
-			skills: skills.filter((s) => s.category === 'frontend')
-		},
-		{
-			id: 'backend',
-			title: 'Backend Development',
-			description: 'Server-side architecture & APIs',
-			icon: Code,
-			color: '#10b981',
-			gradient: 'from-green-500 to-emerald-500',
-			skills: skills.filter((s) => s.category === 'backend')
-		},
-		{
-			id: 'tools',
-			title: 'Tools & DevOps',
-			description: 'Development tools & deployment',
-			icon: Zap,
-			color: '#f59e0b',
-			gradient: 'from-orange-500 to-yellow-500',
-			skills: skills.filter((s) => ['devops', 'tools'].includes(s.category))
-		}
-	];
+	// Get skills data from JSON
+	const skillCategories = getHomepageSkills();
+	const skillLevels = getSkillLevels();
 
-	// Skill level configurations
-	const levelConfig = {
-		expert: {
-			label: 'Expert',
-			color: '#8b5cf6',
-			bgColor: 'rgba(139, 92, 246, 0.1)',
-			borderColor: 'rgba(139, 92, 246, 0.3)'
-		},
-		proficient: {
-			label: 'Proficient',
-			color: '#10b981',
-			bgColor: 'rgba(16, 185, 129, 0.1)',
-			borderColor: 'rgba(16, 185, 129, 0.3)'
-		},
-		developing: {
-			label: 'Developing',
-			color: '#3b82f6',
-			bgColor: 'rgba(59, 130, 246, 0.1)',
-			borderColor: 'rgba(59, 130, 246, 0.3)'
-		},
-		foundational: {
-			label: 'Learning',
-			color: '#6b7280',
-			bgColor: 'rgba(107, 114, 128, 0.1)',
-			borderColor: 'rgba(107, 114, 128, 0.3)'
-		}
+	// Icon mapping for categories
+	const iconMap: Record<string, any> = {
+		Layers,
+		Code,
+		Zap,
+		Award
 	};
 
 	onMount(() => {
@@ -86,8 +39,8 @@
 		if (techIcon.type === 'devicon') {
 			return `<i class="devicon-${techIcon.icon}-${techIcon.variant}" style="font-size: ${size}px;"></i>`;
 		} else {
-			const skill = skills.find((s) => s.name.toLowerCase() === techName.toLowerCase());
-			return skill?.icon || '⚡';
+			// Fallback to emoji or default icon
+			return '⚡';
 		}
 	}
 </script>
@@ -111,7 +64,7 @@
 					<div class="category-header">
 						<div class="category-icon-wrapper">
 							<div class="category-icon" style="background: {category.color}">
-								<svelte:component this={category.icon} size={24} />
+								<svelte:component this={iconMap[category.icon] || Code} size={24} />
 							</div>
 						</div>
 						<div class="category-info">
@@ -123,15 +76,14 @@
 					<!-- Skills Grid -->
 					<div class="skills-grid">
 						{#each category.skills as skill, skillIndex}
-							{@const levelInfo =
-								levelConfig[skill.level as keyof typeof levelConfig] || levelConfig.foundational}
+							{@const levelInfo = skillLevels[skill.level] || skillLevels.learning}
 							<div
 								class="skill-item"
 								style="animation-delay: {categoryIndex * 0.2 + skillIndex * 0.05}s"
 								title="{skill.name} - {levelInfo.label}"
 							>
 								<div class="skill-icon">
-									{@html renderTechIcon(skill.name, 20)}
+									<span style="font-size: 20px;">{skill.icon}</span>
 								</div>
 								<div class="skill-details">
 									<span class="skill-name">{skill.name}</span>

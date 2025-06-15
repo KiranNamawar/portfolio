@@ -1,64 +1,25 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Code, Palette, Database, Globe, Smartphone, Zap, Award } from '$lib/utils/icons.js';
-	import { skills, skillLevels } from '../../data/personal.js';
+	import { getSkillsGroupedByCategory, getSkillLevels } from '$lib/utils/skills.js';
 
 	let skillsRef: HTMLElement;
 	let isVisible = false;
 
-	const skillCategories = [
-		{
-			id: 'frontend',
-			title: 'Frontend Development',
-			icon: Palette,
-			description: 'Creating beautiful, responsive user interfaces',
-			color: 'from-blue-500 to-cyan-500',
-			skills: skills.filter((skill) => skill.category === 'frontend')
-		},
-		{
-			id: 'backend',
-			title: 'Backend Development',
-			icon: Database,
-			description: 'Building robust server-side applications',
-			color: 'from-green-500 to-emerald-500',
-			skills: skills.filter((skill) => skill.category === 'backend')
-		},
-		{
-			id: 'database',
-			title: 'Database & Storage',
-			icon: Database,
-			description: 'Data modeling and optimization',
-			color: 'from-orange-500 to-red-500',
-			skills: skills.filter((skill) => skill.category === 'database')
-		},
-		{
-			id: 'devops',
-			title: 'DevOps & Cloud',
-			icon: Zap,
-			description: 'Deployment and infrastructure management',
-			color: 'from-purple-500 to-violet-500',
-			skills: skills.filter((skill) => skill.category === 'devops')
-		},
-		{
-			id: 'tools',
-			title: 'Tools & Workflow',
-			icon: Zap,
-			description: 'Development tools and productivity',
-			color: 'from-gray-500 to-slate-500',
-			skills: skills.filter((skill) => skill.category === 'tools')
-		},
-		{
-			id: 'design',
-			title: 'Design & UX',
-			icon: Palette,
-			description: 'User experience and visual design',
-			color: 'from-pink-500 to-rose-500',
-			skills: skills.filter((skill) => skill.category === 'design')
-		}
-	];
+	// Get skills data from JSON
+	const skillCategories = getSkillsGroupedByCategory();
+	const skillLevels = getSkillLevels();
 
-	// Filter out empty categories
-	const filteredCategories = skillCategories.filter((category) => category.skills.length > 0);
+	// Icon mapping for categories
+	const iconMap: Record<string, any> = {
+		Palette,
+		Database,
+		Code,
+		Globe,
+		Smartphone,
+		Zap,
+		Award
+	};
 
 	onMount(() => {
 		const observer = new IntersectionObserver(
@@ -98,20 +59,20 @@
 		</header>
 
 		<div class="skills-grid">
-			{#each filteredCategories as category, categoryIndex}
+			{#each skillCategories as categoryGroup, categoryIndex}
 				<div class="skill-category glass-card" style="animation-delay: {categoryIndex * 0.2}s">
 					<div class="category-header">
-						<div class="category-icon bg-gradient-to-br {category.color}">
-							<svelte:component this={category.icon} size={24} />
+						<div class="category-icon" style="background: {categoryGroup.categoryInfo.color}">
+							<svelte:component this={iconMap[categoryGroup.categoryInfo.icon] || Code} size={24} />
 						</div>
 						<div class="category-info">
-							<h3 class="category-title">{category.title}</h3>
-							<p class="category-description">{category.description}</p>
+							<h3 class="category-title">{categoryGroup.categoryInfo.label}</h3>
+							<p class="category-description">{categoryGroup.categoryInfo.description}</p>
 						</div>
 					</div>
 
 					<div class="skills-list">
-						{#each category.skills as skill, skillIndex}
+						{#each categoryGroup.skills as skill, skillIndex}
 							<div
 								class="skill-item"
 								style="animation-delay: {categoryIndex * 0.2 + skillIndex * 0.1}s"
@@ -123,19 +84,26 @@
 										<span class="skill-name">{skill.name}</span>
 									</div>
 									<div
-										class="skill-level-badge bg-gradient-to-r {getSkillLevelInfo(skill.level)
-											.color}"
+										class="skill-level-badge"
+										style="background: {skillLevels[skill.level]?.bgColor ||
+											skillLevels.learning.bgColor}; color: {skillLevels[skill.level]?.color ||
+											skillLevels.learning.color}"
 									>
 										<Award size={14} />
-										<span class="skill-level-text">{getSkillLevelInfo(skill.level).label}</span>
+										<span class="skill-level-text"
+											>{skillLevels[skill.level]?.label || skillLevels.learning.label}</span
+										>
 									</div>
 								</div>
 
 								<div class="skill-progress-container">
 									<div
-										class="skill-progress bg-gradient-to-r {getSkillLevelInfo(skill.level).color}"
+										class="skill-progress"
 										class:animate={isVisible}
-										style="width: {isVisible ? getSkillProgressWidth(skill.level) : 0}%"
+										style="background: {skillLevels[skill.level]?.color ||
+											skillLevels.learning.color}; width: {isVisible
+											? getSkillProgressWidth(skill.level)
+											: 0}%"
 									></div>
 								</div>
 
