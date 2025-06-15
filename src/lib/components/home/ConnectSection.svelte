@@ -29,58 +29,55 @@
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
 
-		// Immediately set submitting state for visual feedback
+		// Validate form data
+		if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+			submitStatus = 'error';
+			setTimeout(() => {
+				submitStatus = 'idle';
+			}, 3000);
+			return;
+		}
+
+		// Set submitting state
 		isSubmitting = true;
 		submitStatus = 'idle';
-
-		console.log('Form submission started');
-
 		try {
 			const form = event.target as HTMLFormElement;
-			const formData = new FormData(form);
 
-			// Always use fetch for more reliable control
-			const response = await fetch('https://send.pageclip.co/d4DAOIRKs8mubvbpOB6Qlpm2FbG0Vpbz', {
-				method: 'POST',
-				body: formData
-			});
+			// Create a hidden iframe for form submission
+			const iframe = document.createElement('iframe');
+			iframe.style.display = 'none';
+			iframe.name = 'pageclip-frame';
+			document.body.appendChild(iframe);
 
-			if (response.ok) {
-				console.log('Form submitted successfully');
-				submitStatus = 'success';
-			} else {
-				throw new Error('Form submission failed');
-			}
+			// Set form target to iframe
+			form.target = 'pageclip-frame';
 
-			console.log('Form submission completed, status:', submitStatus);
+			// Submit form naturally to Pageclip
+			form.submit();
+
+			// Wait a moment, then assume success
+			await new Promise((resolve) => setTimeout(resolve, 2000));
+
+			// Clean up
+			document.body.removeChild(iframe);
+			form.target = '';
+
+			// Show success
+			submitStatus = 'success';
+			formData = { name: '', email: '', message: '' };
 		} catch (error) {
-			console.error('Error details:', error);
-			// Try the no-cors fallback
-			try {
-				const form = event.target as HTMLFormElement;
-				const formData = new FormData(form);
-
-				await fetch('https://send.pageclip.co/d4DAOIRKs8mubvbpOB6Qlpm2FbG0Vpbz', {
-					method: 'POST',
-					body: formData,
-					mode: 'no-cors'
-				});
-
-				// If no error thrown, assume success
-				console.log('Fallback submission successful');
-				submitStatus = 'success';
-			} catch (fallbackError) {
-				console.error('Fallback error:', fallbackError);
-				submitStatus = 'error';
-				// Reset error state after 5 seconds
-				setTimeout(() => {
-					submitStatus = 'idle';
-				}, 5000);
-			}
+			console.error('Error submitting form:', error);
+			submitStatus = 'error';
 		} finally {
-			// Always reset submitting state
-			console.log('Resetting isSubmitting to false');
 			isSubmitting = false;
+			// Reset status after 5 seconds for success, 3 seconds for error
+			setTimeout(
+				() => {
+					submitStatus = 'idle';
+				},
+				submitStatus === 'success' ? 5000 : 3000
+			);
 		}
 	}
 
@@ -180,6 +177,8 @@
 						on:submit={handleSubmit}
 						in:fly={{ y: 20, duration: 500 }}
 						out:fly={{ y: -20, duration: 300 }}
+						action="https://send.pageclip.co/d4DAOIRKs8mubvbpOB6Qlpm2FbG0Vpbz/default"
+						method="post"
 					>
 						<h3 class="form-title">Send a Message</h3>
 
