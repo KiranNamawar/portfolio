@@ -2,8 +2,9 @@
  * Skills data utilities for loading and processing skill information
  */
 
-import skillsData from '../../data/skills.json';
+import skillsData from '../data/skills.json';
 import type { SkillLevel, SkillCategory, Skill } from '$lib/types/skills';
+import { getTechIcon } from './techIcons.js';
 
 /**
  * Get all skill levels with their configurations
@@ -48,18 +49,6 @@ export function getSkillById(id: string): Skill | undefined {
 }
 
 /**
- * Get skills sorted by experience level (highest to lowest)
- */
-export function getSkillsByExperience(): Skill[] {
-	const skillLevels = getSkillLevels();
-	return getAllSkills().sort((a, b) => {
-		const aLevel = skillLevels[a.level]?.order || 0;
-		const bLevel = skillLevels[b.level]?.order || 0;
-		return bLevel - aLevel;
-	});
-}
-
-/**
  * Get skills grouped by category with category metadata
  */
 export function getSkillsGroupedByCategory(): Array<{
@@ -77,29 +66,6 @@ export function getSkillsGroupedByCategory(): Array<{
 			skills: skills.filter((skill) => skill.category === categoryKey)
 		}))
 		.filter((group) => group.skills.length > 0);
-}
-
-/**
- * Get recently used skills (within specified months)
- */
-export function getRecentlyUsedSkills(withinMonths: number = 6): Skill[] {
-	const cutoffDate = new Date();
-	cutoffDate.setMonth(cutoffDate.getMonth() - withinMonths);
-
-	return getAllSkills().filter((skill) => {
-		if (!skill.lastUsed) return false;
-		const lastUsedDate = new Date(skill.lastUsed);
-		return lastUsedDate >= cutoffDate;
-	});
-}
-
-/**
- * Get skills with most projects completed
- */
-export function getMostActiveSkills(limit: number = 10): Skill[] {
-	return getAllSkills()
-		.sort((a, b) => (b.projectsCompleted || 0) - (a.projectsCompleted || 0))
-		.slice(0, limit);
 }
 
 /**
@@ -210,45 +176,24 @@ export function getHomepageSkills(): Array<{
 }
 
 /**
- * Legacy compatibility - convert to old format for gradual migration
- * @deprecated Use the new functions above instead
+ * Get complete skills data structure
  */
-export function getLegacySkills(): Array<{
-	name: string;
-	level: string;
-	icon: string;
-	category: string;
-	achievements?: string[];
-	description?: string;
-}> {
-	return getAllSkills().map((skill) => ({
-		name: skill.name,
-		level: skill.level,
-		icon: skill.icon,
-		category: skill.category,
-		achievements: skill.achievements,
-		description: skill.description
-	}));
+export function getSkillsData(): {
+	skillLevels: Record<string, SkillLevel>;
+	categories: Record<string, SkillCategory>;
+	skills: Skill[];
+} {
+	return {
+		skillLevels: getSkillLevels(),
+		categories: getSkillCategories(),
+		skills: getAllSkills()
+	};
 }
 
 /**
- * Legacy compatibility - get skill levels in old format
- * @deprecated Use getSkillLevels() instead
+ * Get skill icon component using tech icons utility
+ * This provides a consistent way to get skill icons across the application
  */
-export function getLegacySkillLevels(): Record<
-	string,
-	{ order: number; label: string; color: string }
-> {
-	const levels = getSkillLevels();
-	return Object.entries(levels).reduce(
-		(acc, [key, level]) => {
-			acc[key] = {
-				order: level.order,
-				label: level.label,
-				color: `from-${level.color.replace('#', '')}-400 to-${level.color.replace('#', '')}-500`
-			};
-			return acc;
-		},
-		{} as Record<string, { order: number; label: string; color: string }>
-	);
+export function getSkillIcon(skillName: string) {
+	return getTechIcon(skillName);
 }

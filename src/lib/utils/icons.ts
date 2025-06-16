@@ -52,7 +52,16 @@ export { Code, Zap, Database, Globe, Smartphone, Monitor } from '@lucide/svelte'
 export { ArrowDown, Coffee, Sparkles, Palette, Folder, MessageCircle, Award } from '@lucide/svelte';
 
 // About page icons
-export { TestTube, Layers, Shield, Target, Lightbulb } from '@lucide/svelte';
+export {
+	TestTube,
+	Layers,
+	Shield,
+	Target,
+	Lightbulb,
+	Settings,
+	Star,
+	TrendingUp
+} from '@lucide/svelte';
 
 // Re-export the icon type for TypeScript
 export type { Icon } from '@lucide/svelte';

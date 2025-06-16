@@ -11,11 +11,10 @@ export const templateConfig = {
 		location: 'Your City, Country',
 		bio: 'Your professional bio or elevator pitch. Keep it concise but engaging.',
 
-		// Professional tagline (appears on homepage)
-		tagline: 'Building digital experiences with modern web technologies',
+		// Professional tagline (appears on homepage)		tagline: 'Fresher full-stack developer focused on React and Node.js',
 
-		// Years of experience (optional)
-		experience: 3,
+		// Years of experience (removed for fresher)
+		// experience: 0, // Removed for fresher
 
 		// Profile image
 		profileImage: '/profile.svg' // Path to your profile image in static folder

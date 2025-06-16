@@ -51,11 +51,11 @@
 
 		// Terminal animation
 		const terminalCommands = [
-			'ls -la projects/',
-			'git commit -m "Added magic ✨"',
-			'npm run build-dreams',
-			'coffee --infinite',
-			'vim life.goals'
+			'npm install express',
+			'git status',
+			'npm run dev',
+			'node server.js',
+			'git push origin main'
 		];
 
 		let terminalCommandIndex = 0;

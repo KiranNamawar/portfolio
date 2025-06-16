@@ -11,34 +11,18 @@
 		"developing": {
 			"order": 2,
 			"label": "Developing",
-			"description": "Building practical experience and working knowledge",
+			"description": "Building practical knowledge through projects and practice",
 			"color": "#3b82f6",
 			"bgColor": "rgba(59, 130, 246, 0.1)",
 			"borderColor": "rgba(59, 130, 246, 0.3)"
 		},
-		"proficient": {
+		"comfortable": {
 			"order": 3,
-			"label": "Proficient",
-			"description": "Comfortable with complex tasks and advanced features",
+			"label": "Comfortable",
+			"description": "Can work with confidence on real projects",
 			"color": "#10b981",
 			"bgColor": "rgba(16, 185, 129, 0.1)",
 			"borderColor": "rgba(16, 185, 129, 0.3)"
-		},
-		"expert": {
-			"order": 4,
-			"label": "Expert",
-			"description": "Deep knowledge with ability to teach and architect solutions",
-			"color": "#8b5cf6",
-			"bgColor": "rgba(139, 92, 246, 0.1)",
-			"borderColor": "rgba(139, 92, 246, 0.3)"
-		},
-		"master": {
-			"order": 5,
-			"label": "Master",
-			"description": "Industry-leading expertise with contributions to ecosystem",
-			"color": "#f59e0b",
-			"bgColor": "rgba(245, 158, 11, 0.1)",
-			"borderColor": "rgba(245, 158, 11, 0.3)"
 		}
 	},
 	"categories": {
@@ -83,9 +67,8 @@
 		{
 			"id": "javascript",
 			"name": "JavaScript",
-			"level": "expert",
+			"level": "comfortable",
 			"category": "frontend",
-			"icon": "🟨",
 			"description": "Deep understanding of modern JavaScript including ES6+, async patterns, and performance optimization",
 			"topics": [
 				"ES6+ Features",
@@ -103,18 +86,18 @@
 				"Async programming mastery",
 				"Performance optimization techniques"
 			],
-			"yearsOfExperience": 4,
-			"projectsCompleted": 15,
-			"lastUsed": "2024-12-01",
-			"certifications": [],
-			"relatedSkills": ["typescript", "react", "svelte", "vue"]
+			"relatedSkills": [
+				"typescript",
+				"react",
+				"svelte",
+				"vue"
+			]
 		},
 		{
 			"id": "typescript",
 			"name": "TypeScript",
-			"level": "expert",
+			"level": "comfortable",
 			"category": "frontend",
-			"icon": "💙",
 			"description": "Expert-level TypeScript with advanced type systems, generics, and type-safe architecture",
 			"topics": [
 				"Advanced Types",
@@ -132,18 +115,18 @@
 				"Complex interface design",
 				"Type-safe application architecture"
 			],
-			"yearsOfExperience": 3,
-			"projectsCompleted": 12,
-			"lastUsed": "2024-12-01",
-			"certifications": [],
-			"relatedSkills": ["javascript", "react", "svelte", "node"]
+			"relatedSkills": [
+				"javascript",
+				"react",
+				"svelte",
+				"node"
+			]
 		},
 		{
 			"id": "react",
 			"name": "React",
-			"level": "proficient",
+			"level": "comfortable",
 			"category": "frontend",
-			"icon": "⚛️",
 			"description": "Solid React development with advanced patterns, hooks, and state management",
 			"topics": [
 				"Hooks (useState, useEffect, useContext)",
@@ -161,18 +144,18 @@
 				"Performance optimization techniques",
 				"Component architecture design"
 			],
-			"yearsOfExperience": 3,
-			"projectsCompleted": 8,
-			"lastUsed": "2024-11-15",
-			"certifications": [],
-			"relatedSkills": ["javascript", "typescript", "next", "tailwind"]
+			"relatedSkills": [
+				"javascript",
+				"typescript",
+				"next",
+				"tailwind"
+			]
 		},
 		{
 			"id": "svelte",
 			"name": "Svelte",
-			"level": "expert",
+			"level": "comfortable",
 			"category": "frontend",
-			"icon": "🧡",
 			"description": "Advanced Svelte development with custom patterns, performance optimization, and architectural design",
 			"topics": [
 				"Svelte Components",
@@ -190,18 +173,18 @@
 				"Performance optimization",
 				"Component library development"
 			],
-			"yearsOfExperience": 2,
-			"projectsCompleted": 6,
-			"lastUsed": "2024-12-01",
-			"certifications": [],
-			"relatedSkills": ["javascript", "typescript", "vite", "tailwind"]
+			"relatedSkills": [
+				"javascript",
+				"typescript",
+				"vite",
+				"tailwind"
+			]
 		},
 		{
 			"id": "vue",
 			"name": "Vue.js",
 			"level": "developing",
 			"category": "frontend",
-			"icon": "💚",
 			"description": "Working knowledge of Vue.js with component architecture and state management",
 			"topics": [
 				"Vue 3 Composition API",
@@ -219,18 +202,17 @@
 				"Vue Router implementation",
 				"Basic animations and transitions"
 			],
-			"yearsOfExperience": 1,
-			"projectsCompleted": 3,
-			"lastUsed": "2024-10-01",
-			"certifications": [],
-			"relatedSkills": ["javascript", "typescript", "vite"]
+			"relatedSkills": [
+				"javascript",
+				"typescript",
+				"vite"
+			]
 		},
 		{
 			"id": "html",
 			"name": "HTML",
-			"level": "expert",
+			"level": "comfortable",
 			"category": "frontend",
-			"icon": "🏗️",
 			"description": "Expert-level semantic HTML with accessibility, SEO, and performance optimization",
 			"topics": [
 				"Semantic HTML5",
@@ -248,18 +230,17 @@
 				"SEO optimization techniques",
 				"Performance considerations"
 			],
-			"yearsOfExperience": 5,
-			"projectsCompleted": 20,
-			"lastUsed": "2024-12-01",
-			"certifications": [],
-			"relatedSkills": ["css", "javascript", "accessibility"]
+			"relatedSkills": [
+				"css",
+				"javascript",
+				"accessibility"
+			]
 		},
 		{
 			"id": "css",
 			"name": "CSS",
-			"level": "proficient",
+			"level": "comfortable",
 			"category": "frontend",
-			"icon": "🎨",
 			"description": "Advanced CSS with modern layout systems, animations, and responsive design",
 			"topics": [
 				"CSS Grid",
@@ -277,18 +258,18 @@
 				"Complex animations and transitions",
 				"Responsive design mastery"
 			],
-			"yearsOfExperience": 4,
-			"projectsCompleted": 18,
-			"lastUsed": "2024-12-01",
-			"certifications": [],
-			"relatedSkills": ["html", "sass", "tailwind", "design"]
+			"relatedSkills": [
+				"html",
+				"sass",
+				"tailwind",
+				"design"
+			]
 		},
 		{
 			"id": "tailwind",
 			"name": "Tailwind CSS",
-			"level": "proficient",
+			"level": "comfortable",
 			"category": "frontend",
-			"icon": "🎯",
 			"description": "Proficient in Tailwind CSS with custom design systems and utility-first architecture",
 			"topics": [
 				"Utility Classes",
@@ -306,18 +287,18 @@
 				"Advanced utility combinations",
 				"Plugin development"
 			],
-			"yearsOfExperience": 2,
-			"projectsCompleted": 10,
-			"lastUsed": "2024-12-01",
-			"certifications": [],
-			"relatedSkills": ["css", "design", "react", "svelte"]
+			"relatedSkills": [
+				"css",
+				"design",
+				"react",
+				"svelte"
+			]
 		},
 		{
 			"id": "sass",
 			"name": "SCSS/Sass",
-			"level": "proficient",
+			"level": "comfortable",
 			"category": "frontend",
-			"icon": "💖",
 			"description": "Advanced SCSS with modular architecture and build optimization",
 			"topics": [
 				"Mixins & Functions",
@@ -335,18 +316,17 @@
 				"Variable management systems",
 				"Build optimization techniques"
 			],
-			"yearsOfExperience": 3,
-			"projectsCompleted": 8,
-			"lastUsed": "2024-09-01",
-			"certifications": [],
-			"relatedSkills": ["css", "html", "build-tools"]
+			"relatedSkills": [
+				"css",
+				"html",
+				"build-tools"
+			]
 		},
 		{
 			"id": "node",
 			"name": "Node.js",
-			"level": "proficient",
+			"level": "comfortable",
 			"category": "backend",
-			"icon": "💚",
 			"description": "Proficient Node.js development with API design, microservices, and performance optimization",
 			"topics": [
 				"Express.js Framework",
@@ -364,18 +344,19 @@
 				"Database integration",
 				"Performance optimization"
 			],
-			"yearsOfExperience": 3,
-			"projectsCompleted": 12,
-			"lastUsed": "2024-11-20",
-			"certifications": [],
-			"relatedSkills": ["javascript", "typescript", "express", "mongodb", "postgresql"]
+			"relatedSkills": [
+				"javascript",
+				"typescript",
+				"express",
+				"mongodb",
+				"postgresql"
+			]
 		},
 		{
 			"id": "express",
 			"name": "Express.js",
-			"level": "proficient",
+			"level": "comfortable",
 			"category": "backend",
-			"icon": "🚀",
 			"description": "Advanced Express.js development with custom middleware and API architecture",
 			"topics": [
 				"Middleware Development",
@@ -393,18 +374,19 @@
 				"Security implementation",
 				"Performance optimization"
 			],
-			"yearsOfExperience": 3,
-			"projectsCompleted": 10,
-			"lastUsed": "2024-11-20",
-			"certifications": [],
-			"relatedSkills": ["node", "javascript", "typescript", "mongodb", "postgresql"]
+			"relatedSkills": [
+				"node",
+				"javascript",
+				"typescript",
+				"mongodb",
+				"postgresql"
+			]
 		},
 		{
 			"id": "python",
 			"name": "Python",
 			"level": "developing",
 			"category": "backend",
-			"icon": "🐍",
 			"description": "Solid Python skills with web development and data processing capabilities",
 			"topics": [
 				"FastAPI Framework",
@@ -422,18 +404,17 @@
 				"Web scraping automation",
 				"API integration"
 			],
-			"yearsOfExperience": 1,
-			"projectsCompleted": 4,
-			"lastUsed": "2024-10-15",
-			"certifications": [],
-			"relatedSkills": ["fastapi", "postgresql", "data-processing"]
+			"relatedSkills": [
+				"fastapi",
+				"postgresql",
+				"data-processing"
+			]
 		},
 		{
 			"id": "fastapi",
 			"name": "FastAPI",
 			"level": "developing",
 			"category": "backend",
-			"icon": "⚡",
 			"description": "FastAPI development with automatic documentation and async capabilities",
 			"topics": [
 				"Async Endpoints",
@@ -451,18 +432,17 @@
 				"Async endpoint creation",
 				"Database integration"
 			],
-			"yearsOfExperience": 1,
-			"projectsCompleted": 3,
-			"lastUsed": "2024-10-15",
-			"certifications": [],
-			"relatedSkills": ["python", "postgresql", "async-programming"]
+			"relatedSkills": [
+				"python",
+				"postgresql",
+				"async-programming"
+			]
 		},
 		{
 			"id": "postgresql",
 			"name": "PostgreSQL",
-			"level": "proficient",
+			"level": "comfortable",
 			"category": "database",
-			"icon": "🐘",
 			"description": "Advanced PostgreSQL with query optimization, database design, and performance tuning",
 			"topics": [
 				"Advanced Queries",
@@ -480,18 +460,18 @@
 				"Index optimization strategies",
 				"Performance tuning"
 			],
-			"yearsOfExperience": 3,
-			"projectsCompleted": 8,
-			"lastUsed": "2024-11-30",
-			"certifications": [],
-			"relatedSkills": ["sql", "node", "python", "database-design"]
+			"relatedSkills": [
+				"sql",
+				"node",
+				"python",
+				"database-design"
+			]
 		},
 		{
 			"id": "mongodb",
 			"name": "MongoDB",
 			"level": "developing",
 			"category": "database",
-			"icon": "🍃",
 			"description": "MongoDB development with document modeling and aggregation pipelines",
 			"topics": [
 				"Document Modeling",
@@ -509,18 +489,18 @@
 				"Basic indexing strategies",
 				"CRUD operations mastery"
 			],
-			"yearsOfExperience": 2,
-			"projectsCompleted": 5,
-			"lastUsed": "2024-11-01",
-			"certifications": [],
-			"relatedSkills": ["node", "express", "mongoose", "nosql"]
+			"relatedSkills": [
+				"node",
+				"express",
+				"mongoose",
+				"nosql"
+			]
 		},
 		{
 			"id": "redis",
 			"name": "Redis",
 			"level": "developing",
 			"category": "database",
-			"icon": "🔴",
 			"description": "Redis implementation for caching, sessions, and performance optimization",
 			"topics": [
 				"Caching Strategies",
@@ -538,18 +518,17 @@
 				"Pub/Sub messaging systems",
 				"Performance optimization"
 			],
-			"yearsOfExperience": 1,
-			"projectsCompleted": 4,
-			"lastUsed": "2024-10-01",
-			"certifications": [],
-			"relatedSkills": ["node", "caching", "performance"]
+			"relatedSkills": [
+				"node",
+				"caching",
+				"performance"
+			]
 		},
 		{
 			"id": "git",
 			"name": "Git",
-			"level": "proficient",
+			"level": "comfortable",
 			"category": "tools",
-			"icon": "🌿",
 			"description": "Advanced Git workflows with branching strategies and team collaboration",
 			"topics": [
 				"Branching Strategies",
@@ -567,18 +546,17 @@
 				"Repository management",
 				"Team collaboration workflows"
 			],
-			"yearsOfExperience": 4,
-			"projectsCompleted": 25,
-			"lastUsed": "2024-12-01",
-			"certifications": [],
-			"relatedSkills": ["github", "collaboration", "version-control"]
+			"relatedSkills": [
+				"github",
+				"collaboration",
+				"version-control"
+			]
 		},
 		{
 			"id": "docker",
 			"name": "Docker",
 			"level": "developing",
 			"category": "devops",
-			"icon": "🐳",
 			"description": "Docker containerization with multi-stage builds and orchestration",
 			"topics": [
 				"Containerization",
@@ -596,18 +574,17 @@
 				"Docker Compose workflows",
 				"Production deployment"
 			],
-			"yearsOfExperience": 2,
-			"projectsCompleted": 6,
-			"lastUsed": "2024-11-15",
-			"certifications": [],
-			"relatedSkills": ["devops", "deployment", "containerization"]
+			"relatedSkills": [
+				"devops",
+				"deployment",
+				"containerization"
+			]
 		},
 		{
 			"id": "aws",
 			"name": "AWS",
 			"level": "developing",
 			"category": "devops",
-			"icon": "🌩️",
 			"description": "AWS cloud services with compute, storage, and serverless capabilities",
 			"topics": [
 				"EC2 Instances",
@@ -625,18 +602,17 @@
 				"CloudFormation basics",
 				"Cost optimization strategies"
 			],
-			"yearsOfExperience": 1,
-			"projectsCompleted": 3,
-			"lastUsed": "2024-09-01",
-			"certifications": [],
-			"relatedSkills": ["cloud", "serverless", "infrastructure"]
+			"relatedSkills": [
+				"cloud",
+				"serverless",
+				"infrastructure"
+			]
 		},
 		{
 			"id": "vercel",
 			"name": "Vercel",
-			"level": "expert",
+			"level": "comfortable",
 			"category": "devops",
-			"icon": "▲",
 			"description": "Expert Vercel deployment with edge functions and performance optimization",
 			"topics": [
 				"Deployment Strategies",
@@ -654,18 +630,18 @@
 				"Domain and DNS management",
 				"Analytics integration"
 			],
-			"yearsOfExperience": 2,
-			"projectsCompleted": 15,
-			"lastUsed": "2024-12-01",
-			"certifications": [],
-			"relatedSkills": ["deployment", "serverless", "next", "svelte"]
+			"relatedSkills": [
+				"deployment",
+				"serverless",
+				"next",
+				"svelte"
+			]
 		},
 		{
 			"id": "figma",
 			"name": "Figma",
 			"level": "developing",
 			"category": "design",
-			"icon": "🎨",
 			"description": "Design system creation and prototyping with collaborative workflows",
 			"topics": [
 				"Component Systems",
@@ -683,11 +659,11 @@
 				"Design system creation",
 				"Collaborative workflows"
 			],
-			"yearsOfExperience": 2,
-			"projectsCompleted": 8,
-			"lastUsed": "2024-11-01",
-			"certifications": [],
-			"relatedSkills": ["design", "ui-ux", "prototyping"]
+			"relatedSkills": [
+				"design",
+				"ui-ux",
+				"prototyping"
+			]
 		}
 	]
 }

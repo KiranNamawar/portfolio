@@ -19,11 +19,11 @@
 export const personalInfo = {
 	name: 'Kiran',
 	title: 'Full Stack Developer',
-	bio: `I'm a passionate full-stack developer with over 4 years of experience creating 
-digital solutions that make a difference. I love turning complex problems into 
-simple, beautiful, and intuitive designs.`,
-	description: `When I'm not coding, you'll find me exploring new technologies, contributing to 
-open-source projects, or mentoring aspiring developers in the community.`,
+	bio: `I'm a passionate fresher full-stack developer with a strong focus on backend technologies 
+like Node.js and GraphQL. I enjoy building robust web applications with clean, maintainable code 
+and love learning new technologies to solve real-world problems.`,
+	description: `When I'm not coding, you'll find me exploring backend frameworks, building personal 
+projects, and continuously learning about server-side technologies, APIs, and database design.`,
 	email: 'kirannamawardev@gmail.com',
 	location: 'Mumbai, India',
 	resumeUrl: '/resume.pdf'
@@ -38,9 +38,9 @@ open-source projects, or mentoring aspiring developers in the community.`,
  */
 export const heroTypingPhrases = [
 	'Full Stack Developer',
-	'Creative Problem Solver',
-	'Technology Enthusiast',
-	'Digital Innovator'
+	'Backend Developer',
+	'Node.js Developer', 
+	'GraphQL Enthusiast'
 ];
 
 /**
@@ -94,7 +94,7 @@ export const skills = [
 			'Type-safe architecture'
 		],
 		description:
-			'Expertise in TypeScript type system, generics, and building type-safe applications'
+			'Strong understanding of TypeScript type system, generics, and building type-safe applications'
 	},
 	{
 		name: 'Svelte',

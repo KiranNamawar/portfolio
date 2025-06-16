@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import SEOHead from '$lib/components/ui/SEOHead.svelte';
-	import DetailedSkillsShowcase from '$lib/components/about/DetailedSkillsShowcase.svelte';
+	import CleanSkillsShowcase from '$lib/components/about/SkillsShowcase.svelte';
 	import { personalInfo } from '$lib/data/personal.js';
 	import {
 		Code,
@@ -24,9 +24,9 @@
 	const developmentPrinciples = [
 		{
 			icon: Layers,
-			title: 'Modularity',
+			title: 'Clean Architecture',
 			description:
-				'Building reusable, maintainable components that can be easily extended and modified.',
+				'Learning to build reusable, maintainable components that follow best practices.',
 			details: [
 				'Component-based architecture',
 				'Separation of concerns',
@@ -37,61 +37,62 @@
 		},
 		{
 			icon: TestTube,
-			title: 'Extensive Testing',
-			description: 'Comprehensive testing strategy to ensure reliability and catch issues early.',
+			title: 'Testing Mindset',
+			description:
+				'Understanding the importance of testing and working to implement it in projects.',
 			details: [
-				'Unit testing for all components',
-				'Integration testing',
-				'End-to-end testing',
-				'Test-driven development'
+				'Unit testing fundamentals',
+				'Integration testing concepts',
+				'Learning testing frameworks',
+				'Test-driven development principles'
 			],
 			color: 'from-green-500 to-emerald-500'
 		},
 		{
 			icon: Shield,
-			title: 'Security First',
-			description: 'Implementing security best practices from the ground up.',
+			title: 'Security Awareness',
+			description: 'Learning security best practices and implementing them from the start.',
 			details: [
 				'Input validation and sanitization',
-				'Authentication and authorization',
+				'Authentication concepts',
 				'HTTPS and secure headers',
-				'Regular security audits'
+				'Security best practices'
 			],
 			color: 'from-red-500 to-pink-500'
 		},
 		{
 			icon: Zap,
-			title: 'Performance',
-			description: 'Optimizing for speed, efficiency, and user experience.',
+			title: 'Performance Focus',
+			description: 'Building with modern technologies while keeping performance in mind.',
 			details: [
-				'Code splitting and lazy loading',
-				'Image optimization',
-				'Caching strategies',
-				'Bundle size optimization'
+				'Code optimization techniques',
+				'Image optimization basics',
+				'Understanding caching',
+				'Bundle size awareness'
 			],
 			color: 'from-yellow-500 to-orange-500'
 		},
 		{
 			icon: User,
-			title: 'User-Centric Design',
-			description: 'Putting user experience and accessibility at the forefront.',
+			title: 'User Experience',
+			description: 'Focus on creating applications that work well for users.',
 			details: [
-				'Responsive design',
-				'Accessibility standards (WCAG)',
+				'Responsive design principles',
+				'Basic accessibility knowledge',
 				'Progressive enhancement',
-				'User feedback integration'
+				'User feedback consideration'
 			],
 			color: 'from-purple-500 to-violet-500'
 		},
 		{
 			icon: Target,
-			title: 'Quality Assurance',
-			description: 'Maintaining high standards through rigorous quality control.',
+			title: 'Quality Focus',
+			description: 'Striving for high standards and continuous improvement in code quality.',
 			details: [
-				'Code reviews and pair programming',
-				'Automated CI/CD pipelines',
-				'Error monitoring and logging',
-				'Performance monitoring'
+				'Code reviews and feedback',
+				'Learning CI/CD concepts',
+				'Error handling practices',
+				'Performance monitoring basics'
 			],
 			color: 'from-indigo-500 to-blue-500'
 		}
@@ -101,22 +102,23 @@
 		{
 			icon: Lightbulb,
 			title: 'Continuous Learning',
-			description: 'Always staying updated with the latest technologies and best practices.'
+			description: 'Always eager to learn new technologies and best practices in development.'
 		},
 		{
 			icon: Heart,
-			title: 'Passion for Quality',
-			description: 'Dedicated to delivering exceptional work that exceeds expectations.'
+			title: 'Passion for Code',
+			description: 'Dedicated to writing clean, maintainable code and improving with every project.'
 		},
 		{
 			icon: User,
-			title: 'Collaboration',
-			description: 'Believing in the power of teamwork and knowledge sharing.'
+			title: 'Team Player',
+			description: 'Believing in the power of collaboration and knowledge sharing with others.'
 		},
 		{
 			icon: BookOpen,
 			title: 'Documentation',
-			description: 'Writing clear, comprehensive documentation for maintainability.'
+			description:
+				'Understanding the importance of clear documentation for project maintainability.'
 		}
 	];
 
@@ -139,13 +141,13 @@
 <SEOHead
 	data={{
 		title: `About`,
-		description: `Learn more about ${personalInfo.name}, a passionate full-stack developer dedicated to creating exceptional digital experiences through quality code and innovative solutions.`,
+		description: `Learn more about ${personalInfo.name}, a passionate full-stack developer with a focus on backend technologies like Node.js and GraphQL, dedicated to building robust web applications with clean, maintainable code.`,
 		keywords: [
 			'about',
 			'full-stack developer',
+			'backend developer',
 			'web development',
-			'programming philosophy',
-			'skills'
+			'programming'
 		],
 		type: 'website',
 		url: '/about'
@@ -160,7 +162,7 @@
 				<div class="hero-text">
 					<h1 class="hero-title">About Me</h1>
 					<p class="hero-subtitle">
-						Passionate full-stack developer dedicated to creating exceptional digital experiences
+						Full-stack developer with a passion for backend technologies and clean code
 					</p>
 				</div>
 				<div class="hero-image">
@@ -191,26 +193,19 @@
 						<p>{personalInfo.bio}</p>
 						<p>{personalInfo.description}</p>
 						<p>
-							I believe in writing clean, maintainable code that not only works but is also easy to
-							understand and extend. Every project I work on follows strict quality standards,
-							comprehensive testing, and modern development practices.
+							I believe in writing clean, maintainable code and following modern development
+							practices. I'm particularly passionate about backend technologies like Node.js,
+							GraphQL, and database design, while also enjoying frontend development with React and
+							modern JavaScript frameworks.
+						</p>
+						<p>
+							As a fresher developer, I'm constantly learning and working on personal projects to
+							improve my skills. I enjoy tackling complex problems and building scalable solutions
+							that make a difference.
 						</p>
 					</div>
 				</div>
-				<div class="bio-stats">
-					<div class="stat-item glass-card">
-						<div class="stat-number">4+</div>
-						<div class="stat-label">Years Experience</div>
-					</div>
-					<div class="stat-item glass-card">
-						<div class="stat-number">50+</div>
-						<div class="stat-label">Projects Completed</div>
-					</div>
-					<div class="stat-item glass-card">
-						<div class="stat-number">100%</div>
-						<div class="stat-label">Client Satisfaction</div>
-					</div>
-				</div>
+				<!-- Removed stats section as a fresher -->
 			</div>
 		</div>
 	</section>
@@ -222,9 +217,9 @@
 				<div class="header-icon">
 					<Code size={32} />
 				</div>
-				<h2 class="section-title">Development Philosophy</h2>
+				<h2 class="section-title">Development Approach</h2>
 				<p class="section-subtitle">
-					Core principles that guide my approach to building exceptional software
+					Principles and practices I'm learning and applying in my development journey
 				</p>
 			</header>
 
@@ -251,7 +246,7 @@
 
 	<!-- Skills Section -->
 	<section id="skills" class="skills-section">
-		<DetailedSkillsShowcase />
+		<CleanSkillsShowcase />
 	</section>
 
 	<!-- Values Section -->
@@ -261,9 +256,9 @@
 				<div class="header-icon">
 					<Heart size={32} />
 				</div>
-				<h2 class="section-title">Values & Approach</h2>
+				<h2 class="section-title">Values & Mindset</h2>
 				<p class="section-subtitle">
-					What drives me as a developer and how I approach every project
+					What drives me as a developer and how I approach learning and growth
 				</p>
 			</header>
 
@@ -286,10 +281,10 @@
 		<div class="container">
 			<div class="cta-content glass-card">
 				<div class="cta-text">
-					<h2>Let's Work Together</h2>
+					<h2>Let's Connect</h2>
 					<p>
-						Ready to bring your ideas to life? I'm always excited to work on new projects and
-						collaborate with passionate people.
+						Interested in connecting or discussing development? I'm always excited to learn from
+						others and explore new opportunities to grow as a developer.
 					</p>
 				</div>
 				<div class="cta-actions">
