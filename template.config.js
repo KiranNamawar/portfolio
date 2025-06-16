@@ -1,5 +1,9 @@
 // Template Configuration
 // This file contains all the essential settings you need to customize when using this project as a template
+//
+// 🌟 Live Demo: https://keyrun.site
+// 📚 Documentation: /docs/README.md
+// 🚀 Quick Setup: Run `bun run template:setup` for interactive configuration
 
 export const templateConfig = {
 	// ===== PERSONAL INFORMATION =====

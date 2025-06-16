@@ -8,10 +8,21 @@ A cutting-edge portfolio template built with **SvelteKit 5.x**, featuring stunni
 
 [![SvelteKit](https://img.shields.io/badge/SvelteKit-5.x-orange?style=for-the-badge&logo=svelte)](https://kit.svelte.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![MDSvex](https://img.shields.io/badge/MDSvex-Blog%20Ready-green?style=for-the-badge&logo=markdown)](https://mdsvex.pngwn.io/)
 [![Lighthouse](https://img.shields.io/badge/Lighthouse-95+-green?style=for-the-badge&logo=lighthouse)](https://developers.google.com/web/tools/lighthouse)
 [![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)](LICENSE)
 
-[**🌟 Live Demo**](https://your-demo-site.com) • [**📚 Documentation**](docs/README.md) • [**🛠️ Get Started**](docs/getting-started/using-as-template.md)
+[**🌟 Live Demo**](https://keyrun.site) • [**📚 Documentation**](docs/README.md) • [**🛠️ Get Started**](docs/getting-started/using-as-template.md)
+
+</div>
+
+## 📸 Preview
+
+<div align="center">
+
+![Portfolio Homepage](https://keyrun.site/og-image.svg)
+
+_Experience the glassmorphism design and responsive layout at [keyrun.site](https://keyrun.site)_
 
 </div>
 
@@ -54,28 +65,30 @@ A cutting-edge portfolio template built with **SvelteKit 5.x**, featuring stunni
 ### Option 1: Use as Template (Recommended)
 
 ```bash
-# Use GitHub template feature or clone
-git clone https://github.com/your-username/portfolio-template.git my-portfolio
+# Use GitHub template feature or degit
+npx degit kirannamawar/portfolio my-portfolio
 cd my-portfolio
 
 # Install dependencies (Bun recommended)
 bun install
 
 # Run interactive setup
-bun run setup
+bun run template:setup
 
 # Start development server
-bun dev
+bun run dev
 ```
 
 **🎉 Your portfolio is now running at `http://localhost:5173`**
 
-### Option 2: Fork and Customize
+### ⚡ What's Next?
 
-1. **Fork** this repository on GitHub
-2. **Clone** your fork locally
-3. **Run** the interactive setup: `bun run setup`
-4. **Customize** your content and deploy
+1. **Personalize** - Run `bun run template:setup` for interactive configuration
+2. **Content** - Add your projects to `src/content/projects/`
+3. **Blog** - Write posts in `src/content/blogs/`
+4. **Deploy** - Deploy to Vercel, Netlify, or your preferred platform
+
+> 📖 **Need help?** Check out our comprehensive [documentation](docs/README.md) for detailed guides.
 
 ### 📋 Essential 5-Minute Setup
 
@@ -237,10 +250,7 @@ _See the template in action with sample content_
 
 ### **Vercel** (Recommended)
 
-```bash
-# One-click deployment
-npx vercel --prod
-```
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fkirannamawar%2Fportfolio)
 
 ### **Netlify**
 
@@ -400,9 +410,9 @@ bun run build
 
 ### **Community:**
 
-- **[GitHub Discussions](https://github.com/your-username/portfolio-template/discussions)** - Ask questions, share ideas
-- **[Issues](https://github.com/your-username/portfolio-template/issues)** - Report bugs, request features
-- **[Pull Requests](https://github.com/your-username/portfolio-template/pulls)** - Contribute improvements
+- **[GitHub Discussions](https://github.com/kirannamawar/portfolio/discussions)** - Ask questions, share ideas
+- **[Issues](https://github.com/kirannamawar/portfolio/issues)** - Report bugs, request features
+- **[Pull Requests](https://github.com/kirannamawar/portfolio/pulls)** - Contribute improvements
 
 ## 📄 License & Credits
 
@@ -429,10 +439,10 @@ MIT License - Free for personal and commercial use. See [LICENSE](LICENSE) for d
 
 ## 🚀 Ready to Build Your Portfolio?
 
-**[🛠️ Get Started Now](docs/getting-started/using-as-template.md)** • **[📚 View Documentation](docs/README.md)** • **[🌟 Live Demo](https://your-demo-site.com)**
+**[🛠️ Get Started Now](docs/getting-started/using-as-template.md)** • **[📚 View Documentation](docs/README.md)** • **[🌟 Live Demo](https://keyrun.site)**
 
 ### **Transform your online presence today!**
 
-Made with ❤️ using SvelteKit | **[⭐ Star on GitHub](https://github.com/your-username/portfolio-template)**
+Made with ❤️ using SvelteKit | **[⭐ Star on GitHub](https://github.com/kirannamawar/portfolio)**
 
 </div>

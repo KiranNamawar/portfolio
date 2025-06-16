@@ -1,7 +1,30 @@
 {
-	"name": "portfolio",
+	"name": "sveltekit-glassmorphism-portfolio",
+	"description": "A comprehensive, enterprise-grade portfolio template built with SvelteKit 5.x featuring stunning glassmorphism design, advanced blog system, project showcases, and complete content management.",
+	"keywords": [
+		"sveltekit",
+		"svelte",
+		"portfolio",
+		"template",
+		"glassmorphism",
+		"blog",
+		"mdsvex",
+		"typescript",
+		"responsive",
+		"seo"
+	],
+	"homepage": "https://keyrun.site",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kirannamawar/portfolio.git"
+	},
+	"bugs": {
+		"url": "https://github.com/kirannamawar/portfolio/issues"
+	},
+	"author": "Kiran Namawar",
+	"license": "MIT",
 	"private": true,
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",

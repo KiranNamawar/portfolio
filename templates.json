@@ -1,0 +1,6 @@
+{
+	"title": "SvelteKit Glassmorphism Portfolio Template",
+	"repository": "https://github.com/kirannamawar/portfolio",
+	"description": "A comprehensive, enterprise-grade portfolio template built with SvelteKit 5.x featuring stunning glassmorphism design, advanced blog system, project showcases, and complete content management.",
+	"categories": ["portfolio", "blog", "typescript", "mdsvex", "seo"]
+}
