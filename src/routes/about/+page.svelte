@@ -154,7 +154,7 @@
 	}}
 />
 
-<main class="about-page">
+<main id="main-content" class="about-page">
 	<!-- Hero Section -->
 	<section class="about-hero">
 		<div class="container">

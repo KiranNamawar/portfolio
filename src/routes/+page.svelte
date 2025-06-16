@@ -10,7 +10,7 @@
 
 <SEOHead
 	data={{
-		title:  `Home`,
+		title: `Home`,
 		description: personalInfo.bio,
 		keywords: [
 			'full stack developer',
@@ -28,13 +28,13 @@
 	}}
 />
 
-<div class="homepage">
+<main id="main-content" class="homepage">
 	<IntroSection />
 	<SkillsShowcase />
 	<ProjectsPreview />
 	<BlogPreview />
 	<ConnectSection />
-</div>
+</main>
 
 <style>
 	.homepage {

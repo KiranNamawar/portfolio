@@ -105,7 +105,8 @@
 			</div>
 			<h2 class="section-title">Let's Connect</h2>
 			<p class="section-subtitle">
-				Interested in connecting? I'd love to discuss projects or just have a chat about development!
+				Interested in connecting? I'd love to discuss projects or just have a chat about
+				development!
 			</p>
 		</header>
 
@@ -149,9 +150,9 @@
 								Message Sent Successfully!
 							</h3>
 							<p class="success-message" in:fly={{ y: 10, duration: 400, delay: 400 }}>
-								Thank you for reaching out! I've received your message and will get back to you
-								as soon as possible. I'm excited to learn more about your project and see how I
-								can help.
+								Thank you for reaching out! I've received your message and will get back to you as
+								soon as possible. I'm excited to learn more about your project and see how I can
+								help.
 							</p>
 							<div class="success-actions" in:fly={{ y: 10, duration: 400, delay: 500 }}>
 								<button

@@ -22,7 +22,7 @@
 	]}
 />
 
-<div class="projects-page">
+<main id="main-content" class="projects-page">
 	<div class="container">
 		<div class="page-header">
 			<h1 class="page-title">Projects</h1>
@@ -143,7 +143,7 @@
 			</div>
 		{/if}
 	</div>
-</div>
+</main>
 
 <style>
 	.projects-page {

@@ -76,9 +76,8 @@
 		<slot name="pre-content" />
 		<!-- Content Start Divider -->
 		<ContentDivider type="start" />
-
 		<!-- Main Content -->
-		<main class="content-main">
+		<main id="main-content" class="content-main">
 			<div class="container">
 				<div class="prose {pageType === 'Blog' ? 'blog-post-content' : 'project-content'}">
 					<slot />

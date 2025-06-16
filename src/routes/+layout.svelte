@@ -36,6 +36,18 @@
 	/>
 </svelte:head>
 
+<!-- Skip Navigation Links for Accessibility -->
+<nav class="skip-links" aria-label="Skip navigation">
+	<a href="#main-content" class="skip-link">Skip to main content</a>
+	<a href="#navigation" class="skip-link">Skip to navigation</a>
+	{#if page.route.id === '/'}
+		<a href="#skills" class="skip-link">Skip to skills</a>
+		<a href="#projects" class="skip-link">Skip to projects</a>
+		<a href="#blog" class="skip-link">Skip to blog</a>
+		<a href="#connect" class="skip-link">Skip to contact</a>
+	{/if}
+</nav>
+
 {#if !isDetailPage}
 	<Background variant="subtle" />
 {/if}

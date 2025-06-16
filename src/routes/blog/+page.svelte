@@ -21,7 +21,7 @@
 	]}
 />
 
-<div class="blog-page">
+<main id="main-content" class="blog-page">
 	<div class="container">
 		<div class="page-header">
 			<h1 class="page-title">Blog</h1>
@@ -86,7 +86,7 @@
 			</div>
 		{/if}
 	</div>
-</div>
+</main>
 
 <style>
 	.blog-page {

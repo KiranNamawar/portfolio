@@ -81,6 +81,7 @@
 {#if mounted}
 	<!-- Desktop Floating Dock -->
 	<nav
+		id="navigation"
 		class="floating-dock desktop-dock"
 		in:fly={{ y: 100, duration: 500, delay: 300 }}
 		aria-label="Main navigation"

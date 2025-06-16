@@ -35,7 +35,9 @@
 				<Folder size={32} />
 			</div>
 			<h2 class="section-title">Featured Projects</h2>
-			<p class="section-subtitle">A selection of recent work showcasing my development skills and learning</p>
+			<p class="section-subtitle">
+				A selection of recent work showcasing my development skills and learning
+			</p>
 		</header>
 		<div class="projects-grid">
 			{#each featuredProjects as project, index}
