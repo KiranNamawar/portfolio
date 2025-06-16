@@ -18,4 +18,5 @@ export interface BlogPost {
 	image?: string;
 	content?: string;
 	headings?: BlogHeading[];
+	[key: string]: unknown; // Index signature for compatibility
 }

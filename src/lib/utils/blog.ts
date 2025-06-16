@@ -1,91 +1,17 @@
 import type { BlogPost } from '$lib/types/blog.js';
-import { calculateReadingTime } from './readingTime.js';
-import { extractHeadings } from './markdown.js';
+import { processMarkdownContent, getContentItem } from './contentProcessor.js';
+import { READING_TIME_DEFAULTS, CONTENT_PATHS } from '$lib/constants.js';
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
-	const modules = import.meta.glob('../../content/blogs/*.md', {
-		eager: true,
-		query: '?raw',
-		import: 'default'
+	return processMarkdownContent<BlogPost>({
+		defaultReadingTime: READING_TIME_DEFAULTS.BLOG_MINUTES,
+		defaultWordCount: READING_TIME_DEFAULTS.BLOG_DEFAULT_WORDS,
+		contentPath: CONTENT_PATHS.BLOGS
 	});
-	const metadataModules = import.meta.glob('../../content/blogs/*.md', { eager: true });
-	const posts: BlogPost[] = [];
-
-	for (const path in modules) {
-		const rawContent = modules[path] as string;
-		const metadataPath = path;
-		const mod = metadataModules[metadataPath] as { metadata?: BlogPost; default?: unknown };
-
-		if (mod?.metadata) {
-			const slug = path.split('/').pop()?.replace('.md', '') || '';
-
-			// Extract headings from raw markdown content
-			const headings = extractHeadings(rawContent);
-
-			// For reading time calculation, use description or fallback
-			let content = '';
-			if (mod.metadata.description) {
-				content = mod.metadata.description;
-			}
-
-			const readingTimeResult = calculateReadingTime(content);
-
-			posts.push({
-				...mod.metadata,
-				slug,
-				headings,
-				readingTime: readingTimeResult.minutes || 3, // Default to 3 minutes if no content
-				wordCount: readingTimeResult.words || 300 // Default word count
-			});
-		}
-	}
-	return posts
-		.filter((post) => post.published)
-		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export async function getBlogPost(slug: string) {
-	try {
-		// Validate slug format (only allow alphanumeric, hyphens, underscores)
-		if (!/^[a-zA-Z0-9_-]+$/.test(slug)) {
-			console.error(`Invalid blog post slug format: ${slug}`);
-			return null;
-		}
-
-		// Get the module normally for content
-		const module = await import(`../../content/blogs/${slug}.md`);
-
-		// Get the calculated data from the list function
-		const allPosts = await getBlogPosts();
-		const postData = allPosts.find((post) => post.slug === slug);
-
-		return {
-			content: module.default,
-			metadata: {
-				...module.metadata,
-				readingTime: postData?.readingTime || 1,
-				wordCount: postData?.wordCount || 0
-			}
-		};
-	} catch (error) {
-		console.error(`Error loading blog post ${slug}:`, error);
-
-		// Check if this is a common static file being requested as a blog post
-		const staticFiles = [
-			'manifest.json',
-			'robots.txt',
-			'sitemap.xml',
-			'favicon.ico',
-			'favicon.png'
-		];
-		if (staticFiles.includes(slug)) {
-			console.warn(
-				`Static file ${slug} was requested as a blog post. This should be handled by static file serving.`
-			);
-		}
-
-		return null;
-	}
+	return getContentItem<BlogPost>(slug, CONTENT_PATHS.BLOGS, READING_TIME_DEFAULTS.BLOG_MINUTES);
 }
 
 export async function getFeaturedBlogPosts(): Promise<BlogPost[]> {

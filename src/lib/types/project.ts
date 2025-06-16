@@ -19,4 +19,5 @@ export interface Project {
 	wordCount?: number;
 	content?: string;
 	headings?: ProjectHeading[];
+	[key: string]: unknown; // Index signature for compatibility
 }

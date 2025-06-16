@@ -35,5 +35,36 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	}
 
-	return resolve(event);
+	const response = await resolve(event, {
+		transformPageChunk: ({ html }) => {
+			return html;
+		}
+	});
+
+	// Add security headers
+	response.headers.set('X-Frame-Options', 'DENY');
+	response.headers.set('X-Content-Type-Options', 'nosniff');
+	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+	response.headers.set('X-XSS-Protection', '1; mode=block');
+
+	// Content Security Policy
+	const csp = [
+		"default-src 'self'",
+		"script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Allow inline scripts for Svelte
+		"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net", // Allow Google Fonts and Devicon
+		"img-src 'self' data: https:",
+		"font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net", // Allow Google Fonts and Devicon fonts
+		"connect-src 'self'",
+		"media-src 'self'",
+		"object-src 'none'",
+		"base-uri 'self'",
+		"form-action 'self' https://send.pageclip.co", // Allow form submission to Pageclip
+		"frame-ancestors 'none'",
+		'block-all-mixed-content',
+		'upgrade-insecure-requests'
+	].join('; ');
+
+	response.headers.set('Content-Security-Policy', csp);
+
+	return response;
 };
