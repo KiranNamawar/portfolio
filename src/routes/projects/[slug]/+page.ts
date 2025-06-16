@@ -24,13 +24,13 @@ export const load: PageLoad = async ({ params }) => {
 
 	// Get related projects based on technologies
 	const relatedProjects = await getRelatedProjects(params.slug, project.metadata.technologies);
-
 	return {
 		project: {
 			...project.metadata,
 			slug: params.slug
 		},
 		relatedProjects,
-		ContentComponent: project.content
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		ContentComponent: project.content as any
 	};
 };

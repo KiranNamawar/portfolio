@@ -25,13 +25,13 @@ export const load: PageLoad = async ({ params }) => {
 
 	// Get related posts based on tags
 	const relatedPosts = await getRelatedBlogPosts(params.slug, post.metadata.tags);
-
 	return {
 		post: {
 			...post.metadata,
 			slug: params.slug
 		},
 		relatedPosts,
-		ContentComponent: post.content
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		ContentComponent: post.content as any
 	};
 };

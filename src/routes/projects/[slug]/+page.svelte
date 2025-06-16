@@ -12,12 +12,12 @@
 		data={{
 			title: data.project.title,
 			description: data.project.description || data.project.title,
-			keywords: [...(data.project.tech || []), 'project', 'web development', 'portfolio'],
+			keywords: [...(data.project.technologies || []), 'project', 'web development', 'portfolio'],
 			url: `/projects/${data.project.slug}`,
 			type: 'article',
 			publishedTime: new Date(data.project.date).toISOString(),
 			image: data.project.image || '/project-placeholder.svg',
-			tags: data.project.tech || []
+			tags: data.project.technologies || []
 		}}
 		breadcrumbs={[
 			{ name: 'Home', url: '/' },
