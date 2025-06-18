@@ -36,6 +36,7 @@ function getLanguageIconHTML(lang) {
 		js: 'devicon-javascript-plain',
 		typescript: 'devicon-typescript-plain',
 		ts: 'devicon-typescript-plain',
+		tsx: 'devicon-typescript-plain',
 		css: 'devicon-css3-plain',
 		json: 'devicon-json-plain',
 		bash: 'devicon-bash-plain',
@@ -130,19 +131,21 @@ const config = defineConfig({
 	},
 	highlight: {
 		highlighter: async (code, lang = 'text') => {
+			// Map tsx to typescript for highlighting
+			const actualLang = lang === 'tsx' ? 'typescript' : lang;
 			const displayLang = lang || 'text';
 			const encodedCode = Buffer.from(code).toString('base64');
 			const iconHTML = getLanguageIconHTML(displayLang);
 
-			if (lang && lang !== 'text') {
+			if (actualLang && actualLang !== 'text') {
 				try {
 					const htmlLight = highlighter.codeToHtml(code, {
-						lang,
+						lang: actualLang,
 						theme: 'github-light',
 						transformers: []
 					});
 					const htmlDark = highlighter.codeToHtml(code, {
-						lang,
+						lang: actualLang,
 						theme: 'github-dark',
 						transformers: []
 					});
