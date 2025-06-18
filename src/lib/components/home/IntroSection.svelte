@@ -131,25 +131,27 @@
 			</div>
 		</div>
 		<div class="intro-visual">
-			<!-- 
-				TO REPLACE WITH YOUR IMAGE:
-				1. Replace the entire .image-placeholder div below with:
-				   <img src="/your-image.png" alt="Your Name" class="profile-image" />
-				2. Add this CSS for the image:
-				   .profile-image {
-					   width: 400px;
-					   height: 400px;
-					   object-fit: cover;
-					   border-radius: var(--radius-2xl);
-					   box-shadow: 0 12px 35px rgba(var(--primary-500-rgb), 0.15);
-				   }
-			-->
-			<div class="image-placeholder">
-				<div class="placeholder-content">
-					<div class="placeholder-icon">
-						<Code size={48} />
+			<div class="profile-image-container">
+				<div class="profile-image-frame">
+					<div class="profile-image-glow"></div>
+					<img
+						src="/ProfilePicture.jpg"
+						alt={personalInfo.name}
+						class="profile-image"
+						loading="lazy"
+					/>
+					<div class="profile-image-overlay"></div>
+				</div>
+				<div class="floating-elements">
+					<div class="floating-element element-1">
+						<Code size={20} />
 					</div>
-					<p class="placeholder-text">Your Image Here</p>
+					<div class="floating-element element-2">
+						<Coffee size={18} />
+					</div>
+					<div class="floating-element element-3">
+						<Sparkles size={16} />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -295,64 +297,161 @@
 		opacity: 1;
 		transform: translateX(0);
 	}
+	/* Profile Image Styles */
+	.profile-image-container {
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
-	.image-placeholder {
+	.profile-image-frame {
+		position: relative;
 		width: 400px;
 		height: 400px;
-		border-radius: var(--radius-2xl);
-		background: var(--color-surface-secondary);
-		border: 2px dashed var(--color-border-secondary);
+		border-radius: var(--radius-full);
+		padding: 8px;
+		background: linear-gradient(135deg, var(--primary-500), var(--primary-600), var(--primary-700));
+		box-shadow:
+			0 20px 40px rgba(var(--primary-500-rgb), 0.2),
+			0 8px 16px rgba(0, 0, 0, 0.1);
+		animation: gentle-float 6s ease-in-out infinite;
+	}
+
+	.profile-image-glow {
+		position: absolute;
+		inset: -20px;
+		border-radius: var(--radius-full);
+		background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+		opacity: 0.3;
+		filter: blur(20px);
+		animation: glow-pulse 4s ease-in-out infinite alternate;
+		z-index: -1;
+	}
+
+	.profile-image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: var(--radius-full);
+		position: relative;
+		z-index: 2;
+		filter: contrast(1.1) saturate(1.2) brightness(1.05);
+		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.profile-image-overlay {
+		position: absolute;
+		inset: 8px;
+		border-radius: var(--radius-full);
+		background: linear-gradient(
+			135deg,
+			rgba(255, 255, 255, 0.1) 0%,
+			rgba(255, 255, 255, 0.05) 50%,
+			rgba(0, 0, 0, 0.1) 100%
+		);
+		pointer-events: none;
+		z-index: 3;
+		opacity: 0.7;
+		transition: opacity 0.3s ease;
+	}
+
+	.profile-image-frame:hover .profile-image {
+		filter: contrast(1.15) saturate(1.3) brightness(1.1)
+			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3));
+		transform: scale(1.02);
+	}
+
+	.profile-image-frame:hover .profile-image-overlay {
+		opacity: 0.9;
+	}
+
+	.profile-image-frame:hover .profile-image-glow {
+		opacity: 0.5;
+		transform: scale(1.1);
+	}
+
+	/* Floating Elements */
+	.floating-elements {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.floating-element {
+		position: absolute;
+		width: 50px;
+		height: 50px;
+		background: rgba(var(--glass-overlay-bg-rgb, 255, 255, 255), 0.1);
+		backdrop-filter: blur(10px);
+		border: 1px solid rgba(var(--glass-overlay-border-rgb, 255, 255, 255), 0.2);
+		border-radius: var(--radius-full);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		transition: all 0.3s ease;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.image-placeholder:hover {
-		border-color: var(--primary-500);
-		background: var(--color-surface-tertiary);
-		transform: translateY(-4px);
-		box-shadow: 0 12px 35px rgba(var(--primary-500-rgb), 0.15);
-	}
-
-	.placeholder-content {
-		text-align: center;
-		color: var(--color-text-tertiary);
-		transition: all 0.3s ease;
-	}
-
-	.image-placeholder:hover .placeholder-content {
 		color: var(--primary-500);
-		transform: scale(1.05);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+		animation: float-around 12s ease-in-out infinite;
 	}
 
-	.placeholder-icon {
-		margin-bottom: var(--space-3);
-		opacity: 0.6;
-		transition: all 0.3s ease;
+	.element-1 {
+		top: 20%;
+		right: -10%;
+		animation-delay: 0s;
+		background: rgba(var(--primary-500-rgb), 0.1);
 	}
 
-	.image-placeholder:hover .placeholder-icon {
-		opacity: 1;
-		animation: gentle-pulse 2s ease-in-out infinite;
+	.element-2 {
+		bottom: 30%;
+		left: -15%;
+		animation-delay: -4s;
+		background: rgba(var(--primary-600-rgb), 0.1);
 	}
 
-	.placeholder-text {
-		font-size: var(--font-size-lg);
-		font-weight: 500;
-		margin: 0;
-		opacity: 0.8;
+	.element-3 {
+		top: 60%;
+		right: 10%;
+		animation-delay: -8s;
+		background: rgba(var(--primary-700-rgb), 0.1);
 	}
 
-	@keyframes gentle-pulse {
+	@keyframes gentle-float {
 		0%,
 		100% {
-			transform: scale(1);
+			transform: translateY(0px) rotate(0deg);
+		}
+		33% {
+			transform: translateY(-10px) rotate(1deg);
+		}
+		66% {
+			transform: translateY(5px) rotate(-1deg);
+		}
+	}
+
+	@keyframes glow-pulse {
+		0% {
+			opacity: 0.2;
+			transform: scale(0.95);
+		}
+		100% {
+			opacity: 0.4;
+			transform: scale(1.05);
+		}
+	}
+
+	@keyframes float-around {
+		0%,
+		100% {
+			transform: translateY(0px) translateX(0px) rotate(0deg);
+		}
+		25% {
+			transform: translateY(-20px) translateX(10px) rotate(90deg);
 		}
 		50% {
-			transform: scale(1.1);
+			transform: translateY(-10px) translateX(-15px) rotate(180deg);
+		}
+		75% {
+			transform: translateY(15px) translateX(5px) rotate(270deg);
 		}
 	}
 	.intro-actions {
@@ -427,9 +526,14 @@
 			margin: 0 auto;
 		}
 
-		.image-placeholder {
+		.profile-image-frame {
 			width: 300px;
 			height: 300px;
+		}
+
+		.floating-element {
+			width: 40px;
+			height: 40px;
 		}
 	}
 	@media (max-width: 768px) {
@@ -444,9 +548,23 @@
 		.intro-actions {
 			flex-direction: column;
 		}
-		.image-placeholder {
+
+		.profile-image-frame {
 			width: 250px;
 			height: 250px;
+		}
+
+		.floating-element {
+			width: 35px;
+			height: 35px;
+		}
+
+		.element-1 {
+			right: -5%;
+		}
+
+		.element-2 {
+			left: -10%;
 		}
 
 		.bio {
@@ -463,13 +581,20 @@
 			padding: var(--space-3) var(--space-5);
 		}
 
-		.image-placeholder {
+		.profile-image-frame {
 			width: 200px;
 			height: 200px;
 		}
 
-		.placeholder-text {
-			font-size: var(--font-size-base);
+		.floating-element {
+			width: 30px;
+			height: 30px;
+		}
+
+		.element-1,
+		.element-2,
+		.element-3 {
+			display: none; /* Hide floating elements on very small screens */
 		}
 	}
 </style>
