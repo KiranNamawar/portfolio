@@ -328,7 +328,6 @@
 		animation: glow-pulse 4s ease-in-out infinite alternate;
 		z-index: -1;
 	}
-
 	.profile-image {
 		width: 100%;
 		height: 100%;
@@ -336,8 +335,78 @@
 		border-radius: var(--radius-full);
 		position: relative;
 		z-index: 2;
-		filter: contrast(1.1) saturate(1.2) brightness(1.05);
+		/* Artistic Film Look - Vintage Cinematic */
+		/* filter: 
+			contrast(1.3) 
+			saturate(0.8) 
+			brightness(1.1)
+			sepia(0.15)
+			hue-rotate(10deg)
+			drop-shadow(0 0 20px rgba(255, 165, 0, 0.3)); */
 		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+		/* Alternative filter options - uncomment one at a time */
+
+		/* Cyberpunk Neon Look */
+		/* filter: 
+			contrast(1.4) 
+			saturate(1.6) 
+			brightness(1.2)
+			hue-rotate(270deg)
+			drop-shadow(0 0 30px rgba(0, 255, 255, 0.5))
+			drop-shadow(0 0 15px rgba(255, 0, 255, 0.3)); */
+
+		/* Black & White Dramatic */
+		filter: grayscale(1) contrast(1.5) brightness(1.1)
+			drop-shadow(0 0 25px rgba(255, 255, 255, 0.4));
+
+		/* Black & White Dramatic */
+		/* filter: 
+			grayscale(1) 
+			contrast(1.5) 
+			brightness(1.1)
+			drop-shadow(0 0 25px rgba(255, 255, 255, 0.4)); */
+
+		/* Warm Golden Hour */
+		/* filter: 
+			contrast(1.2) 
+			saturate(1.4) 
+			brightness(1.15)
+			sepia(0.3)
+			hue-rotate(25deg)
+			drop-shadow(0 0 20px rgba(255, 215, 0, 0.4)); */
+
+		/* Cool Blue Tint */
+		/* filter: 
+			contrast(1.25) 
+			saturate(1.1) 
+			brightness(1.05)
+			hue-rotate(200deg)
+			drop-shadow(0 0 25px rgba(0, 150, 255, 0.4)); */
+
+		/* Retro Polaroid */
+		/* filter: 
+			contrast(1.1) 
+			saturate(1.3) 
+			brightness(1.2)
+			sepia(0.2)
+			blur(0.3px)
+			drop-shadow(0 0 15px rgba(255, 255, 255, 0.3)); */
+
+		/* Matrix Green */
+		/* filter: 
+			contrast(1.4) 
+			saturate(0.7) 
+			brightness(1.1)
+			hue-rotate(90deg)
+			drop-shadow(0 0 20px rgba(0, 255, 0, 0.5)); */
+		/* Dreamy Soft Focus */
+		/* filter: 
+			contrast(0.9) 
+			saturate(1.3) 
+			brightness(1.2)
+			blur(0.8px)
+			drop-shadow(0 0 30px rgba(255, 192, 203, 0.4)); */
 	}
 
 	.profile-image-overlay {
@@ -355,11 +424,88 @@
 		opacity: 0.7;
 		transition: opacity 0.3s ease;
 	}
-
 	.profile-image-frame:hover .profile-image {
-		filter: contrast(1.15) saturate(1.3) brightness(1.1)
-			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3));
+		/* Enhanced Vintage Cinematic on Hover */
+		/* filter: 
+			contrast(1.4) 
+			saturate(0.9) 
+			brightness(1.2)
+			sepia(0.25)
+			hue-rotate(15deg)
+			drop-shadow(0 0 30px rgba(255, 165, 0, 0.5))
+			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3)); */
 		transform: scale(1.02);
+
+		/* Hover effects for other filters - match with main filter */
+
+		/* Cyberpunk Hover */
+		/* filter: 
+			contrast(1.5) 
+			saturate(1.8) 
+			brightness(1.3)
+			hue-rotate(280deg)
+			drop-shadow(0 0 40px rgba(0, 255, 255, 0.7))
+			drop-shadow(0 0 20px rgba(255, 0, 255, 0.5))
+			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3)); */
+
+		/* B&W to Original Color Hover - Reveals full color on hover */
+		filter: grayscale(0) contrast(1.2) saturate(1.3) brightness(1.15)
+			drop-shadow(0 0 30px rgba(var(--primary-500-rgb), 0.4))
+			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3));
+
+		/* B&W Dramatic Hover */
+		/* filter: 
+			grayscale(1) 
+			contrast(1.7) 
+			brightness(1.2)
+			drop-shadow(0 0 35px rgba(255, 255, 255, 0.6))
+			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3)); */
+
+		/* Golden Hour Hover */
+		/* filter: 
+			contrast(1.3) 
+			saturate(1.6) 
+			brightness(1.25)
+			sepia(0.4)
+			hue-rotate(30deg)
+			drop-shadow(0 0 30px rgba(255, 215, 0, 0.6))
+			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3)); */
+
+		/* Cool Blue Hover */
+		/* filter: 
+			contrast(1.35) 
+			saturate(1.3) 
+			brightness(1.15)
+			hue-rotate(210deg)
+			drop-shadow(0 0 35px rgba(0, 150, 255, 0.6))
+			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3)); */
+
+		/* Retro Polaroid Hover */
+		/* filter: 
+			contrast(1.2) 
+			saturate(1.5) 
+			brightness(1.3)
+			sepia(0.3)
+			blur(0.2px)
+			drop-shadow(0 0 25px rgba(255, 255, 255, 0.5))
+			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3)); */
+
+		/* Matrix Green Hover */
+		/* filter: 
+			contrast(1.5) 
+			saturate(0.9) 
+			brightness(1.2)
+			hue-rotate(95deg)
+			drop-shadow(0 0 30px rgba(0, 255, 0, 0.7))
+			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3)); */
+		/* Dreamy Soft Focus Hover */
+		/* filter: 
+			contrast(1.0) 
+			saturate(1.5) 
+			brightness(1.3)
+			blur(0.5px)
+			drop-shadow(0 0 40px rgba(255, 192, 203, 0.6))
+			drop-shadow(0 8px 16px rgba(var(--primary-500-rgb), 0.3)); */
 	}
 
 	.profile-image-frame:hover .profile-image-overlay {
