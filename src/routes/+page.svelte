@@ -30,7 +30,7 @@
 
 <main id="main-content" class="homepage">
 	<IntroSection />
-	<SkillsShowcase />
+	<!-- <SkillsShowcase /> -->
 	<ProjectsPreview />
 	<BlogPreview />
 	<ConnectSection />

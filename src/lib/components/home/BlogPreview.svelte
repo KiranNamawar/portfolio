@@ -4,6 +4,7 @@
 	import { getFeaturedBlogPosts } from '$lib/utils/blog.js';
 	import { formatDate } from '$lib/utils/date.js';
 	import type { BlogPost } from '$lib/types/blog.js';
+	import Badge from '$lib/components/ui/Badge.svelte';
 
 	let blogRef: HTMLElement;
 	let isVisible = false;
@@ -31,76 +32,85 @@
 </script>
 
 <section bind:this={blogRef} class="blog-section" class:visible={isVisible} id="blog">
-	<div class="container">
-		<header class="section-header">
-			<div class="header-icon">
-				<BookOpen size={32} />
-			</div>
-			<h2 class="section-title">Latest Insights</h2>
-			<p class="section-subtitle">Thoughts, tutorials, and insights from my development journey</p>
-		</header>
-		<div class="blog-grid">
-			{#each featuredPosts as post, index}
-				<article class="blog-card glass-card" style="animation-delay: {index * 0.2}s">
-					<!-- Banner Image -->
-					<div class="blog-image">
-						<img src={post.image || '/blog-placeholder.svg'} alt={post.title} loading="lazy" />
-						{#if post.category}
-							<div class="blog-category-overlay">
-								<span class="blog-category">{post.category}</span>
-							</div>
-						{/if}
-					</div>
-
-					<div class="blog-content">
-						<h3 class="blog-title">
-							<a href="/blog/{post.slug}">{post.title}</a>
-						</h3>
-						<p class="blog-description">{post.description}</p>
-
-						<!-- Date and Reading Time moved below description -->
-						<div class="blog-meta">
-							<div class="meta-item">
-								<Calendar size={14} />
-								<span>{formatDate(post.date)}</span>
-							</div>
-							{#if post.readingTime}
-								<div class="meta-item">
-									<Clock size={14} />
-									<span>{post.readingTime} min read</span>
+	{#if featuredPosts.length > 0}
+		<div class="container">
+			<header class="section-header">
+				<div class="header-icon">
+					<BookOpen size={32} />
+				</div>
+				<h2 class="section-title">Latest Insights</h2>
+				<p class="section-subtitle">
+					Thoughts, tutorials, and insights from my development journey
+				</p>
+			</header>
+			<div class="blog-grid">
+				{#each featuredPosts as post, index}
+					<article class="blog-card glass-card" style="animation-delay: {index * 0.2}s">
+						<!-- Banner Image -->
+						<div class="blog-image">
+							<img src={post.image || '/blog-placeholder.svg'} alt={post.title} loading="lazy" />
+							{#if post.badge}
+								<div class="blog-badge">
+									<Badge variant={post.badge} size="sm" text={post.badge} />
+								</div>
+							{/if}
+							{#if post.category}
+								<div class="blog-category-overlay">
+									<span class="blog-category">{post.category}</span>
 								</div>
 							{/if}
 						</div>
-						{#if post.tags && post.tags.length > 0}
-							<div class="blog-tags">
-								{#each post.tags.slice(0, 3) as tag}
-									<span class="blog-tag">#{tag}</span>
-								{/each}
-								{#if post.tags.length > 3}
-									<span class="tags-more">+{post.tags.length - 3}</span>
+
+						<div class="blog-content">
+							<h3 class="blog-title">
+								<a href="/blog/{post.slug}">{post.title}</a>
+							</h3>
+							<p class="blog-description">{post.description}</p>
+
+							<!-- Date and Reading Time moved below description -->
+							<div class="blog-meta">
+								<div class="meta-item">
+									<Calendar size={14} />
+									<span>{formatDate(post.date)}</span>
+								</div>
+								{#if post.readingTime}
+									<div class="meta-item">
+										<Clock size={14} />
+										<span>{post.readingTime} min read</span>
+									</div>
 								{/if}
 							</div>
-						{/if}
+							{#if post.tags && post.tags.length > 0}
+								<div class="blog-tags">
+									{#each post.tags.slice(0, 3) as tag}
+										<span class="blog-tag">#{tag}</span>
+									{/each}
+									{#if post.tags.length > 3}
+										<span class="tags-more">+{post.tags.length - 3}</span>
+									{/if}
+								</div>
+							{/if}
 
-						<div class="blog-footer">
-							<a href="/blog/{post.slug}" class="read-more">
-								<span>Read More</span>
-								<ArrowRight size={16} />
-							</a>
+							<div class="blog-footer">
+								<a href="/blog/{post.slug}" class="read-more">
+									<span>Read More</span>
+									<ArrowRight size={16} />
+								</a>
+							</div>
 						</div>
-					</div>
-				</article>
-			{/each}
-		</div>
+					</article>
+				{/each}
+			</div>
 
-		<div class="section-footer">
-			<a href="/blog" class="view-all-btn glass-button">
-				<BookOpen size={20} />
-				<span>View All Posts</span>
-				<ArrowRight size={18} />
-			</a>
+			<div class="section-footer">
+				<a href="/blog" class="view-all-btn glass-button">
+					<BookOpen size={20} />
+					<span>View All Posts</span>
+					<ArrowRight size={18} />
+				</a>
+			</div>
 		</div>
-	</div>
+	{/if}
 </section>
 
 <style>
@@ -216,12 +226,18 @@
 	.blog-card:hover::before {
 		transform: scaleX(1);
 	}
-
 	.blog-image {
 		position: relative;
 		aspect-ratio: 16 / 8;
 		overflow: hidden;
 		background: var(--color-surface-secondary);
+	}
+
+	.blog-badge {
+		position: absolute;
+		top: var(--space-3);
+		right: var(--space-3);
+		z-index: 2;
 	}
 
 	.blog-image img {

@@ -5,6 +5,7 @@ date: '2025-06-13'
 tags: ['demo', 'ui', 'component']
 published: true
 featured: false
+badge: demo
 ---
 
 # Table of Contents Demo

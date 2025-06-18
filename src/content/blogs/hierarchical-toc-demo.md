@@ -5,7 +5,8 @@ published: true
 date: '2024-01-15'
 category: 'Development'
 tags: ['UI/UX', 'SvelteKit', 'Navigation', 'Accessibility']
-featured: true
+featured: false
+badge: tutorial
 ---
 
 # Hierarchical Table of Contents Demo

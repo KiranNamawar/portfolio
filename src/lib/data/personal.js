@@ -19,7 +19,7 @@
 export const personalInfo = {
 	name: 'Kiran',
 	title: 'Full Stack Developer',
-	bio: `I'm a passionate fresher full-stack developer with a strong focus on backend technologies 
+	bio: `I'm a passionate self-taught full-stack developer with a strong focus on backend technologies 
 like Node.js and GraphQL. I enjoy building robust web applications with clean, maintainable code 
 and love learning new technologies to solve real-world problems.`,
 	description: `When I'm not coding, you'll find me exploring backend frameworks, building personal 
@@ -39,7 +39,7 @@ projects, and continuously learning about server-side technologies, APIs, and da
 export const heroTypingPhrases = [
 	'Full Stack Developer',
 	'Backend Developer',
-	'Node.js Developer', 
+	'React Developer', 
 	'GraphQL Enthusiast'
 ];
 
@@ -94,3 +94,61 @@ export const socialLinks = [
 		username: 'kirannamawardev'
 	}
 ];
+
+// {
+// 	"id": "svelte",
+// 	"name": "Svelte",
+// 	"level": "comfortable",
+// 	"category": "frontend",
+// 	"description": "Advanced Svelte development with custom patterns, performance optimization, and architectural design",
+// 	"topics": [
+// 		"Svelte Components",
+// 		"SvelteKit",
+// 		"Stores & Reactivity",
+// 		"Actions & Use Directives",
+// 		"Transitions & Animations",
+// 		"SSR & SSG",
+// 		"Progressive Enhancement",
+// 		"Custom Elements"
+// 	],
+// 	"achievements": [
+// 		"SvelteKit application architecture",
+// 		"Custom store patterns",
+// 		"Performance optimization",
+// 		"Component library development"
+// 	],
+// 	"relatedSkills": [
+// 		"javascript",
+// 		"typescript",
+// 		"vite",
+// 		"tailwind"
+// 	]
+// },
+// {
+// 	"id": "vue",
+// 	"name": "Vue.js",
+// 	"level": "developing",
+// 	"category": "frontend",
+// 	"description": "Working knowledge of Vue.js with component architecture and state management",
+// 	"topics": [
+// 		"Vue 3 Composition API",
+// 		"Components & Templates",
+// 		"Vue Router",
+// 		"Pinia State Management",
+// 		"Directives",
+// 		"Computed Properties",
+// 		"Watchers",
+// 		"Lifecycle Hooks"
+// 	],
+// 	"achievements": [
+// 		"Component-based development",
+// 		"State management with Pinia",
+// 		"Vue Router implementation",
+// 		"Basic animations and transitions"
+// 	],
+// 	"relatedSkills": [
+// 		"javascript",
+// 		"typescript",
+// 		"vite"
+// 	]
+// },

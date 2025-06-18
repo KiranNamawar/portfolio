@@ -10,7 +10,7 @@
 	// Navigation items
 	const navItems = [
 		{ icon: Home, label: 'Home', href: '/', action: 'navigate' },
-		{ icon: User, label: 'About', href: '/about', action: 'navigate' },
+		// { icon: User, label: 'About', href: '/about', action: 'navigate' },
 		{ icon: FolderOpen, label: 'Projects', href: '/projects', action: 'navigate' },
 		{ icon: FileText, label: 'Blog', href: '/blog', action: 'navigate' }
 	];

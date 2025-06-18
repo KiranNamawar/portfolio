@@ -2,6 +2,7 @@
 	import type { PageData } from './$types';
 	import { formatDate } from '$lib/utils/date.js';
 	import SEOHead from '$lib/components/ui/SEOHead.svelte';
+	import Badge from '$lib/components/ui/Badge.svelte';
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -46,6 +47,11 @@
 							/>
 							{#if post.featured}
 								<div class="featured-badge">Featured</div>
+							{/if}
+							{#if post.badge}
+								<div class="content-badge">
+									<Badge variant={post.badge} size="sm" text={post.badge} />
+								</div>
 							{/if}
 						</div>
 
@@ -161,7 +167,6 @@
 	.post-card:hover .post-image img {
 		transform: scale(1.1);
 	}
-
 	.featured-badge {
 		position: absolute;
 		top: var(--space-4);
@@ -176,6 +181,13 @@
 		letter-spacing: 0.05em;
 		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 		backdrop-filter: blur(10px);
+		z-index: 1;
+	}
+
+	.content-badge {
+		position: absolute;
+		top: var(--space-4);
+		left: var(--space-4);
 		z-index: 1;
 	}
 

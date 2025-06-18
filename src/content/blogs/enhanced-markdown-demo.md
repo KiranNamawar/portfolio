@@ -4,7 +4,8 @@ description: 'A comprehensive demonstration of the enhanced typography and layou
 date: '2024-12-15'
 tags: ['design', 'typography', 'markdown', 'demo']
 published: true
-featured: true
+featured: false
+badge: example
 layout: blog
 ---
 

@@ -15,6 +15,7 @@ export interface Project {
 	demo?: string;
 	featured?: boolean;
 	published: boolean;
+	badge?: 'demo' | 'prototype' | 'example' | 'template' | string;
 	readingTime?: number;
 	wordCount?: number;
 	content?: string;

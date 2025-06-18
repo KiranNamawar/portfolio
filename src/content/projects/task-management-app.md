@@ -6,9 +6,10 @@ image: '/project-placeholder.svg'
 technologies: ['React', 'Node.js', 'MongoDB', 'Socket.io', 'Express']
 github: 'https://github.com/username/task-management-app'
 demo: 'https://task-app-demo.vercel.app'
-featured: true
+featured: false
 published: true
 layout: project
+badge: demo
 gallery:
   - src: '/gallery/task-kanban.svg'
     alt: 'Kanban Board Interface'

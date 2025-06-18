@@ -152,63 +152,6 @@
 			]
 		},
 		{
-			"id": "svelte",
-			"name": "Svelte",
-			"level": "comfortable",
-			"category": "frontend",
-			"description": "Advanced Svelte development with custom patterns, performance optimization, and architectural design",
-			"topics": [
-				"Svelte Components",
-				"SvelteKit",
-				"Stores & Reactivity",
-				"Actions & Use Directives",
-				"Transitions & Animations",
-				"SSR & SSG",
-				"Progressive Enhancement",
-				"Custom Elements"
-			],
-			"achievements": [
-				"SvelteKit application architecture",
-				"Custom store patterns",
-				"Performance optimization",
-				"Component library development"
-			],
-			"relatedSkills": [
-				"javascript",
-				"typescript",
-				"vite",
-				"tailwind"
-			]
-		},
-		{
-			"id": "vue",
-			"name": "Vue.js",
-			"level": "developing",
-			"category": "frontend",
-			"description": "Working knowledge of Vue.js with component architecture and state management",
-			"topics": [
-				"Vue 3 Composition API",
-				"Components & Templates",
-				"Vue Router",
-				"Pinia State Management",
-				"Directives",
-				"Computed Properties",
-				"Watchers",
-				"Lifecycle Hooks"
-			],
-			"achievements": [
-				"Component-based development",
-				"State management with Pinia",
-				"Vue Router implementation",
-				"Basic animations and transitions"
-			],
-			"relatedSkills": [
-				"javascript",
-				"typescript",
-				"vite"
-			]
-		},
-		{
 			"id": "html",
 			"name": "HTML",
 			"level": "comfortable",
@@ -295,34 +238,6 @@
 			]
 		},
 		{
-			"id": "sass",
-			"name": "SCSS/Sass",
-			"level": "comfortable",
-			"category": "frontend",
-			"description": "Advanced SCSS with modular architecture and build optimization",
-			"topics": [
-				"Mixins & Functions",
-				"Variables & Maps",
-				"Partials & Imports",
-				"Control Directives",
-				"BEM Methodology",
-				"Build Optimization",
-				"Module System",
-				"Advanced Selectors"
-			],
-			"achievements": [
-				"Advanced mixins and functions",
-				"Modular architecture design",
-				"Variable management systems",
-				"Build optimization techniques"
-			],
-			"relatedSkills": [
-				"css",
-				"html",
-				"build-tools"
-			]
-		},
-		{
 			"id": "node",
 			"name": "Node.js",
 			"level": "comfortable",
@@ -353,259 +268,20 @@
 			]
 		},
 		{
-			"id": "express",
-			"name": "Express.js",
-			"level": "comfortable",
-			"category": "backend",
-			"description": "Advanced Express.js development with custom middleware and API architecture",
-			"topics": [
-				"Middleware Development",
-				"Routing & Controllers",
-				"Error Handling",
-				"Security Best Practices",
-				"Rate Limiting",
-				"API Documentation",
-				"Testing Frameworks",
-				"Performance Optimization"
-			],
-			"achievements": [
-				"Advanced middleware development",
-				"API architecture design",
-				"Security implementation",
-				"Performance optimization"
-			],
-			"relatedSkills": [
-				"node",
-				"javascript",
-				"typescript",
-				"mongodb",
-				"postgresql"
-			]
-		},
-		{
-			"id": "python",
-			"name": "Python",
-			"level": "developing",
-			"category": "backend",
-			"description": "Solid Python skills with web development and data processing capabilities",
-			"topics": [
-				"FastAPI Framework",
-				"Django Basics",
-				"Data Processing",
-				"Web Scraping",
-				"API Development",
-				"Testing (pytest)",
-				"Virtual Environments",
-				"Package Management"
-			],
-			"achievements": [
-				"FastAPI development",
-				"Data processing scripts",
-				"Web scraping automation",
-				"API integration"
-			],
-			"relatedSkills": [
-				"fastapi",
-				"postgresql",
-				"data-processing"
-			]
-		},
-		{
-			"id": "fastapi",
-			"name": "FastAPI",
-			"level": "developing",
-			"category": "backend",
-			"description": "FastAPI development with automatic documentation and async capabilities",
-			"topics": [
-				"Async Endpoints",
-				"Pydantic Models",
-				"Automatic Documentation",
-				"Dependency Injection",
-				"Authentication",
-				"Database Integration",
-				"Background Tasks",
-				"WebSocket Support"
-			],
-			"achievements": [
-				"API development with automatic docs",
-				"Pydantic model validation",
-				"Async endpoint creation",
-				"Database integration"
-			],
-			"relatedSkills": [
-				"python",
-				"postgresql",
-				"async-programming"
-			]
-		},
-		{
-			"id": "postgresql",
-			"name": "PostgreSQL",
-			"level": "comfortable",
-			"category": "database",
-			"description": "Advanced PostgreSQL with query optimization, database design, and performance tuning",
-			"topics": [
-				"Advanced Queries",
-				"Database Design",
-				"Indexing Strategies",
-				"Performance Tuning",
-				"Stored Procedures",
-				"Triggers & Functions",
-				"Replication",
-				"Backup & Recovery"
-			],
-			"achievements": [
-				"Complex query optimization",
-				"Database design and normalization",
-				"Index optimization strategies",
-				"Performance tuning"
-			],
-			"relatedSkills": [
-				"sql",
-				"node",
-				"python",
-				"database-design"
-			]
-		},
-		{
-			"id": "mongodb",
-			"name": "MongoDB",
-			"level": "developing",
-			"category": "database",
-			"description": "MongoDB development with document modeling and aggregation pipelines",
-			"topics": [
-				"Document Modeling",
-				"Aggregation Pipeline",
-				"Indexing",
-				"Mongoose ODM",
-				"Replica Sets",
-				"Sharding Basics",
-				"GridFS",
-				"Performance Optimization"
-			],
-			"achievements": [
-				"Document-based data modeling",
-				"Aggregation pipelines",
-				"Basic indexing strategies",
-				"CRUD operations mastery"
-			],
-			"relatedSkills": [
-				"node",
-				"express",
-				"mongoose",
-				"nosql"
-			]
-		},
-		{
-			"id": "redis",
-			"name": "Redis",
-			"level": "developing",
-			"category": "database",
-			"description": "Redis implementation for caching, sessions, and performance optimization",
-			"topics": [
-				"Caching Strategies",
-				"Session Management",
-				"Pub/Sub Messaging",
-				"Data Structures",
-				"Lua Scripting",
-				"Persistence Options",
-				"Clustering",
-				"Performance Monitoring"
-			],
-			"achievements": [
-				"Caching implementation",
-				"Session management",
-				"Pub/Sub messaging systems",
-				"Performance optimization"
-			],
-			"relatedSkills": [
-				"node",
-				"caching",
-				"performance"
-			]
-		},
-		{
 			"id": "git",
 			"name": "Git",
-			"level": "comfortable",
+			"level": "developing",
 			"category": "tools",
-			"description": "Advanced Git workflows with branching strategies and team collaboration",
+			"description": "Git version control with branching strategies, merge vs rebase, and conflict resolution",
 			"topics": [
-				"Branching Strategies",
-				"Merge vs Rebase",
-				"Conflict Resolution",
-				"Git Hooks",
-				"Advanced Commands",
-				"Repository Management",
-				"Collaborative Workflows",
-				"Git Flow"
+					"Version Control Basics"
 			],
 			"achievements": [
-				"Advanced branching strategies",
-				"Complex conflict resolution",
-				"Repository management",
-				"Team collaboration workflows"
 			],
 			"relatedSkills": [
 				"github",
 				"collaboration",
 				"version-control"
-			]
-		},
-		{
-			"id": "docker",
-			"name": "Docker",
-			"level": "developing",
-			"category": "devops",
-			"description": "Docker containerization with multi-stage builds and orchestration",
-			"topics": [
-				"Containerization",
-				"Multi-stage Builds",
-				"Docker Compose",
-				"Container Orchestration",
-				"Volume Management",
-				"Network Configuration",
-				"Security Best Practices",
-				"Production Deployment"
-			],
-			"achievements": [
-				"Multi-stage build optimization",
-				"Container orchestration",
-				"Docker Compose workflows",
-				"Production deployment"
-			],
-			"relatedSkills": [
-				"devops",
-				"deployment",
-				"containerization"
-			]
-		},
-		{
-			"id": "aws",
-			"name": "AWS",
-			"level": "developing",
-			"category": "devops",
-			"description": "AWS cloud services with compute, storage, and serverless capabilities",
-			"topics": [
-				"EC2 Instances",
-				"S3 Storage",
-				"Lambda Functions",
-				"RDS Database",
-				"CloudFormation",
-				"IAM Security",
-				"CloudWatch Monitoring",
-				"Cost Optimization"
-			],
-			"achievements": [
-				"EC2 and S3 management",
-				"Lambda function development",
-				"CloudFormation basics",
-				"Cost optimization strategies"
-			],
-			"relatedSkills": [
-				"cloud",
-				"serverless",
-				"infrastructure"
 			]
 		},
 		{
@@ -648,10 +324,7 @@
 				"Design Tokens",
 				"Prototyping",
 				"Auto Layout",
-				"Collaborative Design",
-				"Design Handoff",
-				"Plugin Development",
-				"Design Systems"
+				"Collaborative Design"
 			],
 			"achievements": [
 				"Component system design",

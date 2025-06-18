@@ -4,7 +4,8 @@ description: This is my first blog post
 date: 2024-01-15
 tags: ['welcome', 'first-post']
 published: true
-featured: true
+featured: false
+badge: demo
 layout: blog
 ---
 

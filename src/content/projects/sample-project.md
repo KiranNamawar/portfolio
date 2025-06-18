@@ -7,8 +7,9 @@ technologies:
   ['SvelteKit', 'TypeScript', 'MDSvex', 'CSS', 'Bun', 'Vite', 'PostCSS', 'HTML5', 'JavaScript']
 github: 'https://github.com/username/portfolio'
 demo: 'https://portfolio-demo.vercel.app'
-featured: true
+featured: false
 published: true
+badge: template
 layout: project
 timeline:
   - id: 'planning'

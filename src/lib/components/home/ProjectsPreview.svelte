@@ -3,6 +3,7 @@
 	import { ArrowRight, ExternalLink, Github, Folder } from '$lib/utils/icons.js';
 	import { getFeaturedProjects } from '$lib/utils/project.js';
 	import type { Project } from '$lib/types/project.js';
+	import Badge from '$lib/components/ui/Badge.svelte';
 
 	let projectsRef: HTMLElement;
 	let isVisible = false;
@@ -29,90 +30,97 @@
 </script>
 
 <section bind:this={projectsRef} class="projects-section" class:visible={isVisible} id="projects">
-	<div class="container">
-		<header class="section-header">
-			<div class="header-icon">
-				<Folder size={32} />
-			</div>
-			<h2 class="section-title">Featured Projects</h2>
-			<p class="section-subtitle">
-				A selection of recent work showcasing my development skills and learning
-			</p>
-		</header>
-		<div class="projects-grid">
-			{#each featuredProjects as project, index}
-				<article
-					class="project-card glass-card"
-					class:reverse={index % 2 === 1}
-					style="animation-delay: {index * 0.2}s"
-				>
-					<div class="project-image">
-						<img
-							src={project.image || '/project-placeholder.svg'}
-							alt={project.title}
-							loading="lazy"
-						/>
-						<div class="project-overlay">
-							<div class="project-actions">
-								{#if project.demo}
-									<a
-										href={project.demo}
-										target="_blank"
-										rel="noopener noreferrer"
-										class="action-btn glass-control-btn"
-										aria-label="View live demo"
-									>
-										<ExternalLink size={18} />
-									</a>
-								{/if}
-								{#if project.github}
-									<a
-										href={project.github}
-										target="_blank"
-										rel="noopener noreferrer"
-										class="action-btn glass-control-btn"
-										aria-label="View source code"
-									>
-										<Github size={18} />
-									</a>
-								{/if}
-							</div>
-						</div>
-					</div>
-
-					<div class="project-content">
-						<h3 class="project-title">{project.title}</h3>
-						<p class="project-description">{project.description}</p>
-
-						<div class="project-footer">
-							<div class="tech-tags">
-								{#if project.technologies && project.technologies.length > 0}
-									{#each project.technologies.slice(0, 4) as tech}
-										<span class="tech-tag">{tech}</span>
-									{/each}
-									{#if project.technologies.length > 4}
-										<span class="tech-more">+{project.technologies.length - 4}</span>
+	{#if featuredProjects.length > 0}
+		<div class="container">
+			<header class="section-header">
+				<div class="header-icon">
+					<Folder size={32} />
+				</div>
+				<h2 class="section-title">Featured Projects</h2>
+				<p class="section-subtitle">
+					A selection of recent work showcasing my development skills and learning
+				</p>
+			</header>
+			<div class="projects-grid">
+				{#each featuredProjects as project, index}
+					<article
+						class="project-card glass-card"
+						class:reverse={index % 2 === 1}
+						style="animation-delay: {index * 0.2}s"
+					>
+						<div class="project-image">
+							<img
+								src={project.image || '/project-placeholder.svg'}
+								alt={project.title}
+								loading="lazy"
+							/>
+							{#if project.badge}
+								<div class="project-badge">
+									<Badge variant={project.badge} size="sm" text={project.badge} />
+								</div>
+							{/if}
+							<div class="project-overlay">
+								<div class="project-actions">
+									{#if project.demo}
+										<a
+											href={project.demo}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="action-btn glass-control-btn"
+											aria-label="View live demo"
+										>
+											<ExternalLink size={18} />
+										</a>
 									{/if}
-								{/if}
+									{#if project.github}
+										<a
+											href={project.github}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="action-btn glass-control-btn"
+											aria-label="View source code"
+										>
+											<Github size={18} />
+										</a>
+									{/if}
+								</div>
 							</div>
-							<a href="/projects/{project.slug}" class="project-link">
-								<span>View Project</span>
-								<ArrowRight size={16} />
-							</a>
 						</div>
-					</div>
-				</article>
-			{/each}
-		</div>
 
-		<div class="section-footer">
-			<a href="/projects" class="view-all-btn glass-button">
-				<Folder size={20} />
-				<span>View All Projects</span>
-				<ArrowRight size={18} />
-			</a>
+						<div class="project-content">
+							<h3 class="project-title">{project.title}</h3>
+							<p class="project-description">{project.description}</p>
+
+							<div class="project-footer">
+								<div class="tech-tags">
+									{#if project.technologies && project.technologies.length > 0}
+										{#each project.technologies.slice(0, 4) as tech}
+											<span class="tech-tag">{tech}</span>
+										{/each}
+										{#if project.technologies.length > 4}
+											<span class="tech-more">+{project.technologies.length - 4}</span>
+										{/if}
+									{/if}
+								</div>
+								<a href="/projects/{project.slug}" class="project-link">
+									<span>View Project</span>
+									<ArrowRight size={16} />
+								</a>
+							</div>
+						</div>
+					</article>
+				{/each}
+			</div>
+
+			<div class="section-footer">
+				<a href="/projects" class="view-all-btn glass-button">
+					<Folder size={20} />
+					<span>View All Projects</span>
+					<ArrowRight size={18} />
+				</a>
+			</div>
 		</div>
-	</div>
+	{/if}
 </section>
 
 <style>
@@ -224,6 +232,13 @@
 		aspect-ratio: 16 / 8; /* More compact than 16/9 */
 		overflow: hidden;
 		background: var(--color-surface-secondary);
+	}
+
+	.project-badge {
+		position: absolute;
+		top: var(--space-3);
+		left: var(--space-3);
+		z-index: 2;
 	}
 
 	/* Horizontal layout for tablet/desktop */

@@ -13,6 +13,7 @@ export interface BlogPost {
 	category?: string;
 	published: boolean;
 	featured?: boolean;
+	badge?: 'demo' | 'tutorial' | 'guide' | 'example' | string;
 	readingTime?: number;
 	wordCount?: number;
 	image?: string;
